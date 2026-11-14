@@ -9,7 +9,7 @@ import {
 import { EARTH_SITES, TARGETS } from '../data/compare'
 import { Card } from './Card'
 import { ConfidenceBadge } from './ConfidenceBadge'
-import { SourceLink } from './FactorEvidence'
+import { NasaDataLinks, SourceLink } from './FactorEvidence'
 
 /** Everything we know about one analog site: image, why it resembles Mars, landforms, sources. */
 export function AnalogSiteDetails({ site, onBack }: { site: AnalogSite; onBack: () => void }) {
@@ -92,6 +92,7 @@ export function AnalogSiteDetails({ site, onBack }: { site: AnalogSite; onBack: 
             <SourceLink title={source.title} url={source.url} />
           </li>
         ))}
+        <NasaDataLinks lat={site.lat} lon={site.lon} />
       </ul>
 
       {target && (

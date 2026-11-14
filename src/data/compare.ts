@@ -461,6 +461,8 @@ export const TARGETS: Target[] = [
       tempMaxK: 338,
       tempAvgMinK: 65,
       iceWithin1mPct: 19.7,
+      radarCprMedian: 0.62,
+      radarCprAbove1Pct: 10.7,
     },
     note: 'Artemis candidate landing region. Centre = mean of the 5 candidate landing sites of Wueller et al. (Table A1), not counting sites proposed earlier by Kring et al. (2023); most landing sites have slopes under 5°.',
     sources: [
@@ -507,6 +509,8 @@ export const TARGETS: Target[] = [
       tempMaxK: 278,
       tempAvgMinK: 41,
       iceWithin1mPct: 56.4,
+      radarCprMedian: 0.44,
+      radarCprAbove1Pct: 1.8,
     },
     note: 'Artemis candidate landing region. Centre = mean of the 10 candidate landing sites of Wueller et al. (Table A1), not counting sites proposed earlier by Kring et al. (2023); most landing sites have slopes under 5°.',
     sources: [
@@ -554,6 +558,8 @@ export const TARGETS: Target[] = [
       tempMaxK: 328,
       tempAvgMinK: 59,
       iceWithin1mPct: 22.1,
+      radarCprMedian: 0.5,
+      radarCprAbove1Pct: 5.5,
     },
     note: 'Artemis candidate landing region. Centre = mean of the 4 candidate landing sites of Wueller et al. (Table A1), not counting sites proposed earlier by Kring et al. (2023); most landing sites have slopes under 5°.',
     sources: [
@@ -614,6 +620,8 @@ export const TARGETS: Target[] = [
       tempMaxK: 276,
       tempAvgMinK: 40,
       iceWithin1mPct: 42.6,
+      radarCprMedian: 0.49,
+      radarCprAbove1Pct: 2.7,
     },
     note: 'Artemis candidate landing region. Centre = mean of the 11 candidate landing sites of Wueller et al. (Table A1), not counting sites proposed earlier by Kring et al. (2023); most landing sites have slopes under 5°.',
     sources: [
@@ -668,6 +676,8 @@ export const TARGETS: Target[] = [
       tempMaxK: 315,
       tempAvgMinK: 52,
       iceWithin1mPct: 27.6,
+      radarCprMedian: 0.53,
+      radarCprAbove1Pct: 4.4,
     },
     note: 'Artemis candidate landing region. Centre = mean of the 10 candidate landing sites of Wueller et al. (Table A1), not counting sites proposed earlier by Kring et al. (2023); most landing sites have slopes under 5°.',
     sources: [
@@ -721,6 +731,8 @@ export const TARGETS: Target[] = [
       tempMaxK: 329,
       tempAvgMinK: 57,
       iceWithin1mPct: 21.7,
+      radarCprMedian: 0.56,
+      radarCprAbove1Pct: 6.9,
     },
     note: 'Artemis candidate landing region. Centre = mean of the 9 candidate landing sites of Wueller et al. (Table A1), not counting sites proposed earlier by Kring et al. (2023); most landing sites have slopes under 5°.',
     sources: [
@@ -773,6 +785,8 @@ export const TARGETS: Target[] = [
       tempMaxK: 310,
       tempAvgMinK: 55,
       iceWithin1mPct: 28.4,
+      radarCprMedian: 0.46,
+      radarCprAbove1Pct: 2.6,
     },
     note: 'Artemis candidate landing region. Centre = mean of the 8 candidate landing sites of Wueller et al. (Table A1), not counting sites proposed earlier by Kring et al. (2023); most landing sites have slopes under 5°.',
     sources: [
@@ -831,6 +845,8 @@ export const TARGETS: Target[] = [
       tempMaxK: 307,
       tempAvgMinK: 73,
       iceWithin1mPct: 19.5,
+      radarCprMedian: 0.46,
+      radarCprAbove1Pct: 3.9,
     },
     note: 'Artemis candidate landing region. Centre = mean of the 6 candidate landing sites of Wueller et al. (Table A1), not counting sites proposed earlier by Kring et al. (2023); most landing sites have slopes under 5°.',
     sources: [
@@ -883,6 +899,8 @@ export const TARGETS: Target[] = [
       tempMaxK: 283,
       tempAvgMinK: 40,
       iceWithin1mPct: 71.2,
+      radarCprMedian: 0.4,
+      radarCprAbove1Pct: 1.1,
     },
     note: 'Artemis candidate landing region. Centre = mean of the 11 candidate landing sites of Wueller et al. (Table A1), not counting sites proposed earlier by Kring et al. (2023); most landing sites have slopes under 5°.',
     sources: [

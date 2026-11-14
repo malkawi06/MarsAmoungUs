@@ -1,4 +1,4 @@
-import { Moon, Snowflake, Sun, Thermometer } from 'lucide-react'
+import { Moon, Radar, Snowflake, Sun, Thermometer } from 'lucide-react'
 import { Link } from 'react-router'
 import { EARTH_SITES } from '../data/compare'
 import type { MoonEnvironment as Environment } from '../lib/similarity'
@@ -12,6 +12,10 @@ const MOON_DATA = {
   diviner: {
     title: 'Diviner Polar Resource Product, south pole (NASA LRO; Paige et al. 2010, Science)',
     url: 'https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_prp/',
+  },
+  minirf: {
+    title: 'Mini-RF global radar mosaic, CPR, 32 pixels/degree (NASA LRO, PDS)',
+    url: 'https://pds-geosciences.wustl.edu/lro/lro-l-mrflro-5-global-mosaic-v1/lromrf_1001/data/32ppd/',
   },
 }
 
@@ -55,6 +59,12 @@ export function MoonEnvironment({ environment: e }: { environment: Environment }
       value: `${e.iceWithin1mPct}% of the area`,
       detail: 'within 1 m of the surface',
     },
+    {
+      icon: Radar,
+      label: 'Radar (Mini-RF)',
+      value: `${e.radarCprAbove1Pct}% of the area above 1`,
+      detail: `circular polarization ratio, ${e.radarCprMedian} at a typical spot. Above 1 can mean ice, or rough, rocky ground`,
+    },
   ]
   return (
     <section className="mt-4 w-full rounded-xl border border-border bg-bg/60 p-4">
@@ -64,7 +74,7 @@ export function MoonEnvironment({ environment: e }: { environment: Environment }
       <p className="mt-0.5 text-xs text-muted">
         Everything within {e.radiusKm} km of the region centre.
       </p>
-      <dl className="mt-3 grid gap-x-6 gap-y-3 sm:grid-cols-2 xl:grid-cols-4">
+      <dl className="mt-3 grid gap-x-6 gap-y-3 sm:grid-cols-2 xl:grid-cols-3">
         {items.map(({ icon: Icon, label, value, detail }) => (
           <div key={label} className="flex gap-3">
             <Icon className="mt-0.5 size-4 shrink-0 text-accent" aria-hidden />
@@ -110,6 +120,14 @@ export function MoonEnvironment({ environment: e }: { environment: Environment }
           Shown, not scored. Diviner measures the ground&apos;s surface; NASA POWER measures the air
           2 m up, so the numbers give a sense of scale, not an exact match. These ice sites are
           studied as Mars analogs; each link opens Discover to find more cold places like it.
+        </p>
+        <p className="mt-2 text-sm">
+          <Link
+            to="/discover?from=tuktoyaktuk&climate=permafrost"
+            className="text-accent hover:underline"
+          >
+            Find Earth&apos;s permafrost, ground that stays frozen (ESA Permafrost_cci)
+          </Link>
         </p>
       </div>
       <ul className="mt-2 space-y-0.5 text-xs">

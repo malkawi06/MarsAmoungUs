@@ -134,6 +134,15 @@
   filter: invert(1);
 }
 
+/* NASA's colour scale for the ground temperature layer; its text is dark, so it keeps a light card. */
+.map-legend {
+  max-width: 70vw;
+  height: auto;
+  padding: 0.25rem;
+  background: #fff;
+  border-radius: 0.125rem;
+}
+
 /* Rows that scroll sideways on phones, without a visible scrollbar. */
 .no-scrollbar {
   scrollbar-width: none;

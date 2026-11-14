@@ -254,3 +254,27 @@ export function SourceLink({ title, url }: { title: string; url: string }) {
     </a>
   )
 }
+
+/**
+ * Two of the challenge's NASA resources for any Earth point: its satellite imagery in NASA Worldview
+ * (about 1° across), and the NASA datasets that cover it in Earthdata Search.
+ */
+export function NasaDataLinks({ lat, lon }: { lat: number; lon: number }) {
+  const box = [lon - 0.5, lat - 0.5, lon + 0.5, lat + 0.5].map((v) => v.toFixed(3)).join(',')
+  return (
+    <>
+      <li>
+        <SourceLink
+          title="See it in NASA Worldview (satellite imagery)"
+          url={`https://worldview.earthdata.nasa.gov/?v=${box}&l=MODIS_Terra_CorrectedReflectance_TrueColor`}
+        />
+      </li>
+      <li>
+        <SourceLink
+          title="NASA data for this spot (Earthdata Search)"
+          url={`https://search.earthdata.nasa.gov/search?sp[0]=${lon}%2C${lat}`}
+        />
+      </li>
+    </>
+  )
+}

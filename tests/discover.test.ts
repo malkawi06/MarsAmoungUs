@@ -28,6 +28,7 @@ const cells: Cells = {
   elevationM: [900, 800, 300],
   reliefM: [600, 500, 100],
   rock: ['ss', 'ss', 'ig'],
+  permafrostPct: [null, 0, 80],
 }
 
 test('a cell is 100% like itself', () => {
@@ -70,6 +71,8 @@ test('filters keep only the chosen rock kind and climate', () => {
   assert.equal(passes(cells, 0, 'igneous', 'any'), false)
   assert.equal(passes(cells, 0, 'any', 'hyperArid'), false)
   assert.equal(passes(cells, 2, 'ice', 'cold'), true)
+  assert.equal(passes(cells, 2, 'any', 'permafrost'), true)
+  assert.equal(passes(cells, 0, 'any', 'permafrost'), false)
 })
 
 test('top regions stop at places filtered out (score 0)', () => {

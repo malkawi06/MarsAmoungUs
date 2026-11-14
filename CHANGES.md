@@ -280,6 +280,34 @@ Meteor Crater ← Craters of the Moon. وديان أنتاركتيكا وبعض 
 
 ---
 
+## 14. مصادر التحدي اللي ما بدها حسابات
+
+**ليش:** صفحة Resources تبع التحدي فيها مصادر من ناسا والوكالات الشريكة. صار كل واحد منها إله استخدام حقيقي
+بالموقع، مش بس اسم بالمراجع.
+
+**شو انعمل:**
+
+- **NASA Worldview/GIBS:** الخرائط صار فيها طبقة حرارة سطح الأرض من MODIS لكانون الثاني وتموز 2026، مع مقياس
+  الألوان تبع ناسا. هاي حرارة السطح نفسه، زي اللي بيقيسه Diviner على القمر.
+- **Worldview و Earthdata Search:** كل موقع أرضي (Earth Analogs و Compare) إله رابطين: صوره بـ Worldview،
+  وبيانات ناسا اللي بتغطيه بـ Earthdata Search.
+- **LRO Mini-RF (PDS):** لوحة القمر صار فيها رادار Mini-RF: نسبة المساحة اللي فيها CPR أعلى من 1. الجليد بيعطي
+  هالقيمة، بس الصخر الخشن كمان بيعطيها، والصفحة بتحكي هيك بوضوح.
+- **ESA Permafrost_cci (من ESA Open Science Catalog):** صار عند Discover فلتر "Permafrost"، يعني الأماكن اللي
+  نص أرضها أو أكثر تربة متجمدة (2019، النص الشمالي من الكرة). لوحة القمر فيها رابط إله. شروط الاستخدام: مسموح
+  لأي استخدام، بشرط نذكر ESA CCI.
+- **صفحة About:** صار فيها قسم "Partner Agency Data" لبيانات ESA و Copernicus، منفصل عن بيانات ناسا.
+
+**اللي ما انعمل:** LEND (نيوترونات LRO). على PDS في بس عدّادات خام مرتبة بالوقت، وما في خريطة هيدروجين جاهزة،
+فما حطينا أرقام منه. RADARSAT و Copernicus المباشر و JAXA بدهم حسابات.
+
+**الملفات:** `src/components/MapView.tsx`، `src/components/FactorEvidence.tsx`،
+`src/components/MoonEnvironment.tsx`، `src/lib/discover.ts`، `src/config/site.ts`، `src/pages/About.tsx`،
+`scripts/build_moon_environment.py`، `scripts/build_permafrost.py`، `public/discover/cells.json`،
+`analysis/data/moon_environment.json`.
+
+---
+
 ## اللي ما انعمل ولازم تعرفه
 
 - **ملف الـ Excel** (`analysis/mars-among-us-analog-data.xlsx`) ما تعدّل. إذا فيه شرح للطريقة، لازم يتراجع.

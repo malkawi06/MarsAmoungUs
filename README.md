@@ -52,7 +52,8 @@ The data and its sources are in [`analysis/`](analysis/README.md); regenerate `s
 
 `scripts/build_moon_environment.py` measures each Artemis region from NASA Lunar Reconnaissance Orbiter data,
 within 7.5 km of its centre: sunlight and permanent shadow from LOLA, surface temperature and stable ice from
-Diviner. It downloads only the parts of each file around the regions and writes
+Diviner, and the radar circular polarization ratio (CPR) from the Mini-RF global mosaic. CPR above 1 is what
+ice gives, and rough ground too, so it is shown as a measurement, not as ice. It downloads only the parts of each file around the regions and writes
 `analysis/data/moon_environment.json`, which `analysis/build_compare_data.py` adds to the Moon targets. The
 values are shown on Compare, not scored: Earth sites have air temperatures and no sunlit-time value.
 
@@ -60,7 +61,13 @@ values are shown on Compare, not scored: Earth sites have air temperatures and n
 
 `scripts/build_discover.py` builds `public/discover/cells.json`: every 0.5° land cell with NASA POWER
 climate, mean elevation and relief from terrain tiles, and the dominant GLiM rock class. It needs numpy, Pillow and
-xarray with zarr support, and is run by hand; the result is committed.
+xarray with zarr support, and is run by hand; the result is committed. `scripts/build_permafrost.py` then adds
+`permafrostPct` from ESA Permafrost_cci (Northern Hemisphere, 2019), which the permafrost filter uses; run it
+again after `build_discover.py`.
+
+The maps also offer NASA's monthly MODIS land surface temperature (GIBS, the imagery behind Worldview), the
+temperature of the ground itself, like Diviner's on the Moon. Every Earth site links to NASA Worldview and
+Earthdata Search.
 
 **Check against known analogs.** From each known analog site, the closest other known site (at least 400 km
 away, found by other researchers) ranks in about the top 1% of Earth's land; places picked at random would
@@ -130,7 +137,8 @@ public/
 analysis/                ← sourced data and method for Compare
 scripts/
 ├── build_discover.py    ← builds the Discover grid (run by hand, result committed)
-├── build_moon_environment.py ← LRO sunlight, temperature and ice per Artemis region (run by hand)
+├── build_moon_environment.py ← LRO sunlight, temperature, ice and radar per Artemis region (run by hand)
+├── build_permafrost.py  ← adds ESA permafrost to the Discover grid (run by hand, after build_discover.py)
 ├── fetch_earth_images.py ← deploy-time orbital images
 └── lroc_roi.py          ← LROC Artemis site mosaics, used by fetch_earth_images.py
 tests/                   ← unit tests for both scoring modules and checks on the data files
@@ -146,6 +154,11 @@ tests/                   ← unit tests for both scoring modules and checks on t
 - **Climate:** NASA POWER, 2001–2020.
 - **Moon sunlight and shadow:** LRO LOLA average illumination maps (Mazarico et al. 2011, Icarus).
 - **Moon temperature and stable ice:** LRO Diviner Polar Resource Product (Paige et al. 2010, Science).
+- **Moon radar:** LRO Mini-RF global mosaic, CPR, 32 pixels/degree (PDS Geosciences Node); meaning of CPR after
+  Spudis et al. 2013, JGR Planets.
+- **Ground temperature map:** MODIS Terra land surface temperature, monthly, via NASA GIBS/Worldview.
+- **Permafrost (Discover):** ESA Permafrost_cci, permafrost extent v3.0 (2019), via the ESA Open Science Catalog
+  and CEDA.
 - **Elevation and slope (Compare):** ASTER GDEM (NASA/METI).
 - **Elevation and relief (Discover):** Terrain Tiles on AWS (SRTM and other elevation data).
 - **Rock type (Discover):** GLiM Global Lithological Map, Hartmann & Moosdorf 2012 (CC BY 3.0).
@@ -165,6 +178,7 @@ Space Apps asks that non-NASA material be freely usable or open source, with its
 | Global CTX Mosaic of Mars (The Murray Lab)            | Free use for all purposes, with credit                  |
 | EOxCloudless 2016 (EOX, Copernicus Sentinel-2)        | CC BY 4.0                                               |
 | OpenStreetMap                                         | ODbL 1.0                                                |
+| ESA Permafrost_cci                                    | Any use, with credit to ESA CCI and Permafrost_cci      |
 | GLiM lithological map                                 | CC BY 3.0                                               |
 | React, React DOM, React Router                        | MIT                                                     |
 | Leaflet                                               | BSD-2-Clause                                            |

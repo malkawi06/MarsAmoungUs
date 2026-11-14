@@ -259,7 +259,7 @@ for i, (name, cold_trap, landform, setting, setting_sources) in enumerate(MOON, 
         # Shown on the page as the region's environment; not scored, since no Earth site has comparable values.
         'environment': {
             'radiusKm': moon_environment['radiusKm'],
-            **{k: v for k, v in moon_environment['regions'][name].items() if k not in ('lolaPixels', 'divinerPoints')},
+            **{k: v for k, v in moon_environment['regions'][name].items() if k not in ('lolaPixels', 'divinerPoints', 'minirfPixels')},
         },
         'note': f'Artemis candidate landing region. Centre = mean of the {n} candidate landing sites of Wueller et al. (Table A1), not counting sites proposed earlier by Kring et al. (2023); most landing sites have slopes under 5°.',
         'sources': sources,

@@ -56,11 +56,33 @@ export function MapView({
         },
       )
       ;(initial.basemap === 'satellite' ? satellite : streets).addTo(m)
+      const overlays = Object.fromEntries(
+        LST_MONTHS.map(({ label, date }) => [
+          `Ground temperature, ${label}`,
+          surfaceTemperature(date),
+        ]),
+      )
       L.control
-        .layers({ OpenStreetMap: streets, 'Sentinel-2 satellite': satellite }, undefined, {
+        .layers({ OpenStreetMap: streets, 'Sentinel-2 satellite': satellite }, overlays, {
           position: 'topright',
         })
         .addTo(m)
+      const legend = new L.Control({ position: 'bottomright' })
+      legend.onAdd = () => {
+        const img = L.DomUtil.create('img', 'map-legend')
+        img.src = 'https://gibs.earthdata.nasa.gov/legends/MODIS_Land_Surface_Temp_H.svg'
+        img.alt = 'Ground temperature colour scale, kelvin'
+        img.width = 300
+        return img
+      }
+      const shown = new Set<L.Layer>()
+      m.on('overlayadd', (ev) => {
+        if (shown.add(ev.layer).size === 1) legend.addTo(m)
+      })
+      m.on('overlayremove', (ev) => {
+        shown.delete(ev.layer)
+        if (shown.size === 0) legend.remove()
+      })
       L.control.scale({ position: 'bottomleft' }).addTo(m)
       setMap(m)
       return () => {
@@ -79,6 +101,29 @@ export function MapView({
       />
       {map && <MapContext value={map}>{children}</MapContext>}
     </>
+  )
+}
+
+/** Months offered for NASA's monthly ground temperature layer: southern and northern winter. */
+const LST_MONTHS = [
+  { label: 'Jan 2026', date: '2026-01-01' },
+  { label: 'Jul 2026', date: '2026-07-01' },
+]
+
+/**
+ * MODIS Terra daytime land surface temperature, monthly (NASA GIBS, the imagery behind NASA
+ * Worldview). It measures the ground itself, like LRO Diviner on the Moon.
+ */
+function surfaceTemperature(date: string) {
+  return L.tileLayer(
+    `https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/MODIS_Terra_L3_Land_Surface_Temp_Monthly_CMG_Day_TES/default/${date}/GoogleMapsCompatible_Level6/{z}/{y}/{x}.png`,
+    {
+      attribution:
+        'Ground temperature: NASA <a href="https://worldview.earthdata.nasa.gov">Worldview</a>/GIBS, MODIS Terra',
+      maxNativeZoom: 6,
+      maxZoom: 19,
+      opacity: 0.75,
+    },
   )
 }
 

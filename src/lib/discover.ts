@@ -23,6 +23,8 @@ export interface Cells {
   elevationM: (number | null)[]
   reliefM: (number | null)[]
   rock: string[]
+  /** Share of the ground underlain by permafrost (ESA Permafrost_cci), %; null outside its coverage. */
+  permafrostPct?: (number | null)[]
 }
 
 /** Cell centre from its row (0 = 89.75°N) and column (0 = 179.75°W). */
@@ -76,6 +78,7 @@ export const FILTERS = {
       { id: 'desert', label: 'Desert (250 mm/yr or less)' },
       { id: 'hyperArid', label: 'Hyper-arid (25 mm/yr or less)' },
       { id: 'cold', label: 'Cold (mean 0 °C or below)' },
+      { id: 'permafrost', label: 'Permafrost, ground ice (ESA, northern half)' },
     ],
   },
 } as const
@@ -91,6 +94,8 @@ export function passes(cells: Cells, i: number, rock: RockFilter, climate: Clima
   if (climate === 'desert') return rain !== null && rain <= 250
   if (climate === 'hyperArid') return rain !== null && rain <= 25
   if (climate === 'cold') return temp !== null && temp <= 0
+  // At least half the ground is permafrost. ESA's map covers the Northern Hemisphere only.
+  if (climate === 'permafrost') return (cells.permafrostPct?.[i] ?? 0) >= 50
   return true
 }
 

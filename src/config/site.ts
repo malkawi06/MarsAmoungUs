@@ -217,6 +217,11 @@ export const site = {
         title: 'Hartmann & Moosdorf (2012), GLiM Global Lithological Map, 0.5° grid (CC BY 3.0)',
         url: 'https://doi.pangaea.de/10.1594/PANGAEA.788537',
       },
+      {
+        title:
+          'ESA Permafrost_cci, permafrost extent, Northern Hemisphere, v3.0 (2019), via the ESA Open Science Catalog; free for any use with credit',
+        url: 'https://catalogue.ceda.ac.uk/uuid/6e2091cb0c8b4106921b63cd5357c97c',
+      },
     ],
   },
 
@@ -289,6 +294,38 @@ export const site = {
         name: 'ASTER Global Digital Elevation Model (NASA/METI)',
         url: 'https://asterweb.jpl.nasa.gov/gdem.asp',
         howWeUseIt: 'Slope and local relief at every Earth analog site.',
+      },
+      {
+        name: 'LRO Mini-RF global radar mosaic (PDS)',
+        url: 'https://pds-geosciences.wustl.edu/lro/lro-l-mrflro-5-global-mosaic-v1/',
+        howWeUseIt:
+          'Radar returns of each Artemis region: the share of the area with a circular polarization ratio above 1, which ice gives, and so does rough ground.',
+      },
+      {
+        name: 'MODIS Terra land surface temperature, via NASA Worldview/GIBS',
+        url: 'https://worldview.earthdata.nasa.gov',
+        howWeUseIt:
+          "A map layer of the ground's own temperature (January and July 2026), the Earth counterpart of Diviner on the Moon.",
+      },
+      {
+        name: 'NASA Worldview and Earthdata Search',
+        url: 'https://search.earthdata.nasa.gov',
+        howWeUseIt:
+          'Every Earth site links to its satellite imagery in Worldview and to the NASA datasets covering it in Earthdata Search.',
+      },
+    ] satisfies NasaDataSource[],
+    /** Data from the challenge's partner space agencies, listed on the Space Apps form separately. */
+    partnerData: [
+      {
+        name: 'ESA Permafrost_cci, via the ESA Open Science Catalog',
+        url: 'https://opensciencedata.esa.int/products/esa-cci-permafrost/collection',
+        howWeUseIt:
+          'Share of permafrost ground in every Discover cell (2019, Northern Hemisphere), for the permafrost filter.',
+      },
+      {
+        name: 'Copernicus Sentinel-2 (ESA), in the EOxCloudless 2016 mosaic',
+        url: 'https://cloudless.eox.at',
+        howWeUseIt: 'The satellite map and the Earth site images on the Compare page.',
       },
     ] satisfies NasaDataSource[],
     /** Each AI tool used and what for (the Space Apps form asks). Leave empty to hide the section. */

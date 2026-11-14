@@ -10,6 +10,7 @@ const SECTIONS = [
   { id: 'challenge', title: 'The Challenge' },
   { id: 'solution', title: 'Our Solution' },
   { id: 'nasa-data', title: 'NASA Data Used' },
+  { id: 'partner-data', title: 'Partner Agency Data' },
   ...(site.about.ai ? [{ id: 'ai', title: 'Use of AI' }] : []),
   { id: 'team', title: 'Team' },
 ]
@@ -112,6 +113,24 @@ export default function About() {
           <Section id="nasa-data" number={number('nasa-data')} title="NASA Data Used">
             <ul className="divide-y divide-border border-y border-border">
               {about.nasaData.map((source) => (
+                <li key={source.name} className="py-4 sm:grid sm:grid-cols-[1fr_1.4fr] sm:gap-6">
+                  <a
+                    href={source.url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="font-medium text-fg hover:text-accent hover:underline"
+                  >
+                    {source.name}
+                  </a>
+                  <p className="mt-1 text-fg-2 sm:mt-0">{source.howWeUseIt}</p>
+                </li>
+              ))}
+            </ul>
+          </Section>
+
+          <Section id="partner-data" number={number('partner-data')} title="Partner Agency Data">
+            <ul className="divide-y divide-border border-y border-border">
+              {about.partnerData.map((source) => (
                 <li key={source.name} className="py-4 sm:grid sm:grid-cols-[1fr_1.4fr] sm:gap-6">
                   <a
                     href={source.url}

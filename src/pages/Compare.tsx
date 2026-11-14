@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react'
 import { useSearchParams } from 'react-router'
 import { ChevronDown, MapPin } from 'lucide-react'
-import { FactorEvidence, SourceLink } from '../components/FactorEvidence'
+import { FactorEvidence, NasaDataLinks, SourceLink } from '../components/FactorEvidence'
 import { MoonEnvironment } from '../components/MoonEnvironment'
 import { PageHeader } from '../components/PageHeader'
 import { SheetOnPhone } from '../components/SheetOnPhone'
@@ -457,6 +457,7 @@ function AboutSite({ site, analog }: { site: Match['site']; analog?: AnalogSite 
             <SourceLink title={s.title} url={s.url} />
           </li>
         ))}
+        <NasaDataLinks lat={site.lat} lon={site.lon} />
       </ul>
     </div>
   )

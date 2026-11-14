@@ -74,6 +74,9 @@ export interface MoonEnvironment {
   tempMaxK: number
   /** Diviner: share of the area where water ice would stay stable within 1 m of the surface. */
   iceWithin1mPct: number
+  /** Mini-RF radar: middle circular polarization ratio, and the share of the area above 1. */
+  radarCprMedian: number
+  radarCprAbove1Pct: number
 }
 
 export interface TargetSource {

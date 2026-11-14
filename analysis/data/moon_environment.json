@@ -10,8 +10,11 @@
       "tempMaxK": 338,
       "tempAvgMinK": 65,
       "iceWithin1mPct": 19.7,
+      "radarCprMedian": 0.62,
+      "radarCprAbove1Pct": 10.7,
       "lolaPixels": 12346,
-      "divinerPoints": 1381
+      "divinerPoints": 1381,
+      "minirfPixels": 1752
     },
     "Haworth": {
       "sunlitBestPct": 69,
@@ -21,8 +24,11 @@
       "tempMaxK": 278,
       "tempAvgMinK": 41,
       "iceWithin1mPct": 56.4,
+      "radarCprMedian": 0.44,
+      "radarCprAbove1Pct": 1.8,
       "lolaPixels": 12282,
-      "divinerPoints": 1379
+      "divinerPoints": 1379,
+      "minirfPixels": 3494
     },
     "Malapert Massif": {
       "sunlitBestPct": 85,
@@ -32,8 +38,11 @@
       "tempMaxK": 328,
       "tempAvgMinK": 59,
       "iceWithin1mPct": 22.1,
+      "radarCprMedian": 0.5,
+      "radarCprAbove1Pct": 5.5,
       "lolaPixels": 12300,
-      "divinerPoints": 1385
+      "divinerPoints": 1385,
+      "minirfPixels": 2876
     },
     "Mons Mouton Plateau": {
       "sunlitBestPct": 54,
@@ -43,8 +52,11 @@
       "tempMaxK": 276,
       "tempAvgMinK": 40,
       "iceWithin1mPct": 42.6,
+      "radarCprMedian": 0.49,
+      "radarCprAbove1Pct": 2.7,
       "lolaPixels": 12332,
-      "divinerPoints": 1381
+      "divinerPoints": 1381,
+      "minirfPixels": 2066
     },
     "Mons Mouton": {
       "sunlitBestPct": 80,
@@ -54,8 +66,11 @@
       "tempMaxK": 315,
       "tempAvgMinK": 52,
       "iceWithin1mPct": 27.6,
+      "radarCprMedian": 0.53,
+      "radarCprAbove1Pct": 4.4,
       "lolaPixels": 12322,
-      "divinerPoints": 1380
+      "divinerPoints": 1380,
+      "minirfPixels": 2444
     },
     "Nobile Rim 1": {
       "sunlitBestPct": 86,
@@ -65,8 +80,11 @@
       "tempMaxK": 329,
       "tempAvgMinK": 57,
       "iceWithin1mPct": 21.7,
+      "radarCprMedian": 0.56,
+      "radarCprAbove1Pct": 6.9,
       "lolaPixels": 12315,
-      "divinerPoints": 1375
+      "divinerPoints": 1375,
+      "minirfPixels": 2363
     },
     "Nobile Rim 2": {
       "sunlitBestPct": 54,
@@ -76,8 +94,11 @@
       "tempMaxK": 310,
       "tempAvgMinK": 55,
       "iceWithin1mPct": 28.4,
+      "radarCprMedian": 0.46,
+      "radarCprAbove1Pct": 2.6,
       "lolaPixels": 12339,
-      "divinerPoints": 1385
+      "divinerPoints": 1385,
+      "minirfPixels": 1830
     },
     "de Gerlache Rim 2": {
       "sunlitBestPct": 61,
@@ -87,8 +108,11 @@
       "tempMaxK": 307,
       "tempAvgMinK": 73,
       "iceWithin1mPct": 19.5,
+      "radarCprMedian": 0.46,
+      "radarCprAbove1Pct": 3.9,
       "lolaPixels": 12275,
-      "divinerPoints": 1383
+      "divinerPoints": 1383,
+      "minirfPixels": 5931
     },
     "Slater Plain": {
       "sunlitBestPct": 66,
@@ -98,8 +122,11 @@
       "tempMaxK": 283,
       "tempAvgMinK": 40,
       "iceWithin1mPct": 71.2,
+      "radarCprMedian": 0.4,
+      "radarCprAbove1Pct": 1.1,
       "lolaPixels": 12291,
-      "divinerPoints": 1380
+      "divinerPoints": 1380,
+      "minirfPixels": 3977
     }
   }
 }
