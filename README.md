@@ -1,7 +1,7 @@
 # Mars Among Us
 
 **Find the places on Earth that resemble the Moon and Mars, and see why.** Built for the
-[NASA Space Apps Challenge 2026](https://www.spaceappschallenge.org) (November 14–15, 2026).
+[NASA Space Apps Challenge 2026](https://www.spaceappschallenge.org) 
 
 Live: **https://malkawi06.github.io/MarsAmoungUs/**
 
