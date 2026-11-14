@@ -1,0 +1,105 @@
+{
+  "about": "Measured within 7.5 km of each region centre. See scripts/build_moon_environment.py.",
+  "radiusKm": 7.5,
+  "regions": {
+    "Peak near Cabeus B": {
+      "sunlitBestPct": 68,
+      "sunlitMedianPct": 42,
+      "permanentShadowPct": 0.2,
+      "tempAvgMedianK": 169,
+      "tempMaxK": 338,
+      "tempAvgMinK": 65,
+      "iceWithin1mPct": 19.7,
+      "lolaPixels": 12346,
+      "divinerPoints": 1381
+    },
+    "Haworth": {
+      "sunlitBestPct": 69,
+      "sunlitMedianPct": 30,
+      "permanentShadowPct": 2.5,
+      "tempAvgMedianK": 113,
+      "tempMaxK": 278,
+      "tempAvgMinK": 41,
+      "iceWithin1mPct": 56.4,
+      "lolaPixels": 12282,
+      "divinerPoints": 1379
+    },
+    "Malapert Massif": {
+      "sunlitBestPct": 85,
+      "sunlitMedianPct": 36,
+      "permanentShadowPct": 0.7,
+      "tempAvgMedianK": 133,
+      "tempMaxK": 328,
+      "tempAvgMinK": 59,
+      "iceWithin1mPct": 22.1,
+      "lolaPixels": 12300,
+      "divinerPoints": 1385
+    },
+    "Mons Mouton Plateau": {
+      "sunlitBestPct": 54,
+      "sunlitMedianPct": 31,
+      "permanentShadowPct": 4.9,
+      "tempAvgMedianK": 121,
+      "tempMaxK": 276,
+      "tempAvgMinK": 40,
+      "iceWithin1mPct": 42.6,
+      "lolaPixels": 12332,
+      "divinerPoints": 1381
+    },
+    "Mons Mouton": {
+      "sunlitBestPct": 80,
+      "sunlitMedianPct": 35,
+      "permanentShadowPct": 0.9,
+      "tempAvgMedianK": 129,
+      "tempMaxK": 315,
+      "tempAvgMinK": 52,
+      "iceWithin1mPct": 27.6,
+      "lolaPixels": 12322,
+      "divinerPoints": 1380
+    },
+    "Nobile Rim 1": {
+      "sunlitBestPct": 86,
+      "sunlitMedianPct": 37,
+      "permanentShadowPct": 0.7,
+      "tempAvgMedianK": 137,
+      "tempMaxK": 329,
+      "tempAvgMinK": 57,
+      "iceWithin1mPct": 21.7,
+      "lolaPixels": 12315,
+      "divinerPoints": 1375
+    },
+    "Nobile Rim 2": {
+      "sunlitBestPct": 54,
+      "sunlitMedianPct": 34,
+      "permanentShadowPct": 2.5,
+      "tempAvgMedianK": 132,
+      "tempMaxK": 310,
+      "tempAvgMinK": 55,
+      "iceWithin1mPct": 28.4,
+      "lolaPixels": 12339,
+      "divinerPoints": 1385
+    },
+    "de Gerlache Rim 2": {
+      "sunlitBestPct": 61,
+      "sunlitMedianPct": 37,
+      "permanentShadowPct": 0.0,
+      "tempAvgMedianK": 138,
+      "tempMaxK": 307,
+      "tempAvgMinK": 73,
+      "iceWithin1mPct": 19.5,
+      "lolaPixels": 12275,
+      "divinerPoints": 1383
+    },
+    "Slater Plain": {
+      "sunlitBestPct": 66,
+      "sunlitMedianPct": 24,
+      "permanentShadowPct": 2.2,
+      "tempAvgMedianK": 96,
+      "tempMaxK": 283,
+      "tempAvgMinK": 40,
+      "iceWithin1mPct": 71.2,
+      "lolaPixels": 12291,
+      "divinerPoints": 1380
+    }
+  }
+}

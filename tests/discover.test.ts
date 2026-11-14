@@ -1,8 +1,14 @@
 import assert from 'node:assert/strict'
+import { readFileSync } from 'node:fs'
 import { test } from 'node:test'
+import { EARTH_SITES } from '../src/data/compare.ts'
 import {
   cellAt,
+  cellLat,
+  cellLon,
+  checkAgainstKnown,
   distanceKm,
+  knownPlaceNear,
   passes,
   similarity,
   topRegions,
@@ -68,4 +74,29 @@ test('filters keep only the chosen rock kind and climate', () => {
 
 test('top regions stop at places filtered out (score 0)', () => {
   assert.deepEqual(topRegions(cells, new Float32Array([100, 0, 0]), 0, 5, 400), [])
+})
+
+test('knownPlaceNear finds a listed place within 100 km only', () => {
+  const places = [{ name: 'Here', lat: 39.75, lon: 20.25 }]
+  assert.equal(knownPlaceNear(cells, 0, places)?.name, 'Here')
+  assert.equal(knownPlaceNear(cells, 2, places), undefined)
+})
+
+test('the real grid: known analogs rank far above chance from each other', () => {
+  const grid = JSON.parse(
+    readFileSync(new URL('../public/discover/cells.json', import.meta.url), 'utf8'),
+  ) as Cells
+  const known = EARTH_SITES.map((s) => ({ id: s.id, cell: cellAt(grid, s.lat, s.lon) })).filter(
+    (s) => s.cell >= 0,
+  )
+  const check = checkAgainstKnown(grid, known)
+  assert.ok(check.seeds >= 20, `${check.seeds} seeds`)
+  assert.ok(check.medianTopPct * 2 < check.randomMedianTopPct, JSON.stringify(check))
+  // No seed may count a site closer than 400 km.
+  for (const r of check.results) {
+    const a = known.find((k) => k.id === r.id)!.cell
+    const b = known.find((k) => k.id === r.closestId)!.cell
+    const at = (i: number) => [cellLat(grid, i), cellLon(grid, i)] as const
+    assert.ok(distanceKm(...at(a), ...at(b)) >= 400, `${r.id} -> ${r.closestId}`)
+  }
 })

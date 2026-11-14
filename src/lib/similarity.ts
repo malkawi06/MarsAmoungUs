@@ -50,8 +50,30 @@ export interface Target {
   iceAccess: boolean
   /** What the place is geologically, in one sentence (Moon regions). */
   setting?: string
+  /** Measured by NASA's Lunar Reconnaissance Orbiter around the region centre (Moon regions). */
+  environment?: MoonEnvironment
   note: string
   sources: TargetSource[]
+}
+
+/**
+ * A Moon region's environment, from scripts/build_moon_environment.py. Shown, not scored: Earth sites have
+ * air temperatures and no sunlit-time value, so there is nothing comparable on the Earth side.
+ */
+export interface MoonEnvironment {
+  /** Every value covers the points within this distance of the region centre. */
+  radiusKm: number
+  /** LOLA: share of the time the best-lit point is in sunlight, and the middle point. */
+  sunlitBestPct: number
+  sunlitMedianPct: number
+  /** LOLA: share of the area that never sees the Sun. */
+  permanentShadowPct: number
+  /** Diviner: median of the yearly average surface temperature, the coldest yearly average, the hottest moment. */
+  tempAvgMedianK: number
+  tempAvgMinK: number
+  tempMaxK: number
+  /** Diviner: share of the area where water ice would stay stable within 1 m of the surface. */
+  iceWithin1mPct: number
 }
 
 export interface TargetSource {
@@ -113,7 +135,7 @@ const RELIEF: PlannedFactor = {
 }
 const SUNLIGHT: PlannedFactor = {
   label: 'Sunlight',
-  why: 'No sourced sunlight value has been added for the Artemis regions or the Earth sites.',
+  why: 'Each Artemis region shows its sunlight from NASA LOLA above, but no Earth site has a comparable value, so it is not scored.',
   bodies: ['Moon'],
 }
 const RADIATION: PlannedFactor = {

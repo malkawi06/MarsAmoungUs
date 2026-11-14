@@ -48,11 +48,25 @@ on fewer than two factors is flagged as low confidence.
 The data and its sources are in [`analysis/`](analysis/README.md); regenerate `src/data/compare.ts` with
 `python3 analysis/build_compare_data.py`.
 
+### Moon environment
+
+`scripts/build_moon_environment.py` measures each Artemis region from NASA Lunar Reconnaissance Orbiter data,
+within 7.5 km of its centre: sunlight and permanent shadow from LOLA, surface temperature and stable ice from
+Diviner. It downloads only the parts of each file around the regions and writes
+`analysis/data/moon_environment.json`, which `analysis/build_compare_data.py` adds to the Moon targets. The
+values are shown on Compare, not scored: Earth sites have air temperatures and no sunlit-time value.
+
 ### Discover grid
 
 `scripts/build_discover.py` builds `public/discover/cells.json`: every 0.5° land cell with NASA POWER
 climate, mean elevation and relief from terrain tiles, and the dominant GLiM rock class. It needs numpy, Pillow and
 xarray with zarr support, and is run by hand; the result is committed.
+
+**Check against known analogs.** From each known analog site, the closest other known site (at least 400 km
+away, found by other researchers) ranks in about the top 1% of Earth's land; places picked at random would
+rank in about the top 3%. The numbers are worked out from the data on every build
+(`checkAgainstKnown` in `src/lib/discover.ts`) and shown on Home and Discover; a test fails if the method
+stops beating chance by at least two times.
 
 Discover and Compare measure terrain at different scales, and each page labels its own. Compare measures a
 0.6 km window at the site on the 30 m ASTER model; Discover averages a patch about 50 km across at about
@@ -116,6 +130,7 @@ public/
 analysis/                ← sourced data and method for Compare
 scripts/
 ├── build_discover.py    ← builds the Discover grid (run by hand, result committed)
+├── build_moon_environment.py ← LRO sunlight, temperature and ice per Artemis region (run by hand)
 ├── fetch_earth_images.py ← deploy-time orbital images
 └── lroc_roi.py          ← LROC Artemis site mosaics, used by fetch_earth_images.py
 tests/                   ← unit tests for both scoring modules and checks on the data files
@@ -129,6 +144,8 @@ tests/                   ← unit tests for both scoring modules and checks on t
 - **LROC NAC Artemis site mosaics:** NASA/GSFC/Arizona State University; Henriksen et al. 2023, European Lunar Symposium.
 - **Artemis candidate landing regions:** NASA, October 28, 2024 (announced for Artemis III; since February 2026 NASA plans the first crewed landing for Artemis IV). Region centres from JGR Planets 2025, doi 10.1029/2025JE009434.
 - **Climate:** NASA POWER, 2001–2020.
+- **Moon sunlight and shadow:** LRO LOLA average illumination maps (Mazarico et al. 2011, Icarus).
+- **Moon temperature and stable ice:** LRO Diviner Polar Resource Product (Paige et al. 2010, Science).
 - **Elevation and slope (Compare):** ASTER GDEM (NASA/METI).
 - **Elevation and relief (Discover):** Terrain Tiles on AWS (SRTM and other elevation data).
 - **Rock type (Discover):** GLiM Global Lithological Map, Hartmann & Moosdorf 2012 (CC BY 3.0).

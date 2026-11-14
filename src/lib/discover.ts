@@ -234,3 +234,91 @@ export function topRegions(
   }
   return picks
 }
+
+/** A region this close to a site on our lists counts as an already known analog. */
+export const KNOWN_KM = 100
+
+/** The first listed place within KNOWN_KM of cell i, if any. */
+export function knownPlaceNear<T extends { lat: number; lon: number }>(
+  cells: Cells,
+  i: number,
+  places: T[],
+): T | undefined {
+  return places.find(
+    (p) => distanceKm(p.lat, p.lon, cellLat(cells, i), cellLon(cells, i)) < KNOWN_KM,
+  )
+}
+
+/** Similarity of every cell to cell s, 0–100. */
+export function scoresFrom(cells: Cells, s: number): Float32Array {
+  const out = new Float32Array(cells.row.length)
+  for (let i = 0; i < out.length; i++) out[i] = similarity(cells, s, i)
+  return out
+}
+
+const median = (values: number[]) => {
+  const sorted = [...values].sort((a, b) => a - b)
+  const mid = sorted.length >> 1
+  return sorted.length % 2 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2
+}
+
+export interface KnownAnalogCheck {
+  /** Known sites used as starting points (those inside a land cell). */
+  seeds: number
+  /** For each seed: the closest other known analog, and the share of land (%) ranked above it. */
+  results: { id: string; closestId: string; topPct: number }[]
+  /** Median of topPct over the seeds. */
+  medianTopPct: number
+  /** The same median if the other known analogs were land cells picked at random. */
+  randomMedianTopPct: number
+}
+
+/**
+ * Checks Discover against analogs found by other researchers. From each known site, every land
+ * cell is ranked by similarity; the check reports where the closest other known site lands, as the
+ * share of Earth's land ranked above it. Sites closer than `spacingKm` to the seed are skipped, so
+ * a neighbouring site of the same field cannot pass the check by being next door.
+ *
+ * If Discover only matched by chance, the best of k other sites would be the best of k random
+ * cells: its share has median 1 − 0.5^(1/k). Comparing the two shows how much the method adds.
+ */
+export function checkAgainstKnown(
+  cells: Cells,
+  known: { id: string; cell: number }[],
+  spacingKm = 400,
+): KnownAnalogCheck {
+  const n = cells.row.length
+  const results: KnownAnalogCheck['results'] = []
+  const randomMedians: number[] = []
+  for (const seed of known) {
+    const scores = scoresFrom(cells, seed.cell)
+    const sorted = Float32Array.from(scores).sort()
+    /** Share of land (%) strictly more similar than value v. */
+    const above = (v: number) => {
+      let lo = 0
+      let hi = n
+      while (lo < hi) {
+        const mid = (lo + hi) >> 1
+        if (sorted[mid] <= v) lo = mid + 1
+        else hi = mid
+      }
+      return (100 * (n - lo)) / n
+    }
+    const at = (i: number) => [cellLat(cells, i), cellLon(cells, i)] as const
+    const others = known.filter(
+      (o) => o.id !== seed.id && distanceKm(...at(seed.cell), ...at(o.cell)) >= spacingKm,
+    )
+    if (!others.length) continue
+    const ranked = others
+      .map((o) => ({ id: o.id, topPct: above(scores[o.cell]) }))
+      .sort((a, b) => a.topPct - b.topPct)
+    results.push({ id: seed.id, closestId: ranked[0].id, topPct: ranked[0].topPct })
+    randomMedians.push(100 * (1 - 0.5 ** (1 / others.length)))
+  }
+  return {
+    seeds: results.length,
+    results,
+    medianTopPct: median(results.map((r) => r.topPct)),
+    randomMedianTopPct: median(randomMedians),
+  }
+}

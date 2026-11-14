@@ -5,7 +5,19 @@ import { defineConfig, type Plugin } from 'vite'
 import { site } from './src/config/site.ts'
 import { ANALOG_SITES, LANDFORM_NAMES } from './src/data/analogs.ts'
 import { EARTH_SITES, TARGETS } from './src/data/compare.ts'
-import { TRAITS } from './src/lib/discover.ts'
+import {
+  TRAITS,
+  cellAt,
+  cellLat,
+  cellLon,
+  checkAgainstKnown,
+  knownPlaceNear,
+  scoresFrom,
+  topRegions,
+  traitScores,
+  distanceKm,
+  type Cells,
+} from './src/lib/discover.ts'
 import { PURPOSES, rank } from './src/lib/similarity.ts'
 
 // The home page's worked example: the best Earth match for a Moon region, computed from the real data.
@@ -13,12 +25,46 @@ const exampleTarget = TARGETS.find((t) => t.id === 'moon-2')!
 const examplePurpose = PURPOSES.find((p) => p.id === 'training')!
 const exampleMatch = rank(exampleTarget, examplePurpose, EARTH_SITES)[0]
 
-// How many patches of land the Discover page compares, read from its grid.
-const landCells = (
-  JSON.parse(readFileSync(new URL('./public/discover/cells.json', import.meta.url), 'utf8')) as {
-    row: number[]
-  }
-).row.length
+// The Discover grid: how many patches of land it compares, and two results worked out from it.
+const cells = JSON.parse(
+  readFileSync(new URL('./public/discover/cells.json', import.meta.url), 'utf8'),
+) as Cells
+const landCells = cells.row.length
+const knownCells = EARTH_SITES.map((s) => ({ id: s.id, cell: cellAt(cells, s.lat, s.lon) })).filter(
+  (s) => s.cell >= 0,
+)
+const siteName = (id: string) => EARTH_SITES.find((s) => s.id === id)!.name
+
+// The check against analogs found by other researchers (see checkAgainstKnown).
+const check = checkAgainstKnown(cells, knownCells)
+
+// Three examples for the page: the strongest pairs, each site used once.
+const checkExamples: { from: string; to: string }[] = []
+const used = new Set<string>()
+for (const r of [...check.results].sort((a, b) => a.topPct - b.topPct)) {
+  if (checkExamples.length === 3) break
+  if (used.has(r.id) || used.has(r.closestId)) continue
+  used.add(r.id).add(r.closestId)
+  checkExamples.push({ from: siteName(r.id), to: siteName(r.closestId) })
+}
+
+// The Home page's discovery: the best region from one known site that is not on our lists.
+const { discovery } = site.home
+const seed = knownCells.find((s) => s.id === discovery.fromId)!
+const seedScores = scoresFrom(cells, seed.cell)
+const knownPlaces = [...EARTH_SITES, ...ANALOG_SITES]
+const found = topRegions(cells, seedScores, seed.cell, 10).find(
+  (i) => !knownPlaceNear(cells, i, knownPlaces),
+)!
+// The place name is written by hand in site.ts; stop the build if the data has moved the result.
+if (
+  distanceKm(cellLat(cells, found), cellLon(cells, found), discovery.near.lat, discovery.near.lon) >
+  100
+)
+  throw new Error(
+    `Home discovery moved: ${cellLat(cells, found)}, ${cellLon(cells, found)} is no longer near ${discovery.place}. Update site.home.discovery.`,
+  )
+const foundTraits = traitScores(cells, seed.cell, found)
 
 // Every distinct paper or page the data cites: Moon/Mars targets, Earth analogs and scored Earth sites.
 const sourceCount = new Set([
@@ -57,6 +103,28 @@ export default defineConfig({
       sources: sourceCount,
       landCells,
       discoverTraits: TRAITS.length,
+      check: {
+        seeds: check.seeds,
+        medianTopPct: check.medianTopPct,
+        randomMedianTopPct: check.randomMedianTopPct,
+        examples: checkExamples,
+      },
+      discovery: {
+        fromId: seed.id,
+        fromName: siteName(seed.id),
+        cell: found,
+        lat: cellLat(cells, found),
+        lon: cellLon(cells, found),
+        place: discovery.place,
+        percent: Math.round(seedScores[found]),
+        traits: TRAITS.map((t) => ({
+          label: t.label,
+          unit: t.unit,
+          from: t.value(cells, seed.cell),
+          here: t.value(cells, found),
+          score: foundTraits[t.id],
+        })),
+      },
       landforms: Object.entries(LANDFORM_NAMES),
       example: {
         targetId: exampleTarget.id,

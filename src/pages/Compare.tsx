@@ -2,6 +2,7 @@ import { useCallback, useState } from 'react'
 import { useSearchParams } from 'react-router'
 import { ChevronDown, MapPin } from 'lucide-react'
 import { FactorEvidence, SourceLink } from '../components/FactorEvidence'
+import { MoonEnvironment } from '../components/MoonEnvironment'
 import { PageHeader } from '../components/PageHeader'
 import { SheetOnPhone } from '../components/SheetOnPhone'
 import { TargetImages } from '../components/TargetImages'
@@ -17,6 +18,7 @@ import {
   FACTOR_LABELS,
   NO_DATA,
   PURPOSES,
+  compare,
   plannedFor,
   rank,
   type FactorResult,
@@ -32,6 +34,19 @@ const ANALOGS = new Map(ANALOG_SITES.map((site) => [site.id, site]))
 const TOP = 5
 /** Fewer scored factors than this and the scores are flagged as rough. */
 const MIN_FACTORS = 2
+
+/** How many factors a purpose can score for a target: the most any Earth site gets. */
+const scoredFactors = (target: Target, purpose: Purpose) =>
+  Math.max(...EARTH_SITES.map((site) => compare(target, purpose, site).scored))
+
+/** Purposes with enough sourced data for the target to rank sites, and whether most purposes lack it. */
+const COVERAGE = new Map(
+  TARGETS.map((target) => {
+    const offered = PURPOSES.filter((p) => p.bodies.includes(target.body))
+    const enough = offered.filter((p) => scoredFactors(target, p) >= MIN_FACTORS)
+    return [target.id, { enough, limited: enough.length * 2 < offered.length }]
+  }),
+)
 
 const SCORE_STYLE: Record<Score, { label: string; bar: string; text: string }> = {
   3: { label: 'strong', bar: 'bg-emerald-500', text: 'text-emerald-700 dark:text-emerald-300' },
@@ -111,11 +126,18 @@ export default function Compare() {
                   key={body}
                   label={body === 'Moon' ? 'Moon: Artemis landing regions' : 'Mars'}
                 >
-                  {TARGETS.filter((t) => t.body === body).map((t) => (
-                    <option key={t.id} value={t.id}>
-                      {t.name}
-                    </option>
-                  ))}
+                  {/* Targets with little sourced data go last, marked, so they are not picked first. */}
+                  {TARGETS.filter((t) => t.body === body)
+                    .sort(
+                      (a, b) =>
+                        Number(COVERAGE.get(a.id)!.limited) - Number(COVERAGE.get(b.id)!.limited),
+                    )
+                    .map((t) => (
+                      <option key={t.id} value={t.id}>
+                        {t.name}
+                        {COVERAGE.get(t.id)!.limited ? ' (limited data)' : ''}
+                      </option>
+                    ))}
                 </optgroup>
               ))}
             </select>
@@ -177,11 +199,31 @@ export default function Compare() {
       </section>
 
       {selected.scored < MIN_FACTORS && (
-        <p className="mt-4 rounded-xl border border-warning/40 bg-warning/10 px-4 py-3 text-sm text-fg-2">
-          <span className="font-medium text-fg">Rough scores: </span>
-          only {selected.scored} of {selected.factors.length} factors can be scored for{' '}
-          {target.name}, so many sites tie. Check the orbital images too.
-        </p>
+        <div className="mt-4 rounded-xl border border-warning/40 bg-warning/10 px-4 py-3 text-sm text-fg-2">
+          <p>
+            <span className="font-medium text-fg">Limited data: </span>
+            only {selected.scored} of {selected.factors.length} factors have a published value for{' '}
+            {target.name}, so many sites tie and the ranking says little.
+          </p>
+          {COVERAGE.get(target.id)!.enough.length > 0 && (
+            <p className="mt-2 flex flex-wrap items-center gap-2">
+              <span>Better supported for {target.name}:</span>
+              {COVERAGE.get(target.id)!.enough.map((p) => (
+                <button
+                  key={p.id}
+                  type="button"
+                  onClick={() => {
+                    update({ purpose: p.id, site: undefined })
+                    setShowAll(false)
+                  }}
+                  className="rounded-full border border-border bg-surface px-3 py-1 text-xs font-medium hover:border-accent hover:text-accent"
+                >
+                  {p.label}
+                </button>
+              ))}
+            </p>
+          )}
+        </div>
       )}
 
       <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-5">
@@ -347,6 +389,7 @@ function TargetSummary({ target }: { target: Target }) {
       </span>
       {target.setting && <p className="w-full text-fg">{target.setting}</p>}
       <p className="w-full text-fg-2">{target.note}</p>
+      {target.environment && <MoonEnvironment environment={target.environment} />}
       <details className="group w-full">
         <summary className="mt-2 flex cursor-pointer list-none items-center gap-1 text-xs font-medium tracking-wide text-muted uppercase [&::-webkit-details-marker]:hidden">
           Where the values for {target.name} come from ({target.sources.length})

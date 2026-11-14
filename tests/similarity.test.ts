@@ -316,6 +316,24 @@ describe('data files', () => {
       }
   })
 
+  it('Compare: every Moon region has its measured LRO environment, within physical limits', () => {
+    for (const t of TARGETS.filter((t) => t.body === 'Moon')) {
+      const e = t.environment
+      assert.ok(e, t.id)
+      for (const pct of [
+        e.sunlitBestPct,
+        e.sunlitMedianPct,
+        e.permanentShadowPct,
+        e.iceWithin1mPct,
+      ])
+        assert.ok(pct >= 0 && pct <= 100, `${t.id}: ${pct}`)
+      assert.ok(e.sunlitMedianPct <= e.sunlitBestPct, t.id)
+      assert.ok(e.tempAvgMinK <= e.tempAvgMedianK && e.tempAvgMedianK < e.tempMaxK, t.id)
+      assert.ok(e.tempAvgMinK > 20 && e.tempMaxK < 420, t.id)
+    }
+    assert.ok(TARGETS.filter((t) => t.body === 'Mars').every((t) => !t.environment))
+  })
+
   it('Compare: every purpose has a target body that offers it', () => {
     for (const p of PURPOSES)
       assert.ok(

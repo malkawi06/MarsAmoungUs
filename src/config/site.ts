@@ -185,6 +185,15 @@ export const site = {
     methodTitle: 'A source for every number',
     scoring:
       'Each factor scores 3 (strong), 2 (partial) or 1 (weak), and all factors count the same. The match is the average turned into a percentage: all 3s give 100%, all 1s give 0%. Sites with the same match are ordered by how close their measured values are to the target, and sites the data cannot tell apart share a place. The method follows the NASA-led analog framework of Stern et al. (2025).',
+    /**
+     * The new-analog example on Home: the best region from this known site that is not on our lists.
+     * `place` is written by hand, so the build stops if the result moves more than 100 km from `near`.
+     */
+    discovery: {
+      fromId: 'wadi-rum',
+      place: 'near Tabas, central Iran',
+      near: { lat: 33.6, lon: 56.9 },
+    },
     noData:
       'Some values are not published yet, such as the mean temperature at most Mars sites. Those factors are left out of the score instead of guessed, and the page says so. When fewer than two factors can be scored, the page warns that the result is rough.',
   },
@@ -253,6 +262,18 @@ export const site = {
         url: 'https://data.lroc.im-ldi.com/lroc/rdr_product_select',
         howWeUseIt:
           'Orbital images of the five Artemis regions north of 85.5°S, where the south-pole mosaic ends.',
+      },
+      {
+        name: 'LRO LOLA average illumination maps (south pole)',
+        url: 'https://imbrium.mit.edu/EXTRAS/ILLUMINATION/',
+        howWeUseIt:
+          'How much of the time each Artemis region is sunlit, and how much of it is in permanent shadow.',
+      },
+      {
+        name: 'LRO Diviner Polar Resource Product (south pole)',
+        url: 'https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_prp/',
+        howWeUseIt:
+          'Surface temperature of each Artemis region, and where water ice could stay stable within 1 m of the surface.',
       },
       {
         name: 'Global CTX Mosaic of Mars (NASA/JPL/MSSS/The Murray Lab)',

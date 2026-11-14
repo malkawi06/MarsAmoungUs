@@ -5,6 +5,8 @@ Inputs (see analysis/README.md for how each was made):
   data/power.csv           NASA POWER climatology 2001-2020 per Earth site
   data/dem.csv             ASTER GDEM elevation, slope and relief per Earth site
   data/moon_centroids.json Artemis region centres (mean of published landing sites)
+  data/moon_environment.json Sunlight (LOLA), temperature and stable ice (Diviner) per Artemis region,
+                           built by scripts/build_moon_environment.py
 """
 
 import csv
@@ -18,6 +20,7 @@ DATA = ROOT / 'analysis' / 'data'
 power = {r['id']: r for r in csv.DictReader(open(DATA / 'power.csv'))}
 dem = {r['id']: r for r in csv.DictReader(open(DATA / 'dem.csv'))}
 moon_centroids = json.load(open(DATA / 'moon_centroids.json'))
+moon_environment = json.load(open(DATA / 'moon_environment.json'))
 
 # Existing analog sites: name, country, coordinates and first source come from src/data/analogs.ts.
 analogs_ts = (ROOT / 'src' / 'data' / 'analogs.ts').read_text()
@@ -253,6 +256,11 @@ for i, (name, cold_trap, landform, setting, setting_sources) in enumerate(MOON, 
         'id': f'moon-{i}', 'name': name, 'body': 'Moon', 'lat': lat, 'lon': lon,
         'materials': ['anorthosite'], 'landforms': [landform], 'slopeMaxDeg': 5, 'precipMmYr': 0, 'iceAccess': cold_trap,
         'setting': setting,
+        # Shown on the page as the region's environment; not scored, since no Earth site has comparable values.
+        'environment': {
+            'radiusKm': moon_environment['radiusKm'],
+            **{k: v for k, v in moon_environment['regions'][name].items() if k not in ('lolaPixels', 'divinerPoints')},
+        },
         'note': f'Artemis candidate landing region. Centre = mean of the {n} candidate landing sites of Wueller et al. (Table A1), not counting sites proposed earlier by Kring et al. (2023); most landing sites have slopes under 5°.',
         'sources': sources,
     })

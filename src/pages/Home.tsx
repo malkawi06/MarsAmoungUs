@@ -11,6 +11,9 @@ import { PhotoCredit, PhotoFill } from '../components/Photo'
 const stats = __HOME_STATS__
 const example = stats.example
 const exampleLink = `/compare?target=${example.targetId}&purpose=${example.purposeId}&site=${example.siteId}`
+const discovery = stats.discovery
+const discoveryLink = `/discover?from=${discovery.fromId}&region=${discovery.cell}`
+const check = stats.check
 
 export default function Home() {
   usePageTitle()
@@ -34,6 +37,8 @@ export default function Home() {
           ]}
         />
       </Panel>
+
+      <Discovery />
 
       <Panel
         photo={site.photos.compare}
@@ -225,6 +230,72 @@ function Stats({ items }: { items: { value: number; label: string }[] }) {
         </div>
       ))}
     </dl>
+  )
+}
+
+const coord = (v: number, pos: string, neg: string) =>
+  `${Math.abs(v).toFixed(2)}° ${v >= 0 ? pos : neg}`
+const show = (v: number | string | null, unit: string) =>
+  v === null ? '—' : typeof v === 'number' ? `${v.toLocaleString('en')} ${unit}`.trim() : v
+
+/** One region Discover found that is not on any of our analog lists, worked out at build time. */
+function Discovery() {
+  const ref = useReveal<HTMLElement>()
+  return (
+    <section ref={ref} className="border-y border-white/10 bg-black">
+      <div className="mx-auto grid max-w-[90rem] gap-12 px-5 py-16 sm:px-8 sm:py-24 lg:grid-cols-2 lg:items-center lg:py-32">
+        <div className="reveal flex flex-col gap-6">
+          <p className="font-display text-sm font-semibold tracking-[0.3em] text-white/70 uppercase">
+            One new candidate · found by Discover
+          </p>
+          <h2 className="font-display text-3xl leading-tight font-bold uppercase sm:text-5xl">
+            Start from {discovery.fromName}
+            <span className="block text-white/50">Discover finds {discovery.place}</span>
+          </h2>
+          <p className="font-display text-[clamp(6rem,16vw,12rem)] leading-none font-bold tabular-nums">
+            {discovery.percent}%
+          </p>
+          <p className="text-white/70">
+            A patch about 50 km across at {coord(discovery.lat, 'N', 'S')}{' '}
+            {coord(discovery.lon, 'E', 'W')}, on none of our lists of known analogs. It is the
+            closest match to {discovery.fromName} that nobody has listed yet: a lead to check, not a
+            proven analog.
+          </p>
+          <div>
+            <Link to={discoveryLink} className="btn-line">
+              See it on the map
+              <ArrowRight className="size-4" aria-hidden />
+            </Link>
+          </div>
+        </div>
+        <div className="reveal flex flex-col gap-4">
+          <table className="w-full text-left text-sm">
+            <thead className="text-white/60">
+              <tr className="border-b border-white/20">
+                <th className="py-2 font-medium">Trait</th>
+                <th className="py-2 font-medium">{discovery.fromName}</th>
+                <th className="py-2 font-medium">New region</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-white/10">
+              {discovery.traits.map((t) => (
+                <tr key={t.label}>
+                  <td className="py-2.5 pr-3">{t.label}</td>
+                  <td className="py-2.5 pr-3 tabular-nums">{show(t.from, t.unit)}</td>
+                  <td className="py-2.5 tabular-nums">{show(t.here, t.unit)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <p className="text-sm text-white/60">
+            Checked against analogs other researchers found: from each of {check.seeds} known sites,
+            the closest other known site ranks in the top {check.medianTopPct.toFixed(1)}% of
+            Earth&apos;s land (median). Places picked at random would rank in the top{' '}
+            {check.randomMedianTopPct.toFixed(1)}%.
+          </p>
+        </div>
+      </div>
+    </section>
   )
 }
 

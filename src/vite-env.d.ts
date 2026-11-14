@@ -11,6 +11,30 @@ declare const __HOME_STATS__: {
   /** Patches of land in the Discover grid, and the traits each is compared on. */
   landCells: number
   discoverTraits: number
+  /** Discover checked against analogs found by other researchers (checkAgainstKnown). */
+  check: {
+    seeds: number
+    medianTopPct: number
+    randomMedianTopPct: number
+    examples: { from: string; to: string }[]
+  }
+  /** The best region from one known site that is not on our lists, with every trait compared. */
+  discovery: {
+    fromId: string
+    fromName: string
+    cell: number
+    lat: number
+    lon: number
+    place: string
+    percent: number
+    traits: {
+      label: string
+      unit: string
+      from: number | string | null
+      here: number | string | null
+      score: number | null
+    }[]
+  }
   landforms: [string, string][]
   /** The best Earth match for one Moon region and purpose, computed from the data at build time. */
   example: {
