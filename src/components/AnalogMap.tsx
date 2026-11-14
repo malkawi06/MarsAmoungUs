@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
-import { CircleMarker, Tooltip, useMap } from 'react-leaflet'
+import { useMap } from '../hooks/useMap'
+import { CircleMarker, MapView, Tooltip } from './MapView'
 import type { AnalogSite } from '../data/analogs'
-import { MapView } from './MapView'
 
 interface AnalogMapProps {
   sites: AnalogSite[]

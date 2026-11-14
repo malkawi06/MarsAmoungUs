@@ -240,6 +240,28 @@ Meteor Crater ← Craters of the Moon. وديان أنتاركتيكا وبعض 
 
 ---
 
+## 12. الرخص (شرط Space Apps)
+
+**شو كانت المشكلة:** قوانين Space Apps بتطلب إن أي مادة مش من ناسا تكون حرّة الاستخدام أو مفتوحة المصدر
+(OSI)، ورخصتها مذكورة. شيئين ما كانوا هيك:
+
+- صور EOX لسنة 2024 رخصتها CC BY-NC-SA 4.0 (ممنوع الاستخدام التجاري).
+- مكتبة react-leaflet رخصتها Hippocratic-2.1، وهي مش رخصة OSI.
+
+**شو انعمل:**
+
+- **الصور والخريطة:** صارت من طبقة EOxCloudless 2016، ورخصتها CC BY 4.0. هي من بيانات Copernicus Sentinel-2،
+  وهاد مصدر مذكور رسمياً بصفحة Resources تبع التحدي. نص المصدر تحدّث بالخريطة وبصفحة Compare.
+- **react-leaflet انشالت:** مكانها مكونات صغيرة فوق Leaflet نفسها (رخصتها BSD-2) بنفس الأسماء: `CircleMarker`،
+  `Tooltip`، `ImageOverlay` و `useMap`.
+- **الـ README:** صار فيه جدول بالرخص.
+
+**الملفات:** `src/components/MapView.tsx`، `src/hooks/useMap.ts`، `src/components/AnalogMap.tsx`،
+`src/components/DiscoverMap.tsx`، `src/components/TargetImages.tsx`، `scripts/fetch_earth_images.py`،
+`README.md`، `package.json`.
+
+---
+
 ## اللي ما انعمل ولازم تعرفه
 
 - **ملف الـ Excel** (`analysis/mars-among-us-analog-data.xlsx`) ما تعدّل. إذا فيه شرح للطريقة، لازم يتراجع.

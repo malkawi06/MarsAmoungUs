@@ -1,7 +1,8 @@
 """Downloads orbital images for the comparison features into public/earth/ and public/targets/.
 
-- Earth analog sites (src/data/compare.ts EARTH_SITES): Sentinel-2 cloudless 2024 by EOX IT Services
-  GmbH (contains modified Copernicus Sentinel data 2024), CC BY-NC-SA 4.0.
+- Earth analog sites (src/data/compare.ts EARTH_SITES): EOxCloudless 2016 by EOX IT Services GmbH
+  (contains modified Copernicus Sentinel data 2016 & 2017), CC BY 4.0. EOX's later years are
+  CC BY-NC-SA, which the Space Apps rules do not allow.
 - Mars targets: Global CTX Mosaic of Mars V01, NASA/JPL/MSSS/The Murray Lab (free use for all purposes).
 - Moon targets: LRO LROC NAC south-pole mosaic (LMMP/USGS, via NASA Moon Trek), which covers 85.5°S–90°S;
   north of that, the LROC NAC Artemis site mosaics (scripts/lroc_roi.py, needs rasterio and pyproj).
@@ -26,7 +27,7 @@ SIZE = 768  # output images are SIZE x SIZE pixels, centred on the site
 TARGET_M_PER_PX = 8
 TILE = 256
 
-EOX_URL = 'https://tiles.maps.eox.at/wmts/1.0.0/s2cloudless-2024_3857/default/g/{z}/{y}/{x}.jpg'
+EOX_URL = 'https://tiles.maps.eox.at/wmts/1.0.0/s2cloudless_3857/default/g/{z}/{y}/{x}.jpg'
 EARTH_M_PER_PX_Z0 = 156543.03392
 
 CTX_URL = 'https://astro.arcgis.com/arcgis/rest/services/OnMars/CTX1/MapServer/tile/{z}/{y}/{x}'

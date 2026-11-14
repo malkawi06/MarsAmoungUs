@@ -23,7 +23,7 @@ Live: **https://malkawi06.github.io/mars-among-us/**
 The deploy workflow runs `scripts/fetch_earth_images.py`, which downloads ~6 km images of every site at
 the same scale, so the Compare page can show a target and an Earth site side by side:
 
-- Earth: Sentinel-2 cloudless 2024 (EOX).
+- Earth: EOxCloudless 2016 (EOX, Copernicus Sentinel-2).
 - Mars: Global CTX Mosaic (Murray Lab).
 - Moon: LROC NAC south-pole mosaic (Moon Trek), which covers 85.5°S to the pole (4 of the 9 Artemis regions), and the
   LROC NAC Artemis site mosaics for the other 5 (`scripts/lroc_roi.py`, needs rasterio and pyproj).
@@ -149,10 +149,26 @@ tests/                   ← unit tests for both scoring modules and checks on t
 - **Elevation and slope (Compare):** ASTER GDEM (NASA/METI).
 - **Elevation and relief (Discover):** Terrain Tiles on AWS (SRTM and other elevation data).
 - **Rock type (Discover):** GLiM Global Lithological Map, Hartmann & Moosdorf 2012 (CC BY 3.0).
-- **Earth satellite images:** Sentinel-2 cloudless 2024 by EOX IT Services GmbH (contains modified Copernicus Sentinel data 2024).
-- **Maps:** Sentinel-2 cloudless 2024 (EOX) and OpenStreetMap.
+- **Earth satellite images and map:** EOxCloudless 2016 by EOX IT Services GmbH (contains modified Copernicus Sentinel data 2016 & 2017), CC BY 4.0.
+- **Street map:** © OpenStreetMap contributors, ODbL.
 - **Page photos:** NASA Image and Video Library: Curiosity (PIA23898, NASA/JPL-Caltech/MSSS), Perseverance
   (PIA23727, NASA/JPL-Caltech/ASU/MSSS), Apollo 15 (jsc2011e118359, NASA) and the Haughton-Mars Project
   (ARC-2007-ACD07-0170-005 and -006, NASA). Each page links its photo's NASA page.
+
+### Licences
+
+Space Apps asks that non-NASA material be freely usable or open source, with its licence listed.
+
+| Material                                              | Licence                                                 |
+| ----------------------------------------------------- | ------------------------------------------------------- |
+| NASA data and images (POWER, LRO, NASA Image Library) | No copyright in the US (NASA media and data guidelines) |
+| Global CTX Mosaic of Mars (The Murray Lab)            | Free use for all purposes, with credit                  |
+| EOxCloudless 2016 (EOX, Copernicus Sentinel-2)        | CC BY 4.0                                               |
+| OpenStreetMap                                         | ODbL 1.0                                                |
+| GLiM lithological map                                 | CC BY 3.0                                               |
+| React, React DOM, React Router                        | MIT                                                     |
+| Leaflet                                               | BSD-2-Clause                                            |
+| Lucide icons                                          | ISC                                                     |
+| Barlow, Barlow Condensed fonts                        | OFL-1.1                                                 |
 
 This project is not affiliated with or endorsed by NASA.

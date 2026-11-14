@@ -7,7 +7,7 @@ const CREDITS = {
   Moon: 'Moon: LROC NAC south-pole mosaic and Artemis site mosaics (NASA/GSFC/Arizona State University; LMMP/USGS via NASA Moon Trek).',
 }
 const EARTH_CREDIT =
-  'Earth: Sentinel-2 cloudless 2024 by EOX IT Services GmbH (contains modified Copernicus Sentinel data 2024).'
+  'Earth: EOxCloudless 2016 by EOX IT Services GmbH (contains modified Copernicus Sentinel data 2016 & 2017), CC BY 4.0.'
 const MOON_MOSAIC_LIMIT = -85.5
 
 /** A Moon or Mars target's orbital image next to an Earth analog's satellite image (both 8 m/pixel). */

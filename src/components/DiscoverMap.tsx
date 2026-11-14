@@ -1,7 +1,7 @@
 import { useEffect, useMemo } from 'react'
-import { CircleMarker, ImageOverlay, Tooltip, useMap } from 'react-leaflet'
+import { useMap } from '../hooks/useMap'
+import { CircleMarker, ImageOverlay, MapView, Tooltip } from './MapView'
 import { cellLat, cellLon, type Cells } from '../lib/discover'
-import { MapView } from './MapView'
 
 /** Web Mercator stops here; the overlay covers the same band as the map. */
 const MAX_LAT = 85.0511
