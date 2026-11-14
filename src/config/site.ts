@@ -220,6 +220,15 @@ export const site = {
         fromId: 'tuktoyaktuk',
         place: 'the Arctic coastal plain, northern Alaska',
         near: { lat: 70.25, lon: -155.75 },
+        /** Checked by hand: the study area (69.5–70.6° N, 150.8–158.1° W) contains this patch. */
+        check: {
+          text: 'Already known for the same process: Jones et al. (2012) mapped 1,247 pingos in the 40,000 km² of the western Arctic Coastal Plain that contains this patch. Discover was given no landform data.',
+          source: {
+            title:
+              'Jones et al. (2012), Geomorphology 138(1): pingos of the western Arctic Coastal Plain',
+            url: 'https://doi.org/10.1016/j.geomorph.2011.08.007',
+          },
+        },
       },
       {
         fromId: 'haughton',
