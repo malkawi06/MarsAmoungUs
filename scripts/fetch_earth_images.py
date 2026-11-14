@@ -20,7 +20,7 @@ import subprocess
 import urllib.request
 from pathlib import Path
 
-from PIL import Image
+from PIL import Image, ImageStat
 
 ROOT = Path(__file__).resolve().parent.parent
 SIZE = 768  # output images are SIZE x SIZE pixels, centred on the site
@@ -131,6 +131,11 @@ def sites(array_name):
         yield entry['id'], entry.get('body', 'Earth'), entry['lat'], entry['lon']
 
 
+def is_blank(image):
+    """True for a near-uniform image: the blank tiles a mosaic serves where it has no data."""
+    return max(ImageStat.Stat(image).stddev) < 3
+
+
 def save_all(entries, render_for, folder):
     out = ROOT / 'public' / folder
     out.mkdir(parents=True, exist_ok=True)
@@ -143,6 +148,9 @@ def save_all(entries, render_for, folder):
             continue
         except Exception as error:  # one failed download must not stop the others
             print(f'::warning::No image for {sid}: {error}')
+            continue
+        if is_blank(image):
+            print(f'::warning::No image for {sid}: the mosaic has no data there (blank tiles)')
             continue
         image.save(out / f'{sid}.jpg', quality=85)
         index[sid] = {'file': f'{sid}.jpg', 'size': SIZE, 'metersPerPixel': round(m_per_px, 2)}

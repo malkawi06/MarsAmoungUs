@@ -29,7 +29,9 @@ export function TargetImages({
       <p className="rounded-xl border border-dashed border-border p-4 text-sm text-muted">
         {target.body === 'Moon' && target.lat > MOON_MOSAIC_LIMIT
           ? `No close-up image of ${target.name} in this build: it lies outside the LROC south-pole mosaic (85.5°S to the pole), and its LROC site mosaic could not be loaded.`
-          : 'Images for this comparison are not available in this build.'}
+          : targetImage && !earthImage
+            ? `No satellite image of ${site.name} in this build: the cloud-free mosaic has no data there.`
+            : 'Images for this comparison are not available in this build.'}
       </p>
     )
   }
