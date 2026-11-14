@@ -1,6 +1,6 @@
 # Mars Among Us
 
-**Find the places on Earth that resemble the Moon and Mars, and see why.** 
+**Find the places on Earth that resemble the Moon and Mars, and see why.**
 Live: **https://malkawi06.github.io/MarsAmoungUs/**
 
 | Page                           | What it does                                                                                                                                                                                                                                                                                                                                                                     |
