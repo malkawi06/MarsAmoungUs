@@ -27,7 +27,7 @@ UA = {'User-Agent': 'mars-among-us mars slope'}
 # analysis/build_compare_data.py uses these for targets without a published slope. Oxia Planum keeps its
 # published 8° landing limit; it is measured here too, as a check that MOLA agrees with it.
 TARGETS = {
-    'oxia-planum': (18.20, -24.55),
+    'oxia-planum': (18.275, -24.632),
     'jezero': (18.44, 77.45),
     'gale': (-4.5895, 137.4417),
     'victoria': (-2.05, -5.50),

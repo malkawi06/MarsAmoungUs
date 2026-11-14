@@ -115,7 +115,7 @@ export const ANALOG_SITES: AnalogSite[] = [
     sources: [
       {
         title:
-          'Origin of terrestrial gypsum dunes: implications for Olympia Undae (Geomorphology, 2009)',
+          'Origin of terrestrial gypsum dunes: implications for Olympia Undae (Geomorphology, 2010)',
         url: 'https://www.sciencedirect.com/science/article/abs/pii/S0169555X09000786',
       },
     ],
@@ -314,7 +314,7 @@ export const ANALOG_SITES: AnalogSite[] = [
     precision: 'region',
     landforms: { fse: 'weak' },
     climate: 'Mean −21.9 °C, 66 mm of precipitation a year (NASA POWER 2001–2020)',
-    why: 'Slope streaks are a specifically Martian phenomenon with no direct Earth analog; water tracks here are among the closest proposed candidates.',
+    why: 'Slope streaks are a specifically Martian phenomenon with no direct Earth analog; water tracks here, shallow groundwater over permafrost, are among the closest proposed candidates.',
     image: {
       url: 'https://assets.science.nasa.gov/content/dam/science/esd/eo/images/imagerecords/82000/82524/taylorglacier_pho_2013_studinger.jpg/jcr:content/renditions/cq5dam.web.1280.1280.jpeg',
       credit: 'NASA Earth Observatory (aerial photograph, 2013)',
@@ -325,6 +325,11 @@ export const ANALOG_SITES: AnalogSite[] = [
         title:
           'Are slope streaks indicative of aqueous processes on contemporary Mars? (Rev. Geophys., 2019)',
         url: 'https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2018RG000617',
+      },
+      {
+        title:
+          'Water tracks and permafrost in Taylor Valley, Antarctica (Levy et al., GSA Bulletin, 2011)',
+        url: 'https://doi.org/10.1130/B30436.1',
       },
     ],
   },

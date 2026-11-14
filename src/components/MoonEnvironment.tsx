@@ -79,13 +79,13 @@ export function MoonEnvironment({ environment: e }: { environment: Environment }
       </p>
       <dl className="mt-3 grid gap-x-6 gap-y-3 sm:grid-cols-2 xl:grid-cols-3">
         {items.map(({ icon: Icon, label, value, detail }) => (
-          <div key={label} className="flex gap-3">
-            <Icon className="mt-0.5 size-4 shrink-0 text-accent" aria-hidden />
-            <div>
-              <dt className="text-xs text-muted">{label}</dt>
-              <dd className="font-medium">{value}</dd>
-              <dd className="text-xs text-fg-2">{detail}</dd>
-            </div>
+          <div key={label}>
+            <dt className="flex items-center gap-2 text-xs text-muted">
+              <Icon className="size-4 shrink-0 text-accent" aria-hidden />
+              {label}
+            </dt>
+            <dd className="pl-6 font-medium">{value}</dd>
+            <dd className="pl-6 text-xs text-fg-2">{detail}</dd>
           </div>
         ))}
       </dl>

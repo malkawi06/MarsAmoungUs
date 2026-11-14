@@ -3,9 +3,9 @@
   "radiusKm": 10,
   "targets": {
     "oxia-planum": {
-      "slopeP90Deg": 1.3,
-      "slopeMedianDeg": 0.5,
-      "pixels": 1541
+      "slopeP90Deg": 1.0,
+      "slopeMedianDeg": 0.4,
+      "pixels": 1546
     },
     "jezero": {
       "slopeP90Deg": 7.4,

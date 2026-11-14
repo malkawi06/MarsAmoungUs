@@ -876,6 +876,7 @@ export const TARGETS: Target[] = [
         title:
           'Here are the nine sites where Artemis 3 might land on the Moon (Astronomy magazine)',
         url: 'https://www.astronomy.com/space-exploration/here-are-the-nine-sites-where-artemis-3-might-land-on-the-moon/',
+        says: 'Nobile Rim 2 is a site on the northeastern rim of Nobile Crater.',
         supports: ['landform'],
       },
       {
@@ -1018,7 +1019,14 @@ export const TARGETS: Target[] = [
       {
         title: 'Water-rich minerals at Jezero Crater (ESA, 2022)',
         url: 'https://www.esa.int/ESA_Multimedia/Images/2022/08/Water-rich_minerals_at_Jezero_Crater',
+        says: 'The minerals around Jezero Crater, altered by water in the past, are predominately clays and carbonate salts.',
         supports: ['rock'],
+      },
+      {
+        title: 'Jezero (crater) (Wikipedia)',
+        url: 'https://en.wikipedia.org/wiki/Jezero_(crater)',
+        says: 'Thought to have once been flooded with water, the crater contains a fan-delta deposit rich in clays; the lake was present when valley networks were forming on Mars.',
+        supports: ['landform'],
       },
       {
         title: 'Octavia E. Butler Landing (Wikipedia)',
@@ -1027,6 +1035,7 @@ export const TARGETS: Target[] = [
       {
         title: "NASA's first weather report from Jezero Crater on Mars (NASA JPL)",
         url: 'https://www.jpl.nasa.gov/news/nasas-first-weather-report-from-jezero-crater-on-mars/',
+        says: 'MEDA recorded a high of −22 °C and a low of −83 °C in Jezero Crater on sols 43 and 44.',
         supports: ['dailyRange'],
       },
       {
@@ -1054,7 +1063,8 @@ export const TARGETS: Target[] = [
         title:
           "NASA's Curiosity rover finds patches of rock record erased, revealing clues (NASA JPL)",
         url: 'https://www.jpl.nasa.gov/news/nasas-curiosity-rover-finds-patches-of-rock-record-erased-revealing-clues/',
-        supports: ['rock'],
+        says: 'Layers of clay minerals formed at the bottom of the lake in Gale Crater.',
+        supports: ['rock', 'landform'],
       },
       {
         title: 'Bradbury Landing (Wikipedia)',
@@ -1063,6 +1073,7 @@ export const TARGETS: Target[] = [
       {
         title: "PIA16913: Steady temperatures at Mars' Gale Crater (NASA JPL)",
         url: 'https://www.jpl.nasa.gov/images/pia16913-steady-temperatures-at-mars-gale-crater/',
+        says: 'REMS measured daily air temperature highs of about 0 °C and lows of about −70 °C.',
         supports: ['dailyRange'],
       },
       {
@@ -1076,21 +1087,26 @@ export const TARGETS: Target[] = [
     id: 'mars-oxia-planum',
     name: 'Oxia Planum',
     body: 'Mars',
-    lat: 18.2,
-    lon: -24.55,
+    lat: 18.275,
+    lon: -24.632,
     materials: ['clay'],
-    landforms: ['lake-sediment'],
+    landforms: [],
     precipMmYr: 0,
     iceAccess: false,
     slopeMaxDeg: 8,
-    note: 'Centre of the ExoMars Rosalind Franklin landing area (18.20°N, 335.45°E). The landing ellipse avoids slopes above 8° at the MOLA sub-kilometre scale.',
+    note: "Landing site of ESA's ExoMars Rosalind Franklin rover; the IAU feature is near 18.275°N, 335.368°E. The landing ellipse avoids slopes above 8° at the MOLA sub-kilometre scale.",
     sources: [
       {
         title:
           'Quantin-Nataf et al. (2021), Astrobiology: Oxia Planum, the landing site for the ExoMars "Rosalind Franklin" rover mission',
         url: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC7987365/',
-        says: 'Oxia Planum is a 200 km-wide, low-relief terrain with clay-bearing bedrock, chosen by ESA as the landing site of the ExoMars rover.',
-        supports: ['rock'],
+        says: 'Oxia Planum is a 200 km-wide, low-relief terrain with clay-bearing bedrock, chosen by ESA as the landing site of the ExoMars rover; the landing ellipse avoids slopes above 8° at the MOLA sub-kilometre scale.',
+        supports: ['rock', 'slope'],
+      },
+      {
+        title: 'Oxia Planum (Wikipedia)',
+        url: 'https://en.wikipedia.org/wiki/Oxia_Planum',
+        says: 'A 200 km-wide clay-bearing plain on the eastern border of Chryse Planitia; the IAU feature is near 18.275°N 335.368°E.',
       },
       {
         title:
@@ -1114,12 +1130,17 @@ export const TARGETS: Target[] = [
     note: 'Crater explored by the Opportunity rover. Slope: 90% of the ground within 10 km is flatter than 0.9° (MOLA, 128 pixels/degree, about 460 m).',
     sources: [
       {
-        title: 'JGR Planets article on Victoria Crater, 2022 (doi 10.1029/2022JE007374)',
+        title:
+          'McCollom & Hynek (2023), JGR Planets: Proposed origin of the Burns formation (Meridiani Planum, Mars)',
         url: 'https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2022JE007374',
+        says: 'The sulfate-rich sandstones of the Burns formation were investigated by the Opportunity rover on Meridiani Planum.',
+        supports: ['rock'],
       },
       {
         title: 'Victoria (crater) (Wikipedia)',
         url: 'https://en.wikipedia.org/wiki/Victoria_(crater)',
+        says: 'Victoria is an impact crater on Mars at 2.05°S, 5.50°W, in Meridiani Planum.',
+        supports: ['landform'],
       },
       {
         title: 'Mars Global Surveyor MOLA topography (MEGDR), 128 pixels/degree (NASA PDS)',
@@ -1145,7 +1166,7 @@ export const TARGETS: Target[] = [
         title:
           'Luzzi et al. (2025), JGR Planets: geomorphological evidence of near-surface ice at candidate landing sites in northern Amazonis Planitia, Mars',
         url: 'https://agupubs.onlinelibrary.wiley.com/doi/10.1029/2024JE008724',
-        says: 'Maps about 9,000 thermal contraction polygons at candidate landing sites AP-1, AP-8 and AP-9 and estimates the ice beneath them lies within tens of centimetres of the surface.',
+        says: 'Characterizes candidate landing sites AP-1 (39.8°N, 202.1°E), AP-8 and AP-9, maps about 9,000 thermal contraction polygons there and estimates the ice beneath them lies within tens of centimetres of the surface.',
         supports: ['ice'],
       },
       {

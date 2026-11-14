@@ -379,7 +379,11 @@ function Example() {
                   <span className="font-medium">{factor.label}</span>
                   <span className="block text-sm text-white/60">{factor.reason}</span>
                 </span>
-                <span className="flex shrink-0 gap-1" aria-label={`${factor.score} of 3`}>
+                <span
+                  className="flex shrink-0 gap-1"
+                  role="img"
+                  aria-label={`${factor.score} of 3`}
+                >
                   {[1, 2, 3].map((n) => (
                     <span
                       key={n}

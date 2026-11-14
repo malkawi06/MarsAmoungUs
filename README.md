@@ -50,7 +50,7 @@ on fewer than two factors is flagged as low confidence.
   reads the MODIS values from NASA GIBS into `analysis/data/ground_temp.csv`.
 - **Mars slope.** Jezero, Gale, Victoria and Arcadia have no published slope limit, so
   `scripts/build_mars_slope.py` measures one from MGS MOLA topography (128 pixels/degree): 90% of the ground
-  within 10 km is flatter than it. Oxia Planum keeps its published 8° (MOLA gives 1.3° there).
+  within 10 km is flatter than it. Oxia Planum keeps its published 8° (MOLA gives 1.0° there).
 - **Slope limits.** The 8° Artemis landing limit is a Moon rule: it gives Moon targets a partial score and
   the base / habitat landing rule. A Mars target is compared with its own published slope only.
 
