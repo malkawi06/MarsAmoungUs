@@ -308,6 +308,34 @@ Meteor Crater ← Craters of the Moon. وديان أنتاركتيكا وبعض 
 
 ---
 
+## 15. غرض «Permanent Moon base» بـ Compare، وقصة الرئيسية
+
+**ليش:** اسم التحدي «Permanent Moon Base Locations». بيانات LRO كانت معروضة بس، وما كانت داخلة بتقييم
+المواقع الأرضية.
+
+**شو انعمل:**
+
+- **غرض جديد للقمر: «Permanent Moon base».** بيقيّم المواقع الأرضية على 4 عوامل:
+  - **Frozen ground:** حرارة الأرض نفسها من MODIS (NASA GIBS) لكل شهر من 2025. علامة 3 إذا ضلت تحت 0 °C حتى
+    بأدفى شهر، و2 إذا معدّلها تحت 0 °C.
+  - **Ground ice:** 3 إذا مصادر الموقع بتوثّق جليد بالأرض، أو إذا التربة المتجمدة 90% أو أكثر (ESA). 2 إذا
+    50–90%. 1 إذا الأرض أدفى من 0 °C أو التربة المتجمدة أقل من النص.
+  - **Slope و Rock:** زي قبل، مع حد Artemis للميل (8°).
+- **من وين الأرقام:** جهة القمر من Diviner. كل منطقة Artemis أبرد من أي موقع أرضي عنا (أدفى منطقة −104 °C،
+  وأبرد موقع −28.9 °C)، فالبرد بيتقيّم «متجمدة أو لا». تعريف الأرض المتجمدة من NSIDC.
+- **صراحة:** الشمس شبه الدائمة، والفراغ والإشعاع، إلهم سطر «Not compared yet»، لأنه ما في إلهم مقابل على
+  الأرض.
+- **النتيجة لـ Slater Plain:** Taylor Valley و Haughton (75%)، وبعدهم Garwood. Beacon Valley نزل لأنه ميله
+  22.5°، أعلى من حد الهبوط.
+- **الرئيسية:** قسم «Why it matters» تحت أول الصفحة: ليش المشروع مهم، ومين بيستفيد منه (مخططي المهمات،
+  الباحثين، والطلاب والناس).
+
+**الملفات:** `src/lib/similarity.ts`، `src/components/FactorEvidence.tsx`، `src/lib/icons.ts`،
+`scripts/build_ground_temperature.py`، `analysis/data/ground_temp.csv`، `analysis/build_compare_data.py`،
+`src/data/compare.ts`، `src/pages/Home.tsx`، `src/config/site.ts`، `tests/similarity.test.ts`.
+
+---
+
 ## اللي ما انعمل ولازم تعرفه
 
 - **ملف الـ Excel** (`analysis/mars-among-us-analog-data.xlsx`) ما تعدّل. إذا فيه شرح للطريقة، لازم يتراجع.

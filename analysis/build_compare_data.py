@@ -7,6 +7,8 @@ Inputs (see analysis/README.md for how each was made):
   data/moon_centroids.json Artemis region centres (mean of published landing sites)
   data/moon_environment.json Sunlight (LOLA), temperature and stable ice (Diviner) per Artemis region,
                            built by scripts/build_moon_environment.py
+  data/ground_temp.csv     MODIS ground temperature per Earth site, built by scripts/build_ground_temperature.py
+  ../public/discover/cells.json  ESA Permafrost_cci share of each 0.5° patch (scripts/build_permafrost.py)
 """
 
 import csv
@@ -21,6 +23,15 @@ power = {r['id']: r for r in csv.DictReader(open(DATA / 'power.csv'))}
 dem = {r['id']: r for r in csv.DictReader(open(DATA / 'dem.csv'))}
 moon_centroids = json.load(open(DATA / 'moon_centroids.json'))
 moon_environment = json.load(open(DATA / 'moon_environment.json'))
+ground = {r['id']: r for r in csv.DictReader(open(DATA / 'ground_temp.csv'))}
+cells = json.load(open(ROOT / 'public' / 'discover' / 'cells.json'))
+patch = {(r, c): i for i, (r, c) in enumerate(zip(cells['row'], cells['col']))}
+
+
+def permafrost_at(lat, lon):
+    """ESA permafrost share (%) of the Discover patch containing the point, or None."""
+    i = patch.get((int((90 - lat) / cells['cellDeg']), int((lon + 180) / cells['cellDeg'])))
+    return None if i is None else cells['permafrostPct'][i]
 
 # Existing analog sites: name, country, coordinates and first source come from src/data/analogs.ts.
 analogs_ts = (ROOT / 'src' / 'data' / 'analogs.ts').read_text()
@@ -237,6 +248,10 @@ for sid, analog_for, materials, landforms, extra in EARTH:
         'reliefM': None if sid in ON_WATER else int(d['relief_m']),
         'materials': materials, 'landforms': landforms, 'source': source,
     }
+    g = ground[sid]
+    row['groundTempC'] = float(g['annual_c']) if g['annual_c'] else None
+    row['groundWarmestMonthC'] = float(g['warmest_month_c']) if g['warmest_month_c'] else None
+    row['permafrostPct'] = permafrost_at(lat, lon)
     if d['flag']:
         row['note'] = d['flag']
     earth_rows.append(row)
@@ -256,7 +271,7 @@ for i, (name, cold_trap, landform, setting, setting_sources) in enumerate(MOON, 
         'id': f'moon-{i}', 'name': name, 'body': 'Moon', 'lat': lat, 'lon': lon,
         'materials': ['anorthosite'], 'landforms': [landform], 'slopeMaxDeg': 5, 'precipMmYr': 0, 'iceAccess': cold_trap,
         'setting': setting,
-        # Shown on the page as the region's environment; not scored, since no Earth site has comparable values.
+        # The region's environment: Diviner temperature and ice set the Permanent Moon base factors; the rest is shown only.
         'environment': {
             'radiusKm': moon_environment['radiusKm'],
             **{k: v for k, v in moon_environment['regions'][name].items() if k not in ('lolaPixels', 'divinerPoints', 'minirfPixels')},

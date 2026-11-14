@@ -179,6 +179,27 @@ export const site = {
   } satisfies Record<string, Photo>,
 
   home: {
+    /** Right under the hero: who the project helps and why it matters. */
+    impact: {
+      eyebrow: 'Why it matters',
+      title: 'Before the Moon and Mars, there is Earth',
+      intro:
+        'Rovers, instruments and crews headed for the Moon and Mars are tested first at places on Earth that resemble them. Where they train decides what those tests can prove, and today the right place is found by searching scattered research papers by hand.',
+      audiences: [
+        {
+          who: 'Mission and training planners',
+          what: 'A ranked shortlist of Earth sites for one Artemis region or Mars site and one job, with the evidence behind every score.',
+        },
+        {
+          who: 'Analog researchers',
+          what: 'New candidate regions found across all of Earth’s land, beyond the handful of places already in use.',
+        },
+        {
+          who: 'Students and the public',
+          what: 'A way to see how places on Earth relate to the Moon and Mars, with every number traced to NASA data or a published study.',
+        },
+      ],
+    },
     primaryCta: { label: 'Discover new analogs', to: '/discover' },
     secondaryCta: { label: 'Compare with the Moon and Mars', to: '/compare' },
     /** Title of the Home section on how scores are worked out. */
@@ -324,7 +345,7 @@ export const site = {
         name: 'MODIS Terra land surface temperature, via NASA Worldview/GIBS',
         url: 'https://worldview.earthdata.nasa.gov',
         howWeUseIt:
-          "A map layer of the ground's own temperature (January and July 2026), the Earth counterpart of Diviner on the Moon.",
+          "The ground's own temperature, the Earth counterpart of Diviner on the Moon: a map layer, and each Earth site's monthly values for 2025, which score frozen ground for a permanent Moon base.",
       },
       {
         name: 'NASA Worldview and Earthdata Search',

@@ -32,6 +32,11 @@ export interface EarthSite {
   landforms: string[]
   source: string
   note?: string
+  /** MODIS ground (land surface) temperature, °C: the year's mean and the warmest month's mean. */
+  groundTempC?: number | null
+  groundWarmestMonthC?: number | null
+  /** ESA Permafrost_cci: share of the site's 0.5° patch underlain by permafrost, %. null = no data. */
+  permafrostPct?: number | null
 }
 
 export interface Target {
@@ -57,8 +62,8 @@ export interface Target {
 }
 
 /**
- * A Moon region's environment, from scripts/build_moon_environment.py. Shown, not scored: Earth sites have
- * air temperatures and no sunlit-time value, so there is nothing comparable on the Earth side.
+ * A Moon region's environment, from scripts/build_moon_environment.py. Diviner's temperature and ice
+ * set the Moon side of the Permanent Moon base factors; sunlight and radar are shown, not scored.
  */
 export interface MoonEnvironment {
   /** Every value covers the points within this distance of the region centre. */
@@ -88,7 +93,16 @@ export interface TargetSource {
   supports?: FactorId[]
 }
 
-export type FactorId = 'slope' | 'rock' | 'landform' | 'meanTemp' | 'aridity' | 'ice' | 'dailyRange'
+export type FactorId =
+  | 'slope'
+  | 'rock'
+  | 'landform'
+  | 'meanTemp'
+  | 'aridity'
+  | 'ice'
+  | 'dailyRange'
+  | 'frozenGround'
+  | 'groundIce'
 
 export type Score = 1 | 2 | 3
 
@@ -141,6 +155,16 @@ const SUNLIGHT: PlannedFactor = {
   why: 'Each Artemis region shows its sunlight from NASA LOLA above, but no Earth site has a comparable value, so it is not scored.',
   bodies: ['Moon'],
 }
+const POLAR_SUNLIGHT: PlannedFactor = {
+  label: 'Near-constant sunlight',
+  why: 'The best-lit spots of each Artemis region are in sunlight most of the time (LOLA, above). Beyond Earth’s polar circles there are months of daylight and months of darkness, but no place on Earth stays lit almost all year, so this cannot be matched.',
+  bodies: ['Moon'],
+}
+const VACUUM: PlannedFactor = {
+  label: 'Vacuum and radiation',
+  why: 'No place on Earth has the Moon’s vacuum or its surface radiation; they are tested in chambers, not at field sites.',
+  bodies: ['Moon'],
+}
 const RADIATION: PlannedFactor = {
   label: 'Radiation / UV',
   why: 'No sourced radiation value has been added for the Mars targets or the Earth sites.',
@@ -160,6 +184,16 @@ export const PURPOSES: Purpose[] = [
     bodies: ['Moon', 'Mars'],
     factors: ['dailyRange', 'meanTemp', 'slope', 'rock'],
     planned: [SUNLIGHT],
+    maxSlopeDeg: 8,
+  },
+  {
+    // The challenge's permanent bases sit in the Artemis regions near the south pole: ground far below
+    // freezing, with ice that could stay stable near the surface (Diviner).
+    id: 'moonBase',
+    label: 'Permanent Moon base',
+    bodies: ['Moon'],
+    factors: ['frozenGround', 'groundIce', 'slope', 'rock'],
+    planned: [POLAR_SUNLIGHT, VACUUM],
     maxSlopeDeg: 8,
   },
   {
@@ -196,6 +230,8 @@ export const FACTOR_LABELS: Record<FactorId, string> = {
   aridity: 'Dryness',
   ice: 'Water ice',
   dailyRange: 'Day–night temperature swing',
+  frozenGround: 'Frozen ground',
+  groundIce: 'Ground ice',
 }
 
 /** Materials in the same group are a partial match (e.g. clay vs sandstone). */
@@ -222,6 +258,11 @@ const MEAN_TEMP_GAP = { strong: 20, partial: 45 }
 const DAILY_RANGE_GAP = { strong: 10, partial: 30 }
 /** Yearly precipitation (mm) for hyper-arid and desert. */
 const RAIN = { hyperArid: 25, desert: 250 }
+/** Water freezes at 0 °C: ground at or below it is frozen (NSIDC). */
+const FREEZING_C = 0
+/** Permafrost zones by share of the ground (IPA classes, as used by ESA Permafrost_cci). */
+const PERMAFROST = { continuous: 90, discontinuous: 50 }
+const kelvinToC = (k: number) => Math.round(k - 273.15)
 
 const list = (items: string[]) => items.join(', ') || 'none recorded'
 const result = (
@@ -358,6 +399,59 @@ export function scoreFactor(factor: FactorId, target: Target, site: EarthSite): 
         ? result(factor, 3, 'ice reachable', 'ice', 'Both have ground ice.')
         : result(factor, 1, 'ice reachable', 'no ice', 'No ground ice at this site.')
     }
+    case 'frozenGround': {
+      const t = site.groundTempC
+      const warm = site.groundWarmestMonthC
+      const earth =
+        t === undefined || t === null
+          ? 'not measured'
+          : `${t.toFixed(1)} °C mean, ${warm?.toFixed(1)} °C in the warmest month`
+      if (!target.environment) return noData(factor, earth)
+      const targetC = kelvinToC(target.environment.tempAvgMedianK)
+      const targetText = `${targetC} °C mean (Diviner)`
+      if (t === undefined || t === null || warm === undefined || warm === null)
+        return result(factor, 2, targetText, earth, 'No ground temperature for this site: neutral.')
+      const score: Score = warm < FREEZING_C ? 3 : t < FREEZING_C ? 2 : 1
+      const reason =
+        score === 3
+          ? 'The ground stays below 0 °C even in the warmest month.'
+          : score === 2
+            ? 'The ground averages below 0 °C over the year, but thaws in the warmest months.'
+            : 'The ground averages above 0 °C.'
+      // 1 at 0 °C, where the factor turns weak; colder is closer to the Moon's ground.
+      return result(factor, score, targetText, earth, reason, Math.max(0, t - targetC) / -targetC)
+    }
+    case 'groundIce': {
+      const pf = site.permafrostPct
+      const recorded = site.materials.includes('ice')
+      const parts = [
+        ...(recorded ? ['ground ice recorded'] : []),
+        ...(pf === undefined || pf === null ? [] : [`${pf}% permafrost`]),
+      ]
+      const earth = parts.join(', ') || 'no data'
+      if (!target.environment) return noData(factor, earth)
+      const targetText = `${target.environment.iceWithin1mPct}% of the area could hold ice within 1 m (Diviner)`
+      if (recorded)
+        return result(factor, 3, targetText, earth, "The site's sources describe ground ice.")
+      if (pf !== undefined && pf !== null) {
+        if (pf >= PERMAFROST.continuous)
+          return result(factor, 3, targetText, earth, 'Continuous permafrost.')
+        if (pf >= PERMAFROST.discontinuous)
+          return result(factor, 2, targetText, earth, 'Discontinuous permafrost.')
+      }
+      const t = site.groundTempC
+      if (t !== undefined && t !== null && t >= FREEZING_C)
+        return result(
+          factor,
+          1,
+          targetText,
+          earth,
+          'The ground averages above 0 °C, too warm for permafrost.',
+        )
+      if (pf !== undefined && pf !== null)
+        return result(factor, 1, targetText, earth, 'Less than half the ground is permafrost.')
+      return result(factor, 2, targetText, earth, 'No permafrost data here: neutral.')
+    }
     case 'dailyRange': {
       const earth = `${site.dailyRangeC.toFixed(1)} °C`
       if (target.dailyRangeC === undefined) return noData(factor, earth)
@@ -430,6 +524,30 @@ export function scoreLevels(factor: FactorId, target: Target): { score: Score; t
       return [
         { score: 3, text: 'Both have ground ice.' },
         { score: 1, text: 'The target has reachable ice; the Earth site has none.' },
+      ]
+    case 'frozenGround':
+      return [
+        { score: 3, text: 'The ground stays below 0 °C even in the warmest month.' },
+        {
+          score: 2,
+          text: 'The ground averages below 0 °C over the year. Also given when it is not measured.',
+        },
+        { score: 1, text: 'The ground averages above 0 °C.' },
+      ]
+    case 'groundIce':
+      return [
+        {
+          score: 3,
+          text: `The site's sources describe ground ice, or at least ${PERMAFROST.continuous}% of the ground is permafrost (continuous).`,
+        },
+        {
+          score: 2,
+          text: `${PERMAFROST.discontinuous}–${PERMAFROST.continuous}% permafrost (discontinuous). Also given when there is no data and the ground is cold enough for it.`,
+        },
+        {
+          score: 1,
+          text: `Less than ${PERMAFROST.discontinuous}% permafrost, or ground that averages above 0 °C.`,
+        },
       ]
   }
 }

@@ -18,6 +18,9 @@ export const EARTH_SITES: EarthSite[] = [
     materials: ['sand'],
     landforms: ['dunes'],
     source: 'https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2007JF000767',
+    groundTempC: 26.3,
+    groundWarmestMonthC: 31.0,
+    permafrostPct: null,
   },
   {
     id: 'white-sands',
@@ -35,6 +38,9 @@ export const EARTH_SITES: EarthSite[] = [
     materials: ['sand', 'sulfate'],
     landforms: ['dunes'],
     source: 'https://www.sciencedirect.com/science/article/abs/pii/S0169555X09000786',
+    groundTempC: 21.4,
+    groundWarmestMonthC: 34.3,
+    permafrostPct: null,
   },
   {
     id: 'namib',
@@ -52,6 +58,9 @@ export const EARTH_SITES: EarthSite[] = [
     materials: ['sand'],
     landforms: ['dunes'],
     source: 'https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2020GL088456',
+    groundTempC: 28.7,
+    groundWarmestMonthC: 37.0,
+    permafrostPct: null,
   },
   {
     id: 'mdrs-hanksville',
@@ -69,6 +78,9 @@ export const EARTH_SITES: EarthSite[] = [
     materials: ['clay', 'sandstone'],
     landforms: ['lake-sediment'],
     source: 'https://www.lpi.usra.edu/meetings/analogues2011/pdf/6029.pdf',
+    groundTempC: 19.8,
+    groundWarmestMonthC: 36.1,
+    permafrostPct: null,
   },
   {
     id: 'wadi-rum',
@@ -86,6 +98,9 @@ export const EARTH_SITES: EarthSite[] = [
     materials: ['sandstone', 'sand'],
     landforms: [],
     source: 'https://science.nasa.gov/earth/earth-observatory/wadi-rum-jordan-49945/',
+    groundTempC: 24.0,
+    groundWarmestMonthC: 35.2,
+    permafrostPct: null,
   },
   {
     id: 'green-river',
@@ -104,6 +119,9 @@ export const EARTH_SITES: EarthSite[] = [
     landforms: ['channel'],
     source:
       'https://pubs.geoscienceworld.org/gsa/books/edited-volume/645/chapter/3807016/Field-guide-to-exhumed-paleochannels-near-Green',
+    groundTempC: 19.5,
+    groundWarmestMonthC: 36.4,
+    permafrostPct: null,
   },
   {
     id: 'qaidam',
@@ -121,6 +139,9 @@ export const EARTH_SITES: EarthSite[] = [
     materials: ['salt'],
     landforms: [],
     source: 'https://www.sciencedirect.com/science/article/abs/pii/S001282521630174X',
+    groundTempC: 9.7,
+    groundWarmestMonthC: 27.4,
+    permafrostPct: null,
   },
   {
     id: 'channeled-scablands',
@@ -138,6 +159,9 @@ export const EARTH_SITES: EarthSite[] = [
     materials: [],
     landforms: ['channel'],
     source: 'https://www.gps.caltech.edu/~mpl/Ge121a_Scablands/Ge121a.htm',
+    groundTempC: 13.2,
+    groundWarmestMonthC: 29.2,
+    permafrostPct: null,
   },
   {
     id: 'tuktoyaktuk',
@@ -156,6 +180,9 @@ export const EARTH_SITES: EarthSite[] = [
     landforms: [],
     source:
       'https://www.usgs.gov/publications/possible-pingos-and-a-periglacial-landscape-northwest-utopia-planitia',
+    groundTempC: -10.4,
+    groundWarmestMonthC: 14.8,
+    permafrostPct: 100,
     note: 'Coordinates fall on water near the coast: slope and relief not measured.',
   },
   {
@@ -174,6 +201,9 @@ export const EARTH_SITES: EarthSite[] = [
     materials: ['ice'],
     landforms: [],
     source: 'https://www.lpi.usra.edu/meetings/lpsc2011/pdf/1432.pdf',
+    groundTempC: -23.1,
+    groundWarmestMonthC: -2.6,
+    permafrostPct: null,
   },
   {
     id: 'taylor-valley',
@@ -191,6 +221,9 @@ export const EARTH_SITES: EarthSite[] = [
     materials: ['ice'],
     landforms: [],
     source: 'https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2018RG000617',
+    groundTempC: -24.5,
+    groundWarmestMonthC: -3.8,
+    permafrostPct: null,
   },
   {
     id: 'blackhawk',
@@ -208,6 +241,9 @@ export const EARTH_SITES: EarthSite[] = [
     materials: [],
     landforms: ['landslide'],
     source: 'https://www.jpl.nasa.gov/images/pia21008-blackhawk-landslide-california/',
+    groundTempC: 21.7,
+    groundWarmestMonthC: 35.2,
+    permafrostPct: null,
   },
   {
     id: 'meteor-crater',
@@ -225,6 +261,9 @@ export const EARTH_SITES: EarthSite[] = [
     materials: [],
     landforms: ['impact'],
     source: 'https://www.usgs.gov/science/science-explorer/planetary-science/terrestrial-analogs',
+    groundTempC: 19.9,
+    groundWarmestMonthC: 34.9,
+    permafrostPct: null,
   },
   {
     id: 'haughton',
@@ -242,6 +281,9 @@ export const EARTH_SITES: EarthSite[] = [
     materials: [],
     landforms: ['impact'],
     source: 'https://www.marsinstitute.no/hmp',
+    groundTempC: -16.7,
+    groundWarmestMonthC: 14.8,
+    permafrostPct: 100,
   },
   {
     id: 'lonar',
@@ -259,6 +301,9 @@ export const EARTH_SITES: EarthSite[] = [
     materials: ['basalt'],
     landforms: ['impact'],
     source: 'https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2020JE006593',
+    groundTempC: 28.6,
+    groundWarmestMonthC: 36.4,
+    permafrostPct: null,
     note: 'Coordinates fall on the crater lake: slope and relief not measured.',
   },
   {
@@ -278,6 +323,9 @@ export const EARTH_SITES: EarthSite[] = [
     landforms: ['impact'],
     source:
       'https://www.unsw.edu.au/content/dam/pdfs/science/aca/research-reports/2022-01-aca-research/2022-01-West,%20Clarke,%20Thomas,%20Walter%20and%20Pain%20%202010%20_0.pdf',
+    groundTempC: 27.7,
+    groundWarmestMonthC: 40.0,
+    permafrostPct: null,
   },
   {
     id: 'atacama-yungay',
@@ -295,6 +343,9 @@ export const EARTH_SITES: EarthSite[] = [
     materials: ['salt'],
     landforms: [],
     source: 'https://www.nature.com/articles/s41598-020-76302-z',
+    groundTempC: 23.5,
+    groundWarmestMonthC: 31.0,
+    permafrostPct: null,
   },
   {
     id: 'salar-de-uyuni',
@@ -312,6 +363,9 @@ export const EARTH_SITES: EarthSite[] = [
     materials: ['salt'],
     landforms: [],
     source: 'https://earthobservatory.nasa.gov/images/151813/bolivian-salt-flats',
+    groundTempC: 5.1,
+    groundWarmestMonthC: 13.2,
+    permafrostPct: null,
     note: 'Salt flat: the small slope is within DEM noise.',
   },
   {
@@ -330,6 +384,9 @@ export const EARTH_SITES: EarthSite[] = [
     materials: ['basalt'],
     landforms: [],
     source: 'https://iopscience.iop.org/article/10.3847/PSJ/adb5f1',
+    groundTempC: -0.7,
+    groundWarmestMonthC: 14.2,
+    permafrostPct: 34,
   },
   {
     id: 'beacon-valley',
@@ -347,6 +404,9 @@ export const EARTH_SITES: EarthSite[] = [
     materials: ['ice'],
     landforms: ['polygons'],
     source: 'https://www.hou.usra.edu/meetings/marspolar2024/pdf/6062.pdf',
+    groundTempC: -28.9,
+    groundWarmestMonthC: -11.0,
+    permafrostPct: null,
   },
   {
     id: 'mistastin',
@@ -365,6 +425,9 @@ export const EARTH_SITES: EarthSite[] = [
     landforms: ['impact'],
     source:
       'https://www.researchgate.net/publication/241208537_Mistastin_Impact_Structure_Labrador_A_Geological_Analogue_for_Lunar_Highland_Craters',
+    groundTempC: -5.2,
+    groundWarmestMonthC: 11.2,
+    permafrostPct: 31,
     note: 'Coordinates fall on Mistastin Lake: slope and relief not measured.',
   },
   {
@@ -383,6 +446,9 @@ export const EARTH_SITES: EarthSite[] = [
     materials: [],
     landforms: ['impact'],
     source: 'https://blogs.esa.int/caves/2017/09/18/the-astronauts-are-back/',
+    groundTempC: 10.8,
+    groundWarmestMonthC: 23.2,
+    permafrostPct: null,
   },
   {
     id: 'lofoten',
@@ -400,6 +466,9 @@ export const EARTH_SITES: EarthSite[] = [
     materials: ['anorthosite'],
     landforms: [],
     source: 'https://blogs.esa.int/caves/2025/07/28/astronauts-learn-moon-geology-in-a-fjord/',
+    groundTempC: 4.1,
+    groundWarmestMonthC: 19.0,
+    permafrostPct: null,
   },
   {
     id: 'craters-of-the-moon',
@@ -418,6 +487,9 @@ export const EARTH_SITES: EarthSite[] = [
     landforms: [],
     source:
       'https://www.nps.gov/crmo/learn/historyculture/space-exploration-research-and-astronaut-training.htm',
+    groundTempC: 10.8,
+    groundWarmestMonthC: 29.5,
+    permafrostPct: null,
   },
   {
     id: 'lanzarote-corona',
@@ -435,6 +507,9 @@ export const EARTH_SITES: EarthSite[] = [
     materials: ['basalt'],
     landforms: ['lava-tube'],
     source: 'https://pubmed.ncbi.nlm.nih.gov/41572783/',
+    groundTempC: 22.4,
+    groundWarmestMonthC: 27.4,
+    permafrostPct: null,
   },
 ]
 

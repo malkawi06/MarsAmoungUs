@@ -22,6 +22,27 @@ const EARTH_DATA = {
     url: 'https://asterweb.jpl.nasa.gov/gdem.asp',
     how: "Nine elevation points 300 m apart around the pin, a window 0.6 km wide. Slope is measured at the centre point (Horn's method).",
   },
+  groundTemp: {
+    title: 'MODIS Terra land surface temperature, monthly, 2025 (NASA GIBS / Worldview)',
+    url: 'https://worldview.earthdata.nasa.gov',
+    how: 'The temperature of the ground itself, read at the site for each month of 2025, day and night averaged (night only in polar night).',
+  },
+  permafrost: {
+    title: 'ESA Permafrost_cci, permafrost extent v3.0, 2019 (via the ESA Open Science Catalog)',
+    url: 'https://catalogue.ceda.ac.uk/uuid/6e2091cb0c8b4106921b63cd5357c97c',
+    how: 'Share of the 0.5° patch around the site underlain by permafrost. Northern Hemisphere only. Zones: continuous 90–100%, discontinuous 50–90%.',
+  },
+  frozen: {
+    title: 'NSIDC: frozen ground and permafrost',
+    url: 'https://nsidc.org/learn/parts-cryosphere/frozen-ground-permafrost',
+    how: 'Ground at or below 0 °C is frozen; permafrost is ground frozen for at least two years.',
+  },
+}
+
+/** Where the Moon side of the cold and ice factors comes from. */
+const DIVINER = {
+  title: 'Diviner Polar Resource Product, south pole (NASA LRO; Paige et al. 2010, Science)',
+  url: 'https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_prp/',
 }
 
 const SCORE_WORD = { 3: 'strong', 2: 'partial', 1: 'weak' } as const
@@ -143,6 +164,17 @@ function Side({ label, value, children }: { label: string; value: string; childr
 function TargetEvidence({ factor, target }: { factor: FactorResult; target: Target }) {
   if (factor.factor === 'aridity')
     return <p>No rain falls on the {target.body} today, so the target counts as fully dry.</p>
+  if ((factor.factor === 'frozenGround' || factor.factor === 'groundIce') && target.environment)
+    return (
+      <>
+        <p>
+          {factor.factor === 'frozenGround'
+            ? 'Median of the yearly average surface temperature within the region, measured by Diviner. Every Artemis region is colder on average than the ground at any of our Earth sites, so on Earth this factor asks only whether the ground stays frozen.'
+            : 'Share of the region where water ice would stay stable within 1 m of the surface, from Diviner temperatures.'}
+        </p>
+        <SourceLink title={DIVINER.title} url={DIVINER.url} />
+      </>
+    )
   const backing = target.sources.filter((s) => s.supports?.includes(factor.factor))
   if (factor.target === 'no data' || !backing.length)
     return (
@@ -184,6 +216,31 @@ function EarthEvidence({
     case 'dailyRange':
     case 'aridity':
       return <DataSet data={EARTH_DATA.climate} />
+    case 'frozenGround':
+      return (
+        <>
+          <DataSet data={EARTH_DATA.groundTemp} />
+          <DataSet data={EARTH_DATA.frozen} />
+        </>
+      )
+    case 'groundIce':
+      return (
+        <>
+          {site.materials.includes('ice') &&
+            (analog ? (
+              <>
+                <p>“{analog.why}”</p>
+                {analog.sources.map((s) => (
+                  <SourceLink key={s.url} title={s.title} url={s.url} />
+                ))}
+              </>
+            ) : (
+              <SourceLink title="Source for this site" url={site.source} />
+            ))}
+          <DataSet data={EARTH_DATA.permafrost} />
+          <DataSet data={EARTH_DATA.frozen} />
+        </>
+      )
     case 'slope':
       return site.slopeDeg === null ? (
         <p>Not measured: the coordinates fall on water, so the elevation model sees the water.</p>

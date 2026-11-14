@@ -2,6 +2,9 @@ import {
   CarFront,
   GitCompareArrows,
   House,
+  Landmark,
+  MountainSnow,
+  ThermometerSnowflake,
   Telescope,
   Users,
   DropletOff,
@@ -35,6 +38,7 @@ export const PAGE_ICONS: Record<string, LucideIcon> = {
 export const PURPOSE_ICONS: Record<string, LucideIcon> = {
   rover: CarFront,
   base: Tent,
+  moonBase: Landmark,
   isru: Pickaxe,
   life: Microscope,
   training: Footprints,
@@ -48,5 +52,7 @@ export const FACTOR_ICONS: Record<FactorId, LucideIcon> = {
   aridity: DropletOff,
   ice: Snowflake,
   dailyRange: ThermometerSun,
+  frozenGround: ThermometerSnowflake,
+  groundIce: MountainSnow,
 }
 export { ListChecks, Satellite }

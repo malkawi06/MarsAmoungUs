@@ -31,7 +31,7 @@ const latLon = (lat: number, lon: number) =>
 
 /**
  * What NASA's Lunar Reconnaissance Orbiter measured around an Artemis region: sunlight, shadow,
- * temperature and stable ice. Shown for the region, not scored against Earth sites.
+ * temperature and stable ice. Temperature and ice feed the Permanent Moon base purpose; the rest is shown only.
  */
 export function MoonEnvironment({ environment: e }: { environment: Environment }) {
   const items = [
@@ -117,9 +117,10 @@ export function MoonEnvironment({ environment: e }: { environment: Environment }
           ))}
         </ul>
         <p className="mt-2 text-xs text-muted">
-          Shown, not scored. Diviner measures the ground&apos;s surface; NASA POWER measures the air
-          2 m up, so the numbers give a sense of scale, not an exact match. These ice sites are
-          studied as Mars analogs; each link opens Discover to find more cold places like it.
+          Diviner measures the ground&apos;s surface; NASA POWER measures the air 2 m up, so these
+          numbers give a sense of scale, not an exact match. The Permanent Moon base purpose
+          compares the ground itself, with MODIS on Earth. These ice sites are studied as Mars
+          analogs; each link opens Discover to find more cold places like it.
         </p>
         <p className="mt-2 text-sm">
           <Link

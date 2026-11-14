@@ -23,6 +23,8 @@ export default function Home() {
     <div className="bg-black text-white">
       <Hero />
 
+      <Impact />
+
       <Panel
         photo={site.photos.discover}
         eyebrow="01 · Discover"
@@ -239,6 +241,36 @@ const show = (v: number | string | null, unit: string) =>
   v === null ? '—' : typeof v === 'number' ? `${v.toLocaleString('en')} ${unit}`.trim() : v
 
 /** One region Discover found that is not on any of our analog lists, worked out at build time. */
+function Impact() {
+  const ref = useReveal<HTMLElement>()
+  const { impact } = site.home
+  return (
+    <section ref={ref} className="border-b border-white/10 bg-black">
+      <div className="mx-auto max-w-[90rem] px-5 py-16 sm:px-8 sm:py-24">
+        <div className="reveal max-w-3xl">
+          <p className="font-display text-sm font-semibold tracking-[0.3em] text-white/70 uppercase">
+            {impact.eyebrow}
+          </p>
+          <h2 className="mt-4 font-display text-3xl leading-tight font-bold uppercase sm:text-5xl">
+            {impact.title}
+          </h2>
+          <p className="mt-6 text-lg text-white/80">{impact.intro}</p>
+        </div>
+        <ul className="reveal mt-12 grid gap-px overflow-hidden border border-white/10 bg-white/10 md:grid-cols-3">
+          {impact.audiences.map((a) => (
+            <li key={a.who} className="bg-black p-6">
+              <h3 className="font-display text-sm font-semibold tracking-[0.2em] text-accent uppercase">
+                {a.who}
+              </h3>
+              <p className="mt-3 text-white/80">{a.what}</p>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  )
+}
+
 function Discovery() {
   const ref = useReveal<HTMLElement>()
   return (

@@ -59,6 +59,60 @@ const target = (overrides: Partial<Target> = {}): Target => ({
 const purpose = (id: string): Purpose => PURPOSES.find((p) => p.id === id)!
 
 describe('scoreFactor', () => {
+  it('scores frozen ground from the MODIS ground temperature', () => {
+    const moon = target({
+      environment: {
+        radiusKm: 7.5,
+        sunlitBestPct: 80,
+        sunlitMedianPct: 30,
+        permanentShadowPct: 1,
+        tempAvgMedianK: 113,
+        tempAvgMinK: 41,
+        tempMaxK: 278,
+        iceWithin1mPct: 50,
+        radarCprMedian: 0.5,
+        radarCprAbove1Pct: 2,
+      },
+    })
+    const f = (groundTempC: number | null, groundWarmestMonthC: number | null) =>
+      scoreFactor('frozenGround', moon, site({ groundTempC, groundWarmestMonthC })).score
+    assert.equal(f(-29, -11), 3)
+    assert.equal(f(-10, 15), 2)
+    assert.equal(f(12, 30), 1)
+    assert.equal(f(null, null), 2)
+    // Without Diviner data the target has no value, so the factor is left out.
+    assert.equal(
+      scoreFactor('frozenGround', target(), site({ groundTempC: -29, groundWarmestMonthC: -11 }))
+        .score,
+      null,
+    )
+  })
+
+  it('scores ground ice from recorded ice, ESA permafrost and ground temperature', () => {
+    const moon = target({
+      environment: {
+        radiusKm: 7.5,
+        sunlitBestPct: 80,
+        sunlitMedianPct: 30,
+        permanentShadowPct: 1,
+        tempAvgMedianK: 113,
+        tempAvgMinK: 41,
+        tempMaxK: 278,
+        iceWithin1mPct: 50,
+        radarCprMedian: 0.5,
+        radarCprAbove1Pct: 2,
+      },
+    })
+    const g = (o: Partial<EarthSite>) => scoreFactor('groundIce', moon, site(o)).score
+    assert.equal(g({ materials: ['ice'] }), 3)
+    assert.equal(g({ permafrostPct: 100, groundTempC: -16 }), 3)
+    assert.equal(g({ permafrostPct: 60, groundTempC: -3 }), 2)
+    assert.equal(g({ permafrostPct: 34, groundTempC: -1 }), 1)
+    // No permafrost value: too warm for it, or unknown when the ground is cold.
+    assert.equal(g({ permafrostPct: null, groundTempC: 20 }), 1)
+    assert.equal(g({ permafrostPct: null, groundTempC: -5 }), 2)
+  })
+
   it('scores slope against the target limit and the 8° landing limit', () => {
     const t = target({ slopeMaxDeg: 5 })
     assert.equal(scoreFactor('slope', t, site({ slopeDeg: 5 })).score, 3)

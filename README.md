@@ -42,6 +42,12 @@ on fewer than two factors is flagged as low confidence.
   tell apart share a place (shown as `=2`) instead of being listed in an arbitrary order.
 - **Not compared yet.** Local relief, sunlight and radiation have no sourced, comparable value for any
   target, so they are not scored. The page names them under each purpose instead of counting them as factors.
+- **Permanent Moon base.** For the challenge's polar base sites, Earth sites are scored on frozen ground
+  (MODIS ground temperature: below 0 °C all year, or on average) and ground ice (ice in the site's sources, or
+  ESA Permafrost_cci continuous / discontinuous permafrost), plus slope and rock. Every Artemis region is
+  colder than any of our Earth sites (Diviner), so cold is scored as frozen or not. Near-constant sunlight,
+  vacuum and radiation have no Earth match and are named, not scored. `scripts/build_ground_temperature.py`
+  reads the MODIS values from NASA GIBS into `analysis/data/ground_temp.csv`.
 - **Slope limits.** The 8° Artemis landing limit is a Moon rule: it gives Moon targets a partial score and
   the base / habitat landing rule. A Mars target is compared with its own published slope only.
 
@@ -54,8 +60,8 @@ The data and its sources are in [`analysis/`](analysis/README.md); regenerate `s
 within 7.5 km of its centre: sunlight and permanent shadow from LOLA, surface temperature and stable ice from
 Diviner, and the radar circular polarization ratio (CPR) from the Mini-RF global mosaic. CPR above 1 is what
 ice gives, and rough ground too, so it is shown as a measurement, not as ice. It downloads only the parts of each file around the regions and writes
-`analysis/data/moon_environment.json`, which `analysis/build_compare_data.py` adds to the Moon targets. The
-values are shown on Compare, not scored: Earth sites have air temperatures and no sunlit-time value.
+`analysis/data/moon_environment.json`, which `analysis/build_compare_data.py` adds to the Moon targets.
+Temperature and ice set the Moon side of the Permanent Moon base factors; sunlight and radar are shown only.
 
 ### Discover grid
 
@@ -139,6 +145,7 @@ scripts/
 ├── build_discover.py    ← builds the Discover grid (run by hand, result committed)
 ├── build_moon_environment.py ← LRO sunlight, temperature, ice and radar per Artemis region (run by hand)
 ├── build_permafrost.py  ← adds ESA permafrost to the Discover grid (run by hand, after build_discover.py)
+├── build_ground_temperature.py ← MODIS ground temperature per Earth site (run by hand)
 ├── fetch_earth_images.py ← deploy-time orbital images
 └── lroc_roi.py          ← LROC Artemis site mosaics, used by fetch_earth_images.py
 tests/                   ← unit tests for both scoring modules and checks on the data files
@@ -156,7 +163,8 @@ tests/                   ← unit tests for both scoring modules and checks on t
 - **Moon temperature and stable ice:** LRO Diviner Polar Resource Product (Paige et al. 2010, Science).
 - **Moon radar:** LRO Mini-RF global mosaic, CPR, 32 pixels/degree (PDS Geosciences Node); meaning of CPR after
   Spudis et al. 2013, JGR Planets.
-- **Ground temperature map:** MODIS Terra land surface temperature, monthly, via NASA GIBS/Worldview.
+- **Ground temperature:** MODIS Terra land surface temperature, monthly, via NASA GIBS/Worldview (map layer, and 2025
+  values per Earth site). Frozen ground and permafrost definitions: NSIDC.
 - **Permafrost (Discover):** ESA Permafrost_cci, permafrost extent v3.0 (2019), via the ESA Open Science Catalog
   and CEDA.
 - **Elevation and slope (Compare):** ASTER GDEM (NASA/METI).
