@@ -20,7 +20,7 @@ const EARTH_DATA = {
   terrain: {
     title: 'ASTER Global Digital Elevation Model, 30 m (NASA/METI)',
     url: 'https://asterweb.jpl.nasa.gov/gdem.asp',
-    how: "Nine elevation points 300 m apart around the site. Slope is measured at the centre point (Horn's method); local relief is the highest point minus the lowest.",
+    how: "Nine elevation points 300 m apart around the pin, a window 0.6 km wide. Slope is measured at the centre point (Horn's method).",
   },
 }
 
@@ -185,7 +185,6 @@ function EarthEvidence({
     case 'aridity':
       return <DataSet data={EARTH_DATA.climate} />
     case 'slope':
-    case 'relief':
       return site.slopeDeg === null ? (
         <p>Not measured: the coordinates fall on water, so the elevation model sees the water.</p>
       ) : (

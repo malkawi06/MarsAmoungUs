@@ -20,7 +20,6 @@ const cells: Cells = {
   precipMmYr: [40, 50, 900],
   windMs10: [40, 40, 70],
   elevationM: [900, 800, 300],
-  slopeDeg10: [20, 20, 10],
   reliefM: [600, 500, 100],
   rock: ['ss', 'ss', 'ig'],
 }

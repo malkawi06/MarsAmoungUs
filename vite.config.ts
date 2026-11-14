@@ -1,15 +1,24 @@
+import { readFileSync } from 'node:fs'
 import tailwindcss from '@tailwindcss/vite'
 import react from '@vitejs/plugin-react'
 import { defineConfig, type Plugin } from 'vite'
 import { site } from './src/config/site.ts'
 import { ANALOG_SITES, LANDFORM_NAMES } from './src/data/analogs.ts'
 import { EARTH_SITES, TARGETS } from './src/data/compare.ts'
+import { TRAITS } from './src/lib/discover.ts'
 import { PURPOSES, rank } from './src/lib/similarity.ts'
 
 // The home page's worked example: the best Earth match for a Moon region, computed from the real data.
 const exampleTarget = TARGETS.find((t) => t.id === 'moon-2')!
 const examplePurpose = PURPOSES.find((p) => p.id === 'training')!
 const exampleMatch = rank(exampleTarget, examplePurpose, EARTH_SITES)[0]
+
+// How many patches of land the Discover page compares, read from its grid.
+const landCells = (
+  JSON.parse(readFileSync(new URL('./public/discover/cells.json', import.meta.url), 'utf8')) as {
+    row: number[]
+  }
+).row.length
 
 // Every distinct paper or page the data cites: Moon/Mars targets, Earth analogs and scored Earth sites.
 const sourceCount = new Set([
@@ -46,6 +55,8 @@ export default defineConfig({
       purposes: PURPOSES.length,
       analogSites: ANALOG_SITES.length,
       sources: sourceCount,
+      landCells,
+      discoverTraits: TRAITS.length,
       landforms: Object.entries(LANDFORM_NAMES),
       example: {
         targetId: exampleTarget.id,

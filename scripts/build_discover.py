@@ -5,8 +5,10 @@ scores, so the browser can rank the whole planet against a Moon or Mars target.
 Sources (all open, no login):
 - NASA POWER, MERRA-2 climatology (annual): T2M mean temperature, T2M_RANGE day-night swing,
   PRECTOTCORR precipitation, WS10M wind. https://power.larc.nasa.gov (AWS: s3://nasa-power)
-- Terrain Tiles on AWS (terrarium, zoom 7, about 1.2 km pixels at the equator): elevation,
-  slope (Horn's method) and relief. https://registry.opendata.aws/terrain-tiles/
+- Terrain Tiles on AWS (terrarium, zoom 7, about 1.2 km pixels at the equator): mean elevation
+  and relief of each cell. https://registry.opendata.aws/terrain-tiles/
+  Slope is not built: at 1.2 km pixels small slopes vanish, and the value would not be comparable
+  with the Compare page's slope, measured in a 0.6 km window on the 30 m ASTER model.
 - GLiM, Global Lithological Map, 0.5° grid (Hartmann & Moosdorf 2012), CC BY 3.0:
   dominant rock class per cell. https://doi.pangaea.de/10.1594/PANGAEA.788537
 
@@ -59,7 +61,7 @@ daily_range = clim['T2M_RANGE'].values
 precip = clim['PRECTOTCORR'].values * 365.25  # mm/day to mm/year
 wind = clim['WS10M'].values
 
-# --- Elevation, slope and relief from terrain tiles -----------------------------------------------
+# --- Elevation and relief from terrain tiles ------------------------------------------------------
 n = 2 ** ZOOM
 
 
@@ -81,8 +83,6 @@ print('tiles', len(tiles))
 
 cell_index = -np.ones((360, 720), dtype=np.int64)
 cell_index[rows, cols] = np.arange(len(rows))
-SLOPE_BINS = np.arange(0, 91, 0.5)
-slope_hist = np.zeros((len(rows), len(SLOPE_BINS) - 1), dtype=np.int32)
 elev_sum = np.zeros(len(rows))
 elev_n = np.zeros(len(rows))
 elev_min = np.full(len(rows), np.inf)
@@ -110,12 +110,6 @@ with ThreadPoolExecutor(32) as pool:
         # Pixel centres in latitude/longitude.
         px = (x + (np.arange(size) + 0.5) / size) / n * 360 - 180
         py = np.degrees(np.arctan(np.sinh(np.pi * (1 - 2 * (y + (np.arange(size) + 0.5) / size) / n))))
-        # Ground size of a pixel (m): Web Mercator pixels shrink with the cosine of latitude.
-        ground = 40075016.686 / (n * size) * np.cos(np.radians(py))[:, None] * np.ones((1, size))
-        e = np.pad(elev, 1, mode='edge')
-        dzdx = ((e[:-2, 2:] + 2 * e[1:-1, 2:] + e[2:, 2:]) - (e[:-2, :-2] + 2 * e[1:-1, :-2] + e[2:, :-2])) / (8 * ground)
-        dzdy = ((e[2:, :-2] + 2 * e[2:, 1:-1] + e[2:, 2:]) - (e[:-2, :-2] + 2 * e[:-2, 1:-1] + e[:-2, 2:])) / (8 * ground)
-        slope = np.degrees(np.arctan(np.hypot(dzdx, dzdy)))
         r = np.clip(((89.75 - py) / 0.5).round().astype(int), 0, 359)
         c = np.clip(((px + 179.75) / 0.5).round().astype(int), 0, 719)
         idx = cell_index[r[:, None], c[None, :]]
@@ -124,18 +118,11 @@ with ThreadPoolExecutor(32) as pool:
             continue
         i = idx[ok]
         ev = elev[ok]
-        sb = np.clip(np.digitize(slope[ok], SLOPE_BINS) - 1, 0, len(SLOPE_BINS) - 2)
-        np.add.at(slope_hist, (i, sb), 1)
         np.add.at(elev_sum, i, ev)
         np.add.at(elev_n, i, 1)
         np.minimum.at(elev_min, i, ev)
         np.maximum.at(elev_max, i, ev)
 
-# Median slope per cell from its histogram.
-cum = slope_hist.cumsum(axis=1)
-total = cum[:, -1]
-median_bin = (cum >= (total[:, None] / 2)).argmax(axis=1)
-slope_median = np.where(total > 0, SLOPE_BINS[median_bin] + 0.25, np.nan)
 elevation = np.where(elev_n > 0, elev_sum / np.maximum(elev_n, 1), np.nan)
 relief = np.where(elev_n > 0, elev_max - elev_min, np.nan)
 
@@ -146,7 +133,7 @@ def col(a, scale=1):
 
 os.makedirs(OUT, exist_ok=True)
 json.dump({
-    'about': 'Every 0.5° land cell. Temperatures and slope are stored x10. See scripts/build_discover.py.',
+    'about': 'Every 0.5° land cell. Temperatures and wind are stored x10. See scripts/build_discover.py.',
     'cellDeg': 0.5,
     'row': rows.tolist(),
     'col': cols.tolist(),
@@ -155,7 +142,6 @@ json.dump({
     'precipMmYr': col(precip),
     'windMs10': col(wind, 10),
     'elevationM': col(elevation),
-    'slopeDeg10': col(slope_median, 10),
     'reliefM': col(relief),
     'rock': [CODES[int(v)] for v in glim[rows, cols]],
 }, open(f'{OUT}/cells.json', 'w'), separators=(',', ':'))

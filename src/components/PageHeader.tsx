@@ -18,12 +18,12 @@ interface PageHeaderProps {
  */
 export function PageHeader({ title, eyebrow, intro, photo, children }: PageHeaderProps) {
   return (
-    <header className="dark relative -mt-8 mb-10 ml-[calc(50%-50vw)] flex min-h-[22rem] w-screen items-end overflow-hidden bg-black text-fg sm:min-h-[58svh]">
+    <header className="dark relative -mt-8 mb-10 ml-[calc(50%-50vw)] flex min-h-[19rem] w-screen items-end overflow-hidden bg-black text-fg sm:min-h-[44svh]">
       <PhotoFill photo={photo} priority className="kenburns" />
       <div className="absolute inset-0 bg-gradient-to-t from-black via-black/55 to-black/25" />
       <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/25 to-transparent" />
 
-      <div className="fade-in relative mx-auto w-full max-w-7xl px-4 pt-24 pb-10 sm:pt-28 sm:pb-16">
+      <div className="fade-in relative mx-auto w-full max-w-7xl px-4 pt-24 pb-8 sm:pt-28 sm:pb-12">
         {eyebrow && (
           <p className="font-display text-sm font-semibold tracking-[0.3em] text-white/75 uppercase">
             {eyebrow}

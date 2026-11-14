@@ -22,6 +22,11 @@ factors count equally, after Stern et al. 2025, JGR Planets (doi 10.1029/2024JE0
 sourced value for the target are left out and shown as "no data". The thresholds are in
 `src/lib/similarity.ts`.
 
+Sites with the same percentage are ordered by how close their measured values are to the target's: each
+measured factor's gap is taken as a share of the gap at which that factor turns weak, and the gaps are
+averaged. This only orders sites within one percentage; it never changes the percentage. Sites that are
+still equal share a place.
+
 ## Known limits
 
 - NASA POWER values describe a ~50 km grid cell, not the exact point.
@@ -32,6 +37,11 @@ sourced value for the target are left out and shown as "no data". The thresholds
   temperature, so those factors are left out. The planet-wide average is not used as a site value.
 - Mars day–night swing (near-surface air, like NASA POWER's): Gale about 70 °C (REMS), Jezero 61 °C on
   one sample day (MEDA). Oxia Planum, Victoria and Arcadia have no published value, so it is left out.
+- Local relief, sunlight and radiation are not scored for any target: no sourced value exists at a scale
+  comparable with the Earth data. The page lists them as "not compared yet" under the purposes that need
+  them, and they do not count toward "based on N of M factors".
+- The 8° Artemis landing limit applies to Moon targets only. A Mars target's slope is a two-level
+  comparison with its own published slope (same or steeper), with no partial score.
 - Mars slopes: only Oxia Planum has one at a scale comparable to the Earth slopes (landing ellipse avoids
   slopes above 8° at the MOLA sub-kilometre scale). Published rover landing limits are measured over
   2–5 m, so they are not used. No Mars target has a comparable local relief value yet.

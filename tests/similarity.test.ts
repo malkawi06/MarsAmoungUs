@@ -13,6 +13,7 @@ import {
   NO_DATA,
   PURPOSES,
   compare,
+  plannedFor,
   rank,
   scoreFactor,
   scoreLevels,
@@ -63,6 +64,41 @@ describe('scoreFactor', () => {
     assert.equal(scoreFactor('slope', t, site({ slopeDeg: 5 })).score, 3)
     assert.equal(scoreFactor('slope', t, site({ slopeDeg: 7.9 })).score, 2)
     assert.equal(scoreFactor('slope', t, site({ slopeDeg: 8 })).score, 1)
+  })
+
+  it('uses the Artemis landing limit for Moon targets only', () => {
+    // A Mars target has no partial band: within its own slope or not.
+    const mars = target({ body: 'Mars', slopeMaxDeg: 5 })
+    assert.equal(scoreFactor('slope', mars, site({ slopeDeg: 5 })).score, 3)
+    assert.equal(scoreFactor('slope', mars, site({ slopeDeg: 7 })).score, 1)
+    assert.deepEqual(
+      scoreLevels('slope', mars).map((level) => level.score),
+      [3, 1],
+    )
+    for (const s of [3, 7, 20]) {
+      const { reason } = scoreFactor('slope', mars, site({ slopeDeg: s }))
+      assert.ok(!/artemis|landing limit/i.test(reason), reason)
+    }
+    for (const level of scoreLevels('slope', mars)) assert.ok(!/artemis/i.test(level.text))
+    // Oxia Planum, the only Mars target with a slope: its own 8°, no Artemis wording.
+    const oxia = TARGETS.find((t) => t.id === 'mars-oxia-planum')!
+    for (const s of EARTH_SITES)
+      assert.ok(!/artemis/i.test(scoreFactor('slope', oxia, s).reason), s.id)
+  })
+
+  it('gives measured factors a gap that grows with the distance from the target', () => {
+    const moon = target({ slopeMaxDeg: 5 })
+    assert.equal(scoreFactor('slope', moon, site({ slopeDeg: 2 })).gap, 0)
+    assert.equal(scoreFactor('slope', moon, site({ slopeDeg: 8 })).gap, 1)
+    const swing = (c: number) =>
+      scoreFactor('dailyRange', target({ dailyRangeC: 70 }), site({ dailyRangeC: c })).gap!
+    assert.ok(swing(60) < swing(50))
+    const rain = (mm: number) =>
+      scoreFactor('aridity', target({ precipMmYr: 0 }), site({ precipMmYr: mm })).gap!
+    assert.ok(rain(10) < rain(20))
+    // Named and unmeasured values have no gap.
+    assert.equal(scoreFactor('rock', moon, site()).gap, undefined)
+    assert.equal(scoreFactor('slope', moon, site({ slopeDeg: null })).gap, undefined)
   })
 
   it('treats an unmeasured Earth slope as neutral, and a missing target slope as no data', () => {
@@ -130,9 +166,10 @@ describe('scoreLevels', () => {
     for (const target of TARGETS)
       for (const site of EARTH_SITES)
         for (const factor of Object.keys(FACTOR_LABELS) as FactorId[]) {
-          const { score } = scoreFactor(factor, target, site)
+          const { score, earth } = scoreFactor(factor, target, site)
           const levels = scoreLevels(factor, target).map((level) => level.score)
-          if (score !== null && levels.length)
+          // A value not measured on Earth scores a neutral 2, which the page explains separately.
+          if (score !== null && levels.length && earth !== 'not measured')
             assert.ok(levels.includes(score), `${factor} ${target.id} ${site.id}`)
         }
   })
@@ -143,6 +180,7 @@ describe('compare', () => {
     const t = target({ slopeMaxDeg: 5 })
     const best = compare(t, purpose('rover'), site({ slopeDeg: 1, materials: ['anorthosite'] }))
     assert.equal(best.scored, 2)
+    assert.equal(best.factors.length, 3)
     assert.equal(best.percent, 100)
     const worst = compare(t, purpose('rover'), site({ slopeDeg: 20, materials: ['ice'] }))
     assert.equal(worst.percent, 0)
@@ -153,11 +191,19 @@ describe('compare', () => {
     assert.equal(compare(t, purpose('training'), site()).percent, null)
   })
 
-  it('compares sunlight for Moon targets only', () => {
-    const factors = (body: 'Moon' | 'Mars') =>
-      compare(target({ body }), purpose('base'), site()).factors.map((f) => f.factor)
-    assert.ok(factors('Moon').includes('sunlight'))
-    assert.ok(!factors('Mars').includes('sunlight'))
+  it('scores only factors that can be scored, and names the others as planned', () => {
+    for (const p of PURPOSES)
+      for (const f of p.factors)
+        assert.ok(
+          TARGETS.some((t) => p.bodies.includes(t.body) && scoreLevels(f, t).length > 0),
+          `${p.id}: ${f}`,
+        )
+    const labels = (id: string, body: 'Moon' | 'Mars') =>
+      plannedFor(purpose(id), body).map((f) => f.label)
+    assert.deepEqual(labels('base', 'Moon'), ['Sunlight'])
+    assert.deepEqual(labels('base', 'Mars'), [])
+    assert.deepEqual(labels('life', 'Mars'), ['Radiation / UV'])
+    assert.deepEqual(labels('isru', 'Moon'), [])
   })
 
   it('applies the 8° landing rule to Moon targets only', () => {
@@ -181,6 +227,65 @@ describe('rank', () => {
       ranked.map((m) => m.site.id),
       ['flat-match', 'flat-other', 'steep-match'],
     )
+  })
+})
+
+describe('rank: sites that share a percentage', () => {
+  const t = target({ slopeMaxDeg: 5 })
+  const rover = purpose('rover')
+
+  it('orders them by how close the measured values are', () => {
+    // Both are a partial slope match with different rock (25%); 6° is closer to the target than 7.5°.
+    const ranked = rank(t, rover, [
+      site({ id: 'far', name: 'A', slopeDeg: 7.5 }),
+      site({ id: 'near', name: 'B', slopeDeg: 6 }),
+    ])
+    assert.equal(ranked[0].percent, ranked[1].percent)
+    assert.deepEqual(
+      ranked.map((m) => [m.site.id, m.place, m.tied]),
+      [
+        ['near', 1, false],
+        ['far', 2, false],
+      ],
+    )
+  })
+
+  it('gives sites that cannot be told apart the same place, listed by name', () => {
+    const ranked = rank(t, rover, [
+      site({ id: 'c', name: 'Charlie', slopeDeg: 3 }),
+      site({ id: 'top', name: 'Zulu', slopeDeg: 1, materials: ['anorthosite'] }),
+      site({ id: 'a', name: 'Alpha', slopeDeg: 2 }),
+      site({ id: 'last', name: 'Bravo', slopeDeg: 20 }),
+    ])
+    assert.deepEqual(
+      ranked.map((m) => [m.site.id, m.place, m.tied]),
+      [
+        ['top', 1, false],
+        ['a', 2, true],
+        ['c', 2, true],
+        ['last', 4, false],
+      ],
+    )
+  })
+
+  it('puts a site with no measured value after the measured ones', () => {
+    const ranked = rank(target({ slopeMaxDeg: 5, materials: ['clay'] }), rover, [
+      site({ id: 'water', name: 'A', slopeDeg: null, materials: ['clay'] }),
+      site({ id: 'measured', name: 'B', slopeDeg: 6, materials: ['clay'] }),
+    ])
+    assert.equal(ranked[0].percent, ranked[1].percent)
+    assert.deepEqual(
+      ranked.map((m) => m.site.id),
+      ['measured', 'water'],
+    )
+  })
+
+  it('is the same whatever order the sites come in', () => {
+    for (const real of TARGETS)
+      for (const p of PURPOSES.filter((p) => p.bodies.includes(real.body))) {
+        const ids = (sites: EarthSite[]) => rank(real, p, sites).map((m) => m.site.id)
+        assert.deepEqual(ids([...EARTH_SITES].reverse()), ids(EARTH_SITES), `${real.id} ${p.id}`)
+      }
   })
 })
 

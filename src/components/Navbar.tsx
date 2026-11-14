@@ -55,6 +55,11 @@ export function Navbar() {
                   {({ isActive }) => (
                     <>
                       {item.label}
+                      {'soon' in item && item.soon && (
+                        <span className="ml-1.5 border border-white/40 px-1 py-0.5 text-[10px] tracking-[0.12em] text-white/70">
+                          Soon
+                        </span>
+                      )}
                       <span
                         className={`absolute inset-x-0 -bottom-0.5 h-0.5 origin-left bg-current transition-transform duration-300 ${
                           isActive ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'

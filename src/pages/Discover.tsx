@@ -10,7 +10,7 @@ import { site as siteConfig } from '../config/site'
 import { ANALOG_SITES } from '../data/analogs'
 import { EARTH_SITES } from '../data/compare'
 import { useAsync } from '../hooks/useAsync'
-import { DESKTOP } from '../hooks/useMediaQuery'
+import { DESKTOP, useMediaQuery } from '../hooks/useMediaQuery'
 import { usePageTitle } from '../hooks/usePageTitle'
 import {
   TRAITS,
@@ -52,7 +52,7 @@ export default function Discover() {
   return (
     <div className="mx-auto max-w-7xl px-4 py-8">
       <PageHeader
-        eyebrow="Discover"
+        eyebrow="01 · Discover"
         title={page.title}
         intro={page.intro}
         photo={siteConfig.photos.hero}
@@ -103,7 +103,11 @@ function Explorer({ cells }: { cells: Cells }) {
   )
   const known = useMemo(() => new Set(picks.filter((i) => knownName(i))), [picks, knownName])
   const regionParam = Number(params.get('region'))
-  const selected = picks.includes(regionParam) ? regionParam : undefined
+  // Desktop shows the closest region's details straight away; phones wait for a tap, since the
+  // details open as a sheet over the page.
+  const desktop = useMediaQuery(DESKTOP)
+  const chosen = picks.includes(regionParam) ? regionParam : undefined
+  const selected = chosen ?? (desktop ? picks[0] : undefined)
   const [sheetOpen, setSheetOpen] = useState(
     () => selected !== undefined && !window.matchMedia(DESKTOP).matches,
   )
@@ -190,7 +194,8 @@ function Explorer({ cells }: { cells: Cells }) {
             scores={scores}
             seed={seed.cell}
             picks={picks}
-            selected={selected}
+            // Only a region the visitor picked: the map zooms to it, and the default view is the world.
+            selected={chosen}
             known={known}
             onSelect={select}
             className="h-[58svh] min-h-80 lg:h-[640px]"

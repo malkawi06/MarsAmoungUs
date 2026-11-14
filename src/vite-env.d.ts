@@ -8,6 +8,9 @@ declare const __HOME_STATS__: {
   analogSites: number
   /** Distinct sources cited across the Moon/Mars targets and the Earth sites. */
   sources: number
+  /** Patches of land in the Discover grid, and the traits each is compared on. */
+  landCells: number
+  discoverTraits: number
   landforms: [string, string][]
   /** The best Earth match for one Moon region and purpose, computed from the data at build time. */
   example: {

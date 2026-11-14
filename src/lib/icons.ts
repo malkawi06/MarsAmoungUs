@@ -8,16 +8,13 @@ import {
   Earth,
   Footprints,
   Gem,
-  Layers,
   ListChecks,
   Microscope,
   Mountain,
   Pickaxe,
-  Radiation,
   Satellite,
   ScanSearch,
   Snowflake,
-  Sun,
   Tent,
   Thermometer,
   ThermometerSun,
@@ -53,10 +50,7 @@ export const FACTOR_ICONS: Record<FactorId, LucideIcon> = {
   meanTemp: Thermometer,
   aridity: DropletOff,
   ice: Snowflake,
-  relief: Layers,
   dailyRange: ThermometerSun,
-  sunlight: Sun,
-  radiation: Radiation,
 }
 
 /** Icons for the three "how it works" steps on Analyze, in order. */

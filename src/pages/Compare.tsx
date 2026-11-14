@@ -17,9 +17,11 @@ import {
   FACTOR_LABELS,
   NO_DATA,
   PURPOSES,
+  plannedFor,
   rank,
   type FactorResult,
   type Match,
+  type Purpose,
   type Score,
   type Target,
 } from '../lib/similarity'
@@ -58,6 +60,8 @@ export default function Compare() {
   const purposes = PURPOSES.filter((p) => p.bodies.includes(target.body))
   const purpose = purposes.find((p) => p.id === params.get('purpose')) ?? purposes[0]
   const matches = rank(target, purpose, EARTH_SITES)
+  const planned = plannedFor(purpose, target.body)
+  const hasTies = matches.some((m) => m.tied)
   const selected = matches.find((m) => m.site.id === params.get('site')) ?? matches[0]
   const { data: images, error: imagesError } = useAsync('orbital-images', loadOrbitalImages)
   const [showAll, setShowAll] = useState(false)
@@ -127,10 +131,7 @@ export default function Compare() {
               {purposes.map((p) => {
                 const Icon = PURPOSE_ICONS[p.id]
                 const active = p === purpose
-                const factors = p.factors
-                  .filter((f) => f !== 'sunlight' || target.body === 'Moon')
-                  .map((f) => FACTOR_LABELS[f].toLowerCase())
-                  .join(', ')
+                const factors = p.factors.map((f) => FACTOR_LABELS[f].toLowerCase()).join(', ')
                 return (
                   <button
                     key={p.id}
@@ -155,18 +156,21 @@ export default function Compare() {
             </div>
             <p className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted">
               <span>{purpose.label} compares:</span>
-              {purpose.factors
-                .filter((f) => f !== 'sunlight' || target.body === 'Moon')
-                .map((f) => {
-                  const Icon = FACTOR_ICONS[f]
-                  return (
-                    <span key={f} className="inline-flex items-center gap-1 text-fg-2">
-                      <Icon className="size-3.5 text-accent" aria-hidden />
-                      {FACTOR_LABELS[f]}
-                    </span>
-                  )
-                })}
+              {purpose.factors.map((f) => {
+                const Icon = FACTOR_ICONS[f]
+                return (
+                  <span key={f} className="inline-flex items-center gap-1 text-fg-2">
+                    <Icon className="size-3.5 text-accent" aria-hidden />
+                    {FACTOR_LABELS[f]}
+                  </span>
+                )
+              })}
             </p>
+            {planned.length > 0 && (
+              <p className="mt-1 text-xs text-muted">
+                Not compared yet: {planned.map((f) => f.label.toLowerCase()).join(', ')}.
+              </p>
+            )}
           </div>
         </div>
         <TargetSummary target={target} />
@@ -185,7 +189,11 @@ export default function Compare() {
           <h2 className="mb-1">
             <StepLabel number={3}>Earth sites, best match first</StepLabel>
           </h2>
-          <p className="mb-3 text-xs text-muted lg:hidden">Tap a site to see why it matches.</p>
+          <p className="mb-3 text-xs text-muted">
+            <span className="lg:hidden">Tap a site to see why it matches. </span>
+            {hasTies &&
+              'Sites with the same match are ordered by how close their measured values are to the target. Those marked = cannot be told apart with the data we have.'}
+          </p>
           <ol className="space-y-2">
             {matches.map(
               (match, i) =>
@@ -194,7 +202,8 @@ export default function Compare() {
                     <SiteButton
                       match={match}
                       maxSlopeDeg={purpose.maxSlopeDeg}
-                      rank={i + 1}
+                      place={match.place}
+                      tied={match.tied}
                       selected={match === selected}
                       onSelect={() => select(match.site.id)}
                     />
@@ -223,7 +232,7 @@ export default function Compare() {
             <header className="flex items-start justify-between gap-4 p-5">
               <div className="min-w-0">
                 <p className="text-xs font-medium tracking-wide text-accent uppercase">
-                  #{matches.indexOf(selected) + 1} for {purpose.label.toLowerCase()}
+                  {selected.tied ? 'Tied ' : ''}#{selected.place} for {purpose.label.toLowerCase()}
                 </p>
                 <h2 className="mt-1 text-xl font-semibold">{selected.site.name}</h2>
                 <p className="mt-1 text-sm text-muted">
@@ -260,7 +269,12 @@ export default function Compare() {
               <p className="mb-3 text-xs text-muted">
                 Open a factor to see where both values come from and how the score was worked out.
               </p>
-              <Factors match={selected} target={target} analog={ANALOGS.get(selected.site.id)} />
+              <Factors
+                match={selected}
+                target={target}
+                purpose={purpose}
+                analog={ANALOGS.get(selected.site.id)}
+              />
             </div>
 
             <div className="border-t border-border p-5">
@@ -333,7 +347,7 @@ function TargetSummary({ target }: { target: Target }) {
       </span>
       {target.setting && <p className="w-full text-fg">{target.setting}</p>}
       <p className="w-full text-fg-2">{target.note}</p>
-      <details className="group w-full" open={window.matchMedia(DESKTOP).matches}>
+      <details className="group w-full">
         <summary className="mt-2 flex cursor-pointer list-none items-center gap-1 text-xs font-medium tracking-wide text-muted uppercase [&::-webkit-details-marker]:hidden">
           Where the values for {target.name} come from ({target.sources.length})
           <ChevronDown
@@ -372,13 +386,13 @@ function AboutSite({ site, analog }: { site: Match['site']; analog?: AnalogSite 
         <Fact label="Mean temperature" value={`${site.meanTempC.toFixed(1)} °C`} />
         <Fact label="Day–night swing" value={`${site.dailyRangeC.toFixed(1)} °C`} />
         <Fact label="Rain and snow" value={`${site.precipMmYr} mm a year`} />
-        <Fact label="Elevation" value={`${site.elevationM} m`} />
+        <Fact label="Elevation at the pin" value={`${site.elevationM} m`} />
         <Fact
-          label="Slope"
+          label="Slope at the pin"
           value={site.slopeDeg === null ? 'not measured' : `${site.slopeDeg.toFixed(1)}°`}
         />
         <Fact
-          label="Local relief"
+          label="Relief within 0.6 km"
           value={site.reliefM === null ? 'not measured' : `${site.reliefM} m`}
         />
         <Fact label="Rock / surface" value={site.materials.join(', ') || 'not recorded'} />
@@ -390,6 +404,10 @@ function AboutSite({ site, analog }: { site: Match['site']; analog?: AnalogSite 
           describe that point.
         </p>
       )}
+      <p className="mt-3 text-xs text-muted">
+        Terrain here is measured in a 0.6 km window at the pin. Discover averages a patch about 50
+        km across, so its elevation and relief for the same place differ.
+      </p>
       <ul className="mt-3 space-y-0.5 text-sm">
         {(analog?.sources ?? [{ title: 'Source for this site', url: site.source }]).map((s) => (
           <li key={s.url}>
@@ -413,13 +431,15 @@ function Fact({ label, value }: { label: string; value: string }) {
 function SiteButton({
   match,
   maxSlopeDeg,
-  rank,
+  place,
+  tied,
   selected,
   onSelect,
 }: {
   match: Match
   maxSlopeDeg?: number
-  rank: number
+  place: number
+  tied: boolean
   selected: boolean
   onSelect: () => void
 }) {
@@ -432,7 +452,13 @@ function SiteButton({
         selected ? 'border-accent bg-accent/5' : 'border-border bg-surface'
       }`}
     >
-      <span className="w-5 shrink-0 text-center text-sm text-muted tabular-nums">{rank}</span>
+      <span
+        className="w-7 shrink-0 text-center text-sm text-muted tabular-nums"
+        aria-label={tied ? `Tied for place ${place}` : `Place ${place}`}
+      >
+        {tied ? '=' : ''}
+        {place}
+      </span>
       <span className="min-w-0 flex-1">
         <span className="block truncate font-medium">{match.site.name}</span>
         <span className="block truncate text-xs text-muted">
@@ -452,7 +478,18 @@ function SiteButton({
   )
 }
 
-function Factors({ match, target, analog }: { match: Match; target: Target; analog?: AnalogSite }) {
+function Factors({
+  match,
+  target,
+  purpose,
+  analog,
+}: {
+  match: Match
+  target: Target
+  purpose: Purpose
+  analog?: AnalogSite
+}) {
+  const planned = plannedFor(purpose, target.body)
   const scored = match.factors.filter((f) => f.score !== null)
   const noData = match.factors.filter((f) => f.score === null && f.target === NO_DATA)
   const leftOut = match.factors.filter((f) => f.score === null && f.target !== NO_DATA)
@@ -479,6 +516,11 @@ function Factors({ match, target, analog }: { match: Match; target: Target; anal
       {leftOut.map((f) => (
         <p key={f.factor} className="mt-3 text-xs text-muted">
           {f.label}: {f.reason}
+        </p>
+      ))}
+      {planned.map((f) => (
+        <p key={f.label} className="mt-3 text-xs text-muted">
+          {f.label}, not compared yet: {f.why}
         </p>
       ))}
     </>

@@ -5,6 +5,11 @@
  * cell with the same measurements for all cells: NASA POWER climate (MERRA-2 annual climatology),
  * terrain from SRTM-based terrain tiles at about 1 km, and the dominant rock class from GLiM.
  * A known site is compared through its own grid cell, so both sides are measured the same way.
+ *
+ * Scale: a cell is about 50 km across, so its elevation is a mean and its relief the highest minus
+ * the lowest point of the whole patch. The Compare page measures the same site in a 0.6 km window
+ * on the 30 m ASTER model, so the two pages' terrain values differ and are labelled by scale.
+ * Slope is not in the grid at all: it means nothing at this scale.
  */
 
 export interface Cells {
@@ -16,7 +21,6 @@ export interface Cells {
   precipMmYr: (number | null)[]
   windMs10: (number | null)[]
   elevationM: (number | null)[]
-  slopeDeg10: (number | null)[]
   reliefM: (number | null)[]
   rock: string[]
 }
@@ -137,14 +141,14 @@ export const TRAITS: {
   },
   {
     id: 'elevation',
-    label: 'Elevation',
+    label: 'Mean elevation of the patch',
     value: (c, i) => c.elevationM[i],
     unit: 'm',
     tolerance: '1,500 m apart scores 0%',
   },
   {
     id: 'relief',
-    label: 'Relief within the cell',
+    label: 'Relief across the patch',
     value: (c, i) => c.reliefM[i],
     unit: 'm',
     tolerance: 'ten times flatter or rougher scores 0%',

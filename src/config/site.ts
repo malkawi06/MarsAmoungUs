@@ -39,6 +39,8 @@ export interface NavItem {
   shortLabel?: string
   /** One sentence on what the page does. */
   description: string
+  /** The page is not working yet: the menu marks it. */
+  soon?: boolean
 }
 
 export const site = {
@@ -114,12 +116,6 @@ export const site = {
   nav: [
     { to: '/', label: 'Home', description: 'What the site does and how.' },
     {
-      to: '/analyze',
-      label: 'Analyze',
-      description:
-        'Upload a Moon or Mars image. The landform model is being retrained, so this page does not analyze images yet.',
-    },
-    {
       to: '/discover',
       label: 'Discover',
       description:
@@ -137,6 +133,13 @@ export const site = {
       shortLabel: 'Analogs',
       description:
         'A map of places on Earth that look like Moon and Mars landforms, each with its published source.',
+    },
+    {
+      to: '/analyze',
+      label: 'Analyze',
+      soon: true,
+      description:
+        'Upload a Moon or Mars image. The landform model is being retrained, so this page does not analyze images yet.',
     },
     {
       to: '/about',
@@ -185,12 +188,12 @@ export const site = {
   } satisfies Record<string, Photo>,
 
   home: {
-    primaryCta: { label: 'Analyze a Moon or Mars image', to: '/analyze' },
+    primaryCta: { label: 'Discover new analogs', to: '/discover' },
     secondaryCta: { label: 'Compare with the Moon and Mars', to: '/compare' },
     /** Title of the Home section on how scores are worked out. */
     methodTitle: 'A source for every number',
     scoring:
-      'Each factor scores 3 (strong), 2 (partial) or 1 (weak), and all factors count the same. The match is the average turned into a percentage: all 3s give 100%, all 1s give 0%. The method follows the NASA-led analog framework of Stern et al. (2025).',
+      'Each factor scores 3 (strong), 2 (partial) or 1 (weak), and all factors count the same. The match is the average turned into a percentage: all 3s give 100%, all 1s give 0%. Sites with the same match are ordered by how close their measured values are to the target, and sites the data cannot tell apart share a place. The method follows the NASA-led analog framework of Stern et al. (2025).',
     noData:
       'Some values are not published yet, such as the mean temperature at most Mars sites. Those factors are left out of the score instead of guessed, and the page says so. When fewer than two factors can be scored, the page warns that the result is rough.',
   },
@@ -199,10 +202,10 @@ export const site = {
     title: 'Analyze a Moon or Mars image',
     intro:
       'Upload an orbital image of the Moon or Mars. A landform model will name what it shows and find the places on Earth that look like it, with sources.',
-    /** Shown in a pop-up when the page opens, until the landform model is ready. */
+    /** Shown at the top of the page until the landform model is ready. */
     comingSoon: {
       title: 'Hold on! 🛠️',
-      body: "Malkawi isn't a robot. He's still working on this page, so check back soon. Meanwhile, Compare already works.",
+      body: "Malkawi isn't a robot. He's still working on this page, so check back soon. Meanwhile, Discover and Compare already work.",
     },
     notReady:
       'The landform model is being retrained on the Space Apps challenge data, so this page does not analyze images yet. Your image stays in your browser.',
@@ -227,7 +230,7 @@ export const site = {
     intro:
       'Pick a place already used to study the Moon or Mars. Every 0.5° patch of land on Earth is compared with it on the same NASA data, and the closest matches light up, including places nobody has studied as analogs yet.',
     method:
-      'Each patch of land is about 50 km across. Climate is the NASA POWER annual average (MERRA-2): mean temperature, day–night swing, rain and snow, and wind at 10 m. Elevation and relief come from SRTM-based terrain tiles at about 1 km; slope is left out because small slopes vanish at this scale. Rock type is the dominant class of the GLiM global lithological map. The known site is compared through its own patch, so both sides are measured the same way. For each trait, similarity falls in a straight line from 100% (equal) to 0% at a gap we chose, shown next to it; the match is the average. Landform, ground ice and fine slope are not in global data, so check them on the satellite image and in Compare.',
+      'Each patch of land is about 50 km across. Climate is the NASA POWER annual average (MERRA-2): mean temperature, day–night swing, rain and snow, and wind at 10 m. Elevation and relief come from SRTM-based terrain tiles at about 1 km: elevation is the mean of the patch and relief its highest point minus its lowest, so both differ from the Compare page, which measures a 0.6 km window at the site. Slope is left out because small slopes vanish at this scale. Rock type is the dominant class of the GLiM global lithological map. The known site is compared through its own patch, so both sides are measured the same way. For each trait, similarity falls in a straight line from 100% (equal) to 0% at a gap we chose, shown next to it; the match is the average. Landform, ground ice and fine slope are not in global data, so check them on the satellite image and in Compare.',
     sources: [
       {
         title: 'NASA POWER climatology (MERRA-2), on the AWS Open Data registry',
@@ -255,7 +258,7 @@ export const site = {
     intro:
       'Pick a place on the Moon or Mars and what you need an Earth analog for. Every Earth site is scored factor by factor, so you can see exactly where it matches and where it does not.',
     method:
-      'Each factor scores 1 (weak), 2 (partial) or 3 (strong), and all factors count equally, following the NASA-led framework of Stern et al. (2025). Factors without sourced data for the target are left out. Earth climate: NASA POWER 2001–2020; Earth slope and elevation: ASTER 30 m elevation model.',
+      'Each factor scores 1 (weak), 2 (partial) or 3 (strong), and all factors count equally, following the NASA-led framework of Stern et al. (2025). Factors without sourced data for the target are left out. Sites with the same match are ordered by how close their measured values are to the target; sites that are still equal share a place. Earth climate: NASA POWER 2001–2020; Earth slope and elevation: ASTER 30 m elevation model, in a 0.6 km window at the pin.',
     methodSource: 'https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2024JE008803',
   },
 

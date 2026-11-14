@@ -6,6 +6,10 @@
  * - each factor scores 1 (weak), 2 (partial / unknown) or 3 (strong), all factors weigh the same;
  * - a factor with no data for the target is left out and shown as "no data";
  * - overall match = (mean score − 1) / 2, so all 3s = 100% and all 1s = 0%.
+ *
+ * Three scores give few possible percentages, so sites often share one. Sites with the same
+ * percentage are ordered by how far their measured values are from the target's (`gap`), and
+ * sites that are still equal share a place instead of being listed in an arbitrary order.
  */
 
 export type Body = 'Moon' | 'Mars'
@@ -59,17 +63,7 @@ export interface TargetSource {
   supports?: FactorId[]
 }
 
-export type FactorId =
-  | 'slope'
-  | 'rock'
-  | 'landform'
-  | 'meanTemp'
-  | 'aridity'
-  | 'ice'
-  | 'relief'
-  | 'dailyRange'
-  | 'sunlight'
-  | 'radiation'
+export type FactorId = 'slope' | 'rock' | 'landform' | 'meanTemp' | 'aridity' | 'ice' | 'dailyRange'
 
 export type Score = 1 | 2 | 3
 
@@ -81,6 +75,21 @@ export interface FactorResult {
   target: string
   earth: string
   reason: string
+  /**
+   * Measured factors only: how far the Earth value is from the target's, where 0 is no gap and 1
+   * is the gap at which the factor turns weak. Orders sites that share a percentage; it is not
+   * part of the percentage.
+   */
+  gap?: number
+}
+
+/** A factor a purpose should compare, but that no target has a sourced, comparable value for yet. */
+export interface PlannedFactor {
+  label: string
+  /** Why it cannot be scored yet, in one sentence. */
+  why: string
+  /** Bodies it applies to; all when left out. */
+  bodies?: Body[]
 }
 
 export interface Purpose {
@@ -88,6 +97,8 @@ export interface Purpose {
   label: string
   bodies: Body[]
   factors: FactorId[]
+  /** Named on the page as not compared yet, so a purpose does not look more complete than it is. */
+  planned?: PlannedFactor[]
   /**
    * Landing-slope rule for Moon targets: Earth sites this steep or steeper fail. The Artemis Human
    * Landing System requires landing slopes of 0–8° (NASA 2019, quoted in JGR Planets 2025,
@@ -96,18 +107,34 @@ export interface Purpose {
   maxSlopeDeg?: number
 }
 
+const RELIEF: PlannedFactor = {
+  label: 'Local relief',
+  why: 'Earth relief is measured over a 0.6 km window; no Moon or Mars target has a sourced value at that scale.',
+}
+const SUNLIGHT: PlannedFactor = {
+  label: 'Sunlight',
+  why: 'No sourced sunlight value has been added for the Artemis regions or the Earth sites.',
+  bodies: ['Moon'],
+}
+const RADIATION: PlannedFactor = {
+  label: 'Radiation / UV',
+  why: 'No sourced radiation value has been added for the Mars targets or the Earth sites.',
+}
+
 export const PURPOSES: Purpose[] = [
   {
     id: 'rover',
     label: 'Rover testing',
     bodies: ['Moon', 'Mars'],
-    factors: ['slope', 'rock', 'relief', 'dailyRange'],
+    factors: ['slope', 'rock', 'dailyRange'],
+    planned: [RELIEF],
   },
   {
     id: 'base',
     label: 'Base / habitat',
     bodies: ['Moon', 'Mars'],
-    factors: ['dailyRange', 'meanTemp', 'slope', 'rock', 'sunlight'],
+    factors: ['dailyRange', 'meanTemp', 'slope', 'rock'],
+    planned: [SUNLIGHT],
     maxSlopeDeg: 8,
   },
   {
@@ -120,15 +147,21 @@ export const PURPOSES: Purpose[] = [
     id: 'life',
     label: 'Search for life',
     bodies: ['Mars'],
-    factors: ['aridity', 'rock', 'meanTemp', 'radiation'],
+    factors: ['aridity', 'rock', 'meanTemp'],
+    planned: [RADIATION],
   },
   {
     id: 'training',
     label: 'Astronaut training',
     bodies: ['Moon', 'Mars'],
-    factors: ['rock', 'landform', 'relief'],
+    factors: ['rock', 'landform'],
+    planned: [RELIEF],
   },
 ]
+
+/** The factors a purpose cannot compare yet for this body. */
+export const plannedFor = (purpose: Purpose, body: Body): PlannedFactor[] =>
+  (purpose.planned ?? []).filter((f) => !f.bodies || f.bodies.includes(body))
 
 export const FACTOR_LABELS: Record<FactorId, string> = {
   slope: 'Slope',
@@ -137,10 +170,7 @@ export const FACTOR_LABELS: Record<FactorId, string> = {
   meanTemp: 'Mean temperature',
   aridity: 'Dryness',
   ice: 'Water ice',
-  relief: 'Local relief',
   dailyRange: 'Day–night temperature swing',
-  sunlight: 'Sunlight',
-  radiation: 'Radiation / UV',
 }
 
 /** Materials in the same group are a partial match (e.g. clay vs sandstone). */
@@ -156,8 +186,12 @@ export const MATERIAL_GROUP: Record<string, string> = {
   ice: 'ice',
 }
 
-/** Earth sites at this slope or steeper are above the Artemis landing limit. */
-const LANDING_LIMIT_DEG = 8
+/**
+ * The Artemis Human Landing System lands on slopes of 0–8°, so on the Moon an Earth site steeper
+ * than the target but under 8° is still a partial match. It is a Moon rule: Mars has no sourced
+ * second limit, so there a site is either within the target's slope or not.
+ */
+const ARTEMIS_LANDING_LIMIT_DEG = 8
 /** Temperature gaps (°C) for a strong and a partial match. */
 const MEAN_TEMP_GAP = { strong: 20, partial: 45 }
 const DAILY_RANGE_GAP = { strong: 10, partial: 30 }
@@ -171,13 +205,15 @@ const result = (
   target: string,
   earth: string,
   reason: string,
-) => ({
+  gap?: number,
+): FactorResult => ({
   factor,
   label: FACTOR_LABELS[factor],
   score,
   target,
   earth,
   reason,
+  ...(gap === undefined ? {} : { gap }),
 })
 /** The target value shown for a factor left out because the target has no sourced value. */
 export const NO_DATA = 'no data'
@@ -197,15 +233,30 @@ export function scoreFactor(factor: FactorId, target: Target, site: EarthSite): 
           earth,
           'Not measured: the coordinates fall on water. Neutral.',
         )
-      const score: Score =
-        site.slopeDeg <= target.slopeMaxDeg ? 3 : site.slopeDeg < LANDING_LIMIT_DEG ? 2 : 1
+      const max = target.slopeMaxDeg
+      const over = Math.max(0, site.slopeDeg - max)
+      if (target.body !== 'Moon') {
+        // Mars: within the target's own slope or not. The Artemis limit does not apply here.
+        const within = over === 0
+        return result(
+          factor,
+          within ? 3 : 1,
+          `under ${max}°`,
+          earth,
+          within ? `As flat as the target (under ${max}°).` : `Steeper than the target's ${max}°.`,
+          over / max,
+        )
+      }
+      const score: Score = over === 0 ? 3 : site.slopeDeg < ARTEMIS_LANDING_LIMIT_DEG ? 2 : 1
       const reason =
         score === 3
-          ? `As flat as the target (under ${target.slopeMaxDeg}°).`
+          ? `As flat as the target (under ${max}°).`
           : score === 2
-            ? `Steeper than the target, but still under the ${LANDING_LIMIT_DEG}° landing limit.`
-            : `Steeper than the ${LANDING_LIMIT_DEG}° landing limit.`
-      return result(factor, score, `under ${target.slopeMaxDeg}°`, earth, reason)
+            ? `Steeper than the target, but still under the ${ARTEMIS_LANDING_LIMIT_DEG}° Artemis landing limit.`
+            : `Steeper than the ${ARTEMIS_LANDING_LIMIT_DEG}° Artemis landing limit.`
+      // 1 at the landing limit; a target already at the limit falls back to its own slope.
+      const span = ARTEMIS_LANDING_LIMIT_DEG - max
+      return result(factor, score, `under ${max}°`, earth, reason, over / (span > 0 ? span : max))
     }
     case 'rock': {
       const earth = list(site.materials)
@@ -246,7 +297,14 @@ export function scoreFactor(factor: FactorId, target: Target, site: EarthSite): 
       if (target.meanTempC === undefined) return noData(factor, earth)
       const diff = Math.abs(site.meanTempC - target.meanTempC)
       const score: Score = diff <= MEAN_TEMP_GAP.strong ? 3 : diff <= MEAN_TEMP_GAP.partial ? 2 : 1
-      return result(factor, score, `${target.meanTempC} °C`, earth, `${Math.round(diff)} °C apart.`)
+      return result(
+        factor,
+        score,
+        `${target.meanTempC} °C`,
+        earth,
+        `${Math.round(diff)} °C apart.`,
+        diff / MEAN_TEMP_GAP.partial,
+      )
     }
     case 'aridity': {
       const earth = `${site.precipMmYr} mm/yr`
@@ -259,7 +317,7 @@ export function scoreFactor(factor: FactorId, target: Target, site: EarthSite): 
           : score === 2
             ? `Desert (${RAIN.desert} mm/yr or less).`
             : 'Wetter than a desert.'
-      return result(factor, score, 'no rain', earth, reason)
+      return result(factor, score, 'no rain', earth, reason, site.precipMmYr / RAIN.desert)
     }
     case 'ice': {
       const has = site.materials.includes('ice')
@@ -275,8 +333,6 @@ export function scoreFactor(factor: FactorId, target: Target, site: EarthSite): 
         ? result(factor, 3, 'ice reachable', 'ice', 'Both have ground ice.')
         : result(factor, 1, 'ice reachable', 'no ice', 'No ground ice at this site.')
     }
-    case 'relief':
-      return noData(factor, site.reliefM === null ? 'not measured' : `${site.reliefM} m`)
     case 'dailyRange': {
       const earth = `${site.dailyRangeC.toFixed(1)} °C`
       if (target.dailyRangeC === undefined) return noData(factor, earth)
@@ -289,11 +345,9 @@ export function scoreFactor(factor: FactorId, target: Target, site: EarthSite): 
         `${target.dailyRangeC} °C`,
         earth,
         `${Math.round(diff)} °C apart.`,
+        diff / DAILY_RANGE_GAP.partial,
       )
     }
-    case 'sunlight':
-    case 'radiation':
-      return noData(factor)
   }
 }
 
@@ -301,12 +355,18 @@ export function scoreFactor(factor: FactorId, target: Target, site: EarthSite): 
 export function scoreLevels(factor: FactorId, target: Target): { score: Score; text: string }[] {
   switch (factor) {
     case 'slope':
+      // Mars has no sourced second limit, so there is no partial score there.
+      if (target.body !== 'Moon')
+        return [
+          { score: 3, text: `As flat as the target: ${target.slopeMaxDeg ?? '—'}° or less.` },
+          { score: 1, text: `Steeper than the target's ${target.slopeMaxDeg ?? '—'}°.` },
+        ]
       return [
         { score: 3, text: `As flat as the target: ${target.slopeMaxDeg ?? '—'}° or less.` },
-        { score: 2, text: `Steeper than the target, but under ${LANDING_LIMIT_DEG}°.` },
+        { score: 2, text: `Steeper than the target, but under ${ARTEMIS_LANDING_LIMIT_DEG}°.` },
         {
           score: 1,
-          text: `${LANDING_LIMIT_DEG}° or steeper: above the Artemis lander's landing limit.`,
+          text: `${ARTEMIS_LANDING_LIMIT_DEG}° or steeper: above the Artemis lander's landing limit.`,
         },
       ]
     case 'rock':
@@ -346,10 +406,6 @@ export function scoreLevels(factor: FactorId, target: Target): { score: Score; t
         { score: 3, text: 'Both have ground ice.' },
         { score: 1, text: 'The target has reachable ice; the Earth site has none.' },
       ]
-    case 'relief':
-    case 'sunlight':
-    case 'radiation':
-      return []
   }
 }
 
@@ -361,14 +417,18 @@ export interface Match {
   scored: number
   /** Fails the purpose's landing-slope rule. */
   fails: boolean
+  /**
+   * Mean `gap` of the measured factors, or null when none was measured. Lower is closer to the
+   * target. Used only to order sites that share a percentage.
+   */
+  gap: number | null
 }
 
 export function compare(target: Target, purpose: Purpose, site: EarthSite): Match {
-  const factors = purpose.factors
-    .filter((f) => f !== 'sunlight' || target.body === 'Moon')
-    .map((f) => scoreFactor(f, target, site))
+  const factors = purpose.factors.map((f) => scoreFactor(f, target, site))
   const scores = factors.flatMap((f) => (f.score === null ? [] : [f.score]))
   const mean = scores.reduce((a, b) => a + b, 0) / scores.length
+  const gaps = factors.flatMap((f) => (f.score === null || f.gap === undefined ? [] : [f.gap]))
   return {
     site,
     factors,
@@ -379,12 +439,43 @@ export function compare(target: Target, purpose: Purpose, site: EarthSite): Matc
       target.body === 'Moon' &&
       site.slopeDeg !== null &&
       site.slopeDeg >= purpose.maxSlopeDeg,
+    // Two decimals: finer differences are below the precision of the data, so they count as equal.
+    gap: gaps.length
+      ? Math.round((gaps.reduce((a, b) => a + b, 0) / gaps.length) * 100) / 100
+      : null,
   }
 }
 
-/** Best matches first; sites failing the slope rule go last. */
-export function rank(target: Target, purpose: Purpose, sites: EarthSite[]): Match[] {
-  return sites
+export interface Ranked extends Match {
+  /** 1 for the best match. Sites that cannot be told apart share a place. */
+  place: number
+  /** Shares its place with at least one other site. */
+  tied: boolean
+}
+
+/** A site with no measured factor sorts after the measured ones that share its percentage. */
+const gapOf = (match: Match) => match.gap ?? Number.MAX_VALUE
+
+/** Sites failing the slope rule last, then best percentage, then smallest gap. 0 = cannot be told apart. */
+const order = (a: Match, b: Match) =>
+  Number(a.fails) - Number(b.fails) || (b.percent ?? -1) - (a.percent ?? -1) || gapOf(a) - gapOf(b)
+
+/**
+ * Best matches first. Sites with the same percentage are ordered by how close their measured
+ * values are to the target's; sites that are still equal share a place and are listed by name.
+ */
+export function rank(target: Target, purpose: Purpose, sites: EarthSite[]): Ranked[] {
+  const sorted = sites
     .map((site) => compare(target, purpose, site))
-    .sort((a, b) => Number(a.fails) - Number(b.fails) || (b.percent ?? -1) - (a.percent ?? -1))
+    .sort((a, b) => order(a, b) || a.site.name.localeCompare(b.site.name))
+  const places = sorted.map((match, i) => {
+    let first = i
+    while (first > 0 && order(sorted[first - 1], match) === 0) first--
+    return first + 1
+  })
+  return sorted.map((match, i) => ({
+    ...match,
+    place: places[i],
+    tied: places[i - 1] === places[i] || places[i + 1] === places[i],
+  }))
 }
