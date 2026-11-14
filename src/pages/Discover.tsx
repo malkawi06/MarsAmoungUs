@@ -353,7 +353,7 @@ function CheckSection() {
           <p>
             Chance here means land picked at random, and most known analogs are deserts or cold
             places. A stricter test uses climate alone: the four climate traits rank the other known
-            sites in the top 1.4%, terrain and rock alone in the top 1.8%, all seven together in the
+            sites in the top 1.6%, terrain and rock alone in the top 1.8%, all seven together in the
             top 0.8%. Each part adds something (scripts/check_discover_robustness.ts).
           </p>
         </MoreDetails>

@@ -91,7 +91,7 @@ stops beating chance by at least two times.
 `moreDiscoveries`), names the best region on no list we know. The names are written by hand, so the build
 stops if the data moves a result more than 100 km. Discover matches environment, not landform shape.
 `scripts/check_discover_robustness.ts` (run by hand) checks the method against stricter nulls
-(climate alone ranks the other known sites in the top 1.4%, terrain and rock alone 1.8%, all seven
+(climate alone ranks the other known sites in the top 1.6%, terrain and rock alone 1.8%, all seven
 traits 0.8%) and counts how often each Home region holds when every tolerance is changed at random by up
 to ±50% (`holds` in `site.home`). Craters and the Antarctic valleys match poorly: landform is not in the grid.
 

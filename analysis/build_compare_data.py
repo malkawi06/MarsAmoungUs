@@ -80,6 +80,21 @@ EARTH = [
       'https://www.nps.gov/crmo/learn/historyculture/space-exploration-research-and-astronaut-training.htm')),
     ('lanzarote-corona', 'Mars', ['basalt'], ['lava-tube'],
      ('La Corona lava tube, Lanzarote', 'Spain', 29.10, -13.50, 'https://pubmed.ncbi.nlm.nih.gov/41572783/')),
+    # Added from NASA and challenge sources; climate (NASA POWER) and terrain (ASTER) fetched the same way.
+    ('lake-salda', 'Mars', ['carbonate'], ['lake-sediment'],
+     ('Lake Salda', 'Turkey', 37.55, 29.68,
+      'https://science.nasa.gov/blogs/earth-matters/2021/02/17/what-a-lake-in-turkey-can-tell-us-about-mars/')),
+    ('rio-tinto', 'Mars', [], ['channel'],
+     ('Rio Tinto', 'Spain', 37.69, -6.59, 'https://www.nasa.gov/general/rio-tinto-spain/')),
+    ('bockfjorden', 'Mars', ['carbonate', 'basalt'], [],
+     ('Bockfjorden and Sverrefjell volcano, Svalbard', 'Norway', 79.43, 13.33,
+      'https://astrobiology.nasa.gov/news/milestone-reached-for-detecting-life-on-mars/')),
+    ('death-valley', 'Mars', ['salt'], [],
+     ('Death Valley salt pan', 'USA (California)', 36.24, -116.82,
+      'https://www.spaceappschallenge.org/2026/challenges/permanent-moon-base-locations-and-mars/')),
+    ('sp-crater', 'Moon', [], [],
+     ('S P Crater, San Francisco Volcanic Field', 'USA (Arizona)', 35.586, -111.632,
+      'https://www.nasa.gov/humans-in-space/nasa-to-practice-artemis-moonwalking-roving-operations-in-arizona-desert/')),
 ]
 
 JGR = 'https://agupubs.onlinelibrary.wiley.com/doi/10.1029/2025JE009434'
@@ -269,7 +284,7 @@ def ts(value):
     return json.dumps(value, ensure_ascii=False)
 
 
-ON_WATER = {'tuktoyaktuk', 'lonar', 'mistastin'}
+ON_WATER = {'tuktoyaktuk', 'lonar', 'mistastin', 'lake-salda'}
 earth_rows = []
 for sid, analog_for, materials, landforms, extra in EARTH:
     name, country, lat, lon, source = extra or tuple(existing[sid][k] for k in ('name', 'country', 'lat', 'lon', 'source'))

@@ -33,6 +33,9 @@ still equal share a place.
 ## Known limits
 
 - NASA POWER values describe a ~50 km grid cell, not the exact point.
+- Lake Salda, Rio Tinto, Bockfjorden, Death Valley and S P Crater were added later from NASA and
+  challenge sources, with the same POWER request and the same 3×3 ASTER sampling (checked by
+  reproducing Wadi Rum's row exactly). MODIS ground temperature is not yet measured for them.
 - Slope and relief describe a 0.6 km window around the coordinates. For Lonar and Mistastin the
   coordinates fall on a lake, for Tuktoyaktuk on the sea, so slope and relief are left unmeasured there
   (neutral in the score) rather than using the water surface.
