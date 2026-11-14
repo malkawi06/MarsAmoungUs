@@ -101,9 +101,9 @@ export const site = {
 
   /** External links. Empty strings are hidden in the UI. */
   links: {
-    repo: 'https://github.com/malkawi06/mars-among-us',
+    repo: 'https://github.com/malkawi06/MarsAmoungUs',
     /** Live site URL. */
-    demo: 'https://malkawi06.github.io/mars-among-us/',
+    demo: 'https://malkawi06.github.io/MarsAmoungUs/',
     /** 30-second demo video (Space Apps asks for one). */
     video: '',
     /** Slide deck or project page on spaceappschallenge.org. */

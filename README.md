@@ -3,7 +3,7 @@
 **Find the places on Earth that resemble the Moon and Mars, and see why.** Built for the
 [NASA Space Apps Challenge 2026](https://www.spaceappschallenge.org) (November 14–15, 2026).
 
-Live: **https://malkawi06.github.io/mars-among-us/**
+Live: **https://malkawi06.github.io/MarsAmoungUs/**
 
 | Page                           | What it does                                                                                                                                                                                                                                                                                                                                                                     |
 | ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -98,8 +98,8 @@ Discover grid, because it means nothing at that scale.
 Requires **Node.js 20.19+ or 22.12+**.
 
 ```bash
-git clone https://github.com/malkawi06/mars-among-us.git
-cd mars-among-us
+git clone https://github.com/malkawi06/MarsAmoungUs.git
+cd MarsAmoungUs
 npm install
 npm run dev              # http://localhost:5173
 ```
