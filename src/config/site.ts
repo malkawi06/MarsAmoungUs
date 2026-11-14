@@ -45,7 +45,8 @@ export const site = {
   /** Project name: navbar, hero, browser tab. */
   name: 'Mars Among Us',
   /** One-line pitch: hero subtitle and <meta description>. */
-  pitch: 'Find the places on Earth most like the Moon and Mars, with a source behind every number.',
+  pitch:
+    'Astronauts and robots practise on Earth before they go to the Moon or Mars. We find the places on Earth most like them, using NASA data.',
 
   event: {
     name: 'NASA Space Apps Challenge 2026',
@@ -180,10 +181,16 @@ export const site = {
   home: {
     /** Right under the hero: who the project helps and why it matters. */
     impact: {
-      eyebrow: 'Why it matters',
-      title: 'Before the Moon and Mars, there is Earth',
+      eyebrow: 'The idea in one minute',
+      title: 'Earth has twins of the Moon and Mars',
       intro:
-        'Crews and rovers train on Earth before they fly. Finding the right place means reading scattered papers; Mars Among Us puts it in one search.',
+        'Some places on Earth are so much like the Moon or Mars that NASA tests rovers and trains astronauts there. Scientists call them analogs. Finding the right one used to mean reading paper after paper; Mars Among Us does it in one search.',
+      steps: [
+        'Pick a place on the Moon or Mars, and a job: test a rover, build a base, look for signs of life.',
+        'We compare it with places on Earth using NASA measurements: temperature, rain, ground, ice and slope.',
+        'You get the best twins on Earth, ranked, with the reason and the source behind every number.',
+      ],
+      audiencesTitle: 'Who it helps',
       audiences: [
         {
           who: 'Mission and training planners',
@@ -199,8 +206,8 @@ export const site = {
         },
       ],
     },
-    primaryCta: { label: 'Discover new analogs', to: '/discover' },
-    secondaryCta: { label: 'Compare with the Moon and Mars', to: '/compare' },
+    primaryCta: { label: 'Pick a place on the Moon or Mars', to: '/compare' },
+    secondaryCta: { label: 'Find new twins on Earth', to: '/discover' },
     /** Title of the Home section on how scores are worked out. */
     methodTitle: 'A source for every number',
     scoring:
@@ -246,9 +253,9 @@ export const site = {
   },
 
   discover: {
-    title: 'Discover new analogs',
+    title: 'Find new twins on Earth',
     intro:
-      'Pick a known analog site. Every patch of land on Earth is compared with it, and the closest light up, including places on no list of analogs we know.',
+      'Start from a place scientists already use to stand in for Mars or the Moon. We compare it with every patch of land on Earth and light up the places most like it, including ones on no list we know.',
     methodShort:
       'Each 50 km patch is compared with the known site on seven traits: climate, terrain and rock type.',
     method:
@@ -277,13 +284,13 @@ export const site = {
   analogs: {
     title: 'Earth Analogs',
     intro:
-      'Real places on Earth that look like the Moon or Mars, each with its published sources. Pick a landform to start.',
+      'Real places on Earth that scientists already use to stand in for the Moon or Mars, each with the research behind it.',
   },
 
   compare: {
     title: 'Compare with the Moon and Mars',
     intro:
-      'Pick a place on the Moon or Mars and a job. Every Earth site is scored factor by factor.',
+      'Choose a place on the Moon or Mars and what you want to do there. We rank real places on Earth by how well they match, and show why.',
     methodShort:
       'Each factor counts 100% (strong), 50% (partial) or 0% (weak); the match is the average of the factors with a published value.',
     method:

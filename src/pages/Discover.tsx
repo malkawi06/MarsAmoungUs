@@ -2,7 +2,7 @@ import { InfoTip } from '../components/InfoTip'
 import { MoreDetails } from '../components/MoreDetails'
 import { useCallback, useMemo, useState } from 'react'
 import { useSearchParams } from 'react-router'
-import { Sparkles, MapPin } from 'lucide-react'
+import { Sparkles, MapPin, MousePointerClick, ListFilter, Map } from 'lucide-react'
 import { DiscoverMap, SHOW_FROM } from '../components/DiscoverMap'
 import { ErrorState } from '../components/ErrorState'
 import { LoadingState } from '../components/LoadingState'
@@ -56,6 +56,11 @@ export default function Discover() {
         title={page.title}
         intro={page.intro}
         photo={siteConfig.photos.hero}
+        steps={[
+          { icon: ListFilter, text: 'Pick a known place to start from' },
+          { icon: Map, text: 'The places most like it light up on the map' },
+          { icon: MousePointerClick, text: 'Open one to see why it matches' },
+        ]}
       />
       {error ? (
         <ErrorState title="The Discover grid did not load" error={error} onRetry={reload} />

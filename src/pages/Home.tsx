@@ -245,7 +245,20 @@ function Impact() {
           </h2>
           <p className="mt-6 text-lg text-white/80">{impact.intro}</p>
         </div>
-        <ul className="reveal mt-12 grid gap-px overflow-hidden border border-white/10 bg-white/10 md:grid-cols-3">
+        <ol className="reveal mt-10 grid gap-6 md:grid-cols-3">
+          {impact.steps.map((step, i) => (
+            <li key={step} className="flex gap-4">
+              <span className="font-display text-5xl leading-none font-bold text-accent tabular-nums">
+                {i + 1}
+              </span>
+              <p className="text-white/85">{step}</p>
+            </li>
+          ))}
+        </ol>
+        <h3 className="reveal mt-14 font-display text-sm font-semibold tracking-[0.3em] text-white/70 uppercase">
+          {impact.audiencesTitle}
+        </h3>
+        <ul className="reveal mt-4 grid gap-px overflow-hidden border border-white/10 bg-white/10 md:grid-cols-3">
           {impact.audiences.map((a) => (
             <li key={a.who} className="bg-black p-6">
               <h3 className="font-display text-sm font-semibold tracking-[0.2em] text-accent uppercase">

@@ -1,3 +1,4 @@
+import type { LucideIcon } from 'lucide-react'
 import type { ReactNode } from 'react'
 import type { Photo } from '../config/site'
 import { PhotoCredit, PhotoFill } from './Photo'
@@ -8,6 +9,8 @@ interface PageHeaderProps {
   eyebrow?: string
   intro?: ReactNode
   photo: Photo
+  /** How to use the page, in three short steps, under the intro. */
+  steps?: { icon: LucideIcon; text: string }[]
   children?: ReactNode
 }
 
@@ -16,7 +19,7 @@ interface PageHeaderProps {
  * It sits inside the page's centred column and stretches to the screen edges; the `dark` class
  * keeps its text light over the photo in both themes.
  */
-export function PageHeader({ title, eyebrow, intro, photo, children }: PageHeaderProps) {
+export function PageHeader({ title, eyebrow, intro, photo, steps, children }: PageHeaderProps) {
   return (
     <header className="dark relative -mt-8 mb-10 ml-[calc(50%-50vw)] flex min-h-[19rem] w-screen items-end overflow-hidden bg-black text-fg sm:min-h-[44svh]">
       <PhotoFill photo={photo} priority className="kenburns" />
@@ -33,6 +36,18 @@ export function PageHeader({ title, eyebrow, intro, photo, children }: PageHeade
           {title}
         </h1>
         {intro && <p className="mt-5 max-w-2xl text-base text-white/85 sm:text-lg">{intro}</p>}
+        {steps && (
+          <ol className="mt-5 flex flex-col gap-2 text-sm text-white/85 sm:flex-row sm:flex-wrap sm:gap-x-6">
+            {steps.map(({ icon: Icon, text }, i) => (
+              <li key={text} className="flex items-center gap-2">
+                <span className="grid size-7 shrink-0 place-items-center rounded-lg bg-accent/20 text-accent">
+                  <Icon className="size-4" aria-hidden />
+                </span>
+                <span className="text-white/60">{i + 1}.</span> {text}
+              </li>
+            ))}
+          </ol>
+        )}
         {children}
       </div>
 

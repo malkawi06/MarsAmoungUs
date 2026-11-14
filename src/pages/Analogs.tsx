@@ -20,7 +20,7 @@ import { DESKTOP, useMediaQuery } from '../hooks/useMediaQuery'
 import { usePageTitle } from '../hooks/usePageTitle'
 
 const GUIDE = [
-  { icon: ListFilter, text: 'Pick a landform' },
+  { icon: ListFilter, text: 'Pick a type of landscape' },
   { icon: MousePointerClick, text: 'Pick a site on the list or the map' },
   { icon: BookOpenText, text: 'Read why it counts, with its sources' },
 ]
@@ -71,18 +71,8 @@ export default function Analogs() {
         title={page.title}
         intro={page.intro}
         photo={siteConfig.photos.analogs}
-      >
-        <ol className="mt-4 hidden flex-wrap gap-x-6 gap-y-2 text-sm text-fg-2 sm:flex">
-          {GUIDE.map(({ icon: Icon, text }, i) => (
-            <li key={text} className="flex items-center gap-2">
-              <span className="grid size-7 place-items-center rounded-lg bg-accent/15 text-accent">
-                <Icon className="size-4" aria-hidden />
-              </span>
-              <span className="text-muted">{i + 1}.</span> {text}
-            </li>
-          ))}
-        </ol>
-      </PageHeader>
+        steps={GUIDE}
+      />
 
       {/* Phones: one sideways row that stays under the top bar while the page scrolls. */}
       <section

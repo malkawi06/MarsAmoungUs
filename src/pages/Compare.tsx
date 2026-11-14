@@ -2,7 +2,7 @@ import { InfoTip } from '../components/InfoTip'
 import { MoreDetails } from '../components/MoreDetails'
 import { useCallback, useState } from 'react'
 import { useSearchParams } from 'react-router'
-import { ChevronDown, MapPin } from 'lucide-react'
+import { ChevronDown, MapPin, Orbit, Briefcase, Trophy } from 'lucide-react'
 import { FactorEvidence, NasaDataLinks, SourceLink } from '../components/FactorEvidence'
 import { MoonEnvironment } from '../components/MoonEnvironment'
 import { PageHeader } from '../components/PageHeader'
@@ -109,6 +109,11 @@ export default function Compare() {
         title={page.title}
         intro={page.intro}
         photo={siteConfig.photos.compare}
+        steps={[
+          { icon: Orbit, text: 'Choose a place on the Moon or Mars' },
+          { icon: Briefcase, text: 'Choose the job: test a rover, build a base…' },
+          { icon: Trophy, text: 'Read the best match on Earth, and why' },
+        ]}
       />
 
       <section className="rounded-2xl border border-border bg-surface p-4 sm:p-5">
