@@ -1,3 +1,4 @@
+import { InfoTip } from '../components/InfoTip'
 import { MoreDetails } from '../components/MoreDetails'
 import { useCallback, useState } from 'react'
 import { useSearchParams } from 'react-router'
@@ -177,8 +178,19 @@ export default function Compare() {
                 )
               })}
             </div>
-            <p className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted">
-              <span>{purpose.label} compares:</span>
+            <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted">
+              <div className="inline-flex items-center gap-1">
+                {purpose.label} compares:
+                {planned.length > 0 && (
+                  <InfoTip label="What is not compared yet">
+                    {planned.map((f) => (
+                      <p key={f.label}>
+                        <span className="font-medium text-fg">{f.label}:</span> {f.why}
+                      </p>
+                    ))}
+                  </InfoTip>
+                )}
+              </div>
               {purpose.factors.map((f) => {
                 const Icon = FACTOR_ICONS[f]
                 return (
@@ -188,12 +200,7 @@ export default function Compare() {
                   </span>
                 )
               })}
-            </p>
-            {planned.length > 0 && (
-              <p className="mt-1 text-xs text-muted">
-                Not compared yet: {planned.map((f) => f.label.toLowerCase()).join(', ')}.
-              </p>
-            )}
+            </div>
           </div>
         </div>
         <TargetSummary target={target} />
@@ -229,14 +236,20 @@ export default function Compare() {
 
       <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-5">
         <div className="lg:col-span-2">
-          <h2 className="mb-1">
-            <StepLabel number={3}>Earth sites, best match first</StepLabel>
-          </h2>
-          <p className="mb-3 text-xs text-muted">
-            <span className="lg:hidden">Tap a site to see why it matches. </span>
-            {hasTies &&
-              'Sites with the same match are ordered by how close their measured values are to the target. Those marked = cannot be told apart with the data we have.'}
-          </p>
+          <div className="mb-1 flex items-center gap-1">
+            <h2>
+              <StepLabel number={3}>Earth sites, best match first</StepLabel>
+            </h2>
+            {hasTies && (
+              <InfoTip label="How ties are ordered">
+                <p>
+                  Sites with the same match are ordered by how close their measured values are to
+                  the target. Those marked = cannot be told apart with the data we have.
+                </p>
+              </InfoTip>
+            )}
+          </div>
+          <p className="mb-3 text-xs text-muted lg:hidden">Tap a site to see why it matches.</p>
           <ol className="space-y-2">
             {matches.map(
               (match, i) =>
@@ -288,11 +301,9 @@ export default function Compare() {
                   {selected.percent === null ? '—' : `${selected.percent}%`}
                 </p>
                 <p className="text-sm text-muted">{verdict(selected)}</p>
-                <p className="text-xs text-muted">
-                  based on {selected.scored} of {selected.factors.length} factors
-                </p>
               </div>
             </header>
+            <HowScored match={selected} target={target} planned={planned} />
 
             {selected.fails && (
               <p className="mx-5 mb-4 rounded-lg border border-danger/40 bg-danger/10 p-3 text-sm text-fg-2">
@@ -308,12 +319,7 @@ export default function Compare() {
                 Why it matches
               </h3>
               <p className="mb-3 text-xs text-muted">Open a factor to see its evidence.</p>
-              <Factors
-                match={selected}
-                target={target}
-                purpose={purpose}
-                analog={ANALOGS.get(selected.site.id)}
-              />
+              <Factors match={selected} target={target} analog={ANALOGS.get(selected.site.id)} />
             </div>
 
             <div className="border-t border-border p-5">
@@ -529,20 +535,58 @@ function SiteButton({
   )
 }
 
-function Factors({
+/** Score points per level: the match is their average (similarity.ts compare). */
+const POINTS = { 3: 100, 2: 50, 1: 0 } as const
+
+/** The sum behind the percentage, in one line, with the rule and what was left out behind (i). */
+function HowScored({
   match,
   target,
-  purpose,
-  analog,
+  planned,
 }: {
   match: Match
   target: Target
-  purpose: Purpose
-  analog?: AnalogSite
+  planned: { label: string; why: string }[]
 }) {
-  const planned = plannedFor(purpose, target.body)
   const scored = match.factors.filter((f) => f.score !== null)
   const noData = match.factors.filter((f) => f.score === null && f.target === NO_DATA)
+  if (!scored.length) return null
+  return (
+    <div className="flex flex-wrap items-center gap-x-2 gap-y-1 border-t border-border px-5 py-3 text-xs text-muted">
+      <span>Average of</span>
+      {scored.map((f) => (
+        <span key={f.factor} className="rounded-full border border-border px-2 py-0.5 text-fg-2">
+          {f.label} <span className={SCORE_STYLE[f.score!].text}>{POINTS[f.score!]}%</span>
+        </span>
+      ))}
+      <span>
+        = <span className="font-semibold text-fg">{match.percent}%</span>
+      </span>
+      <InfoTip label="How the match is worked out" align="right">
+        <p>
+          Each factor is compared with {target.name}: strong counts 100%, partial 50%, weak 0%,
+          after Stern et al. (2025). The match is the average of the factors that have a published
+          value; the others are left out, never guessed.
+        </p>
+        {noData.length > 0 && (
+          <p>
+            Left out, no published value for {target.name} yet:{' '}
+            {noData.map((f) => f.label.toLowerCase()).join(', ')}.
+          </p>
+        )}
+        {planned.map((f) => (
+          <p key={f.label}>
+            <span className="font-medium text-fg">Not compared, {f.label.toLowerCase()}:</span>{' '}
+            {f.why}
+          </p>
+        ))}
+      </InfoTip>
+    </div>
+  )
+}
+
+function Factors({ match, target, analog }: { match: Match; target: Target; analog?: AnalogSite }) {
+  const scored = match.factors.filter((f) => f.score !== null)
   const leftOut = match.factors.filter((f) => f.score === null && f.target !== NO_DATA)
   return (
     <>
@@ -551,31 +595,11 @@ function Factors({
           <FactorRow key={f.factor} factor={f} target={target} site={match.site} analog={analog} />
         ))}
       </ul>
-      {noData.length > 0 && (
-        <p className="mt-3 text-xs text-muted">
-          Not scored, because no published value exists for {target.name} yet:{' '}
-          {noData.map((f) => f.label.toLowerCase()).join(', ')}.
-        </p>
-      )}
       {leftOut.map((f) => (
         <p key={f.factor} className="mt-3 text-xs text-muted">
           {f.label}: {f.reason}
         </p>
       ))}
-      {planned.length > 0 && (
-        <div className="mt-3 text-xs text-muted">
-          <MoreDetails
-            label="Why"
-            summary={`Not compared: ${planned.map((f) => f.label.toLowerCase()).join(', ')}.`}
-          >
-            {planned.map((f) => (
-              <p key={f.label}>
-                <span className="font-medium text-fg-2">{f.label}:</span> {f.why}
-              </p>
-            ))}
-          </MoreDetails>
-        </div>
-      )}
     </>
   )
 }

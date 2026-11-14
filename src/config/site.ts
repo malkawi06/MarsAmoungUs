@@ -204,7 +204,7 @@ export const site = {
     /** Title of the Home section on how scores are worked out. */
     methodTitle: 'A source for every number',
     scoring:
-      'Every factor scores 3 (strong), 2 (partial) or 1 (weak); the match is their average as a percentage, after Stern et al. (2025).',
+      'Every factor counts 100% (strong), 50% (partial) or 0% (weak); the match is the average of the factors with a published value, after Stern et al. (2025).',
     /**
      * The new-analog example on Home: the best region from this known site that is not on our lists.
      * `place` is written by hand, so the build stops if the result moves more than 100 km from `near`.
@@ -294,7 +294,7 @@ export const site = {
     intro:
       'Pick a place on the Moon or Mars and a job. Every Earth site is scored factor by factor.',
     methodShort:
-      'Each factor scores 3 (strong), 2 (partial) or 1 (weak); the match is their average as a percentage.',
+      'Each factor counts 100% (strong), 50% (partial) or 0% (weak); the match is the average of the factors with a published value.',
     method:
       'Each factor scores 1 (weak), 2 (partial) or 3 (strong), and all factors count equally, following the NASA-led framework of Stern et al. (2025). Factors without sourced data for the target are left out. Sites with the same match are ordered by how close their measured values are to the target; sites that are still equal share a place. Earth climate: NASA POWER 2001–2020; Earth slope and elevation: ASTER 30 m elevation model, in a 0.6 km window at the pin.',
     methodSource: 'https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2024JE008803',

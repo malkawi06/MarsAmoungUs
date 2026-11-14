@@ -2,6 +2,7 @@ import { Moon, Radar, Snowflake, Sun, Thermometer } from 'lucide-react'
 import { Link } from 'react-router'
 import { EARTH_SITES } from '../data/compare'
 import type { MoonEnvironment as Environment } from '../lib/similarity'
+import { InfoTip } from './InfoTip'
 import { MoreDetails } from './MoreDetails'
 
 const MOON_DATA = {
@@ -71,21 +72,25 @@ export function MoonEnvironment({ environment: e }: { environment: Environment }
   ]
   return (
     <section className="mt-4 w-full rounded-xl border border-border bg-bg/60 p-4">
-      <h3 className="text-sm font-semibold">
-        Measured by NASA&apos;s Lunar Reconnaissance Orbiter
-      </h3>
-      <p className="mt-0.5 text-xs text-muted">
-        Everything within {e.radiusKm} km of the region centre.
-      </p>
+      <div className="flex items-center gap-1">
+        <h3 className="text-sm font-semibold">
+          Measured by NASA&apos;s Lunar Reconnaissance Orbiter
+        </h3>
+        <InfoTip label="Measured over what area">
+          <p>Everything within {e.radiusKm} km of the region centre.</p>
+        </InfoTip>
+      </div>
       <dl className="mt-3 grid gap-x-6 gap-y-3 sm:grid-cols-2 xl:grid-cols-3">
         {items.map(({ icon: Icon, label, value, detail }) => (
           <div key={label}>
             <dt className="flex items-center gap-2 text-xs text-muted">
               <Icon className="size-4 shrink-0 text-accent" aria-hidden />
               {label}
+              <InfoTip label={`${label}: details`}>
+                <p>{detail}</p>
+              </InfoTip>
             </dt>
             <dd className="pl-6 font-medium">{value}</dd>
-            <dd className="pl-6 text-xs text-fg-2">{detail}</dd>
           </div>
         ))}
       </dl>
