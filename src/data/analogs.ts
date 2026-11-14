@@ -90,7 +90,7 @@ export const ANALOG_SITES: AnalogSite[] = [
     precision: 'region',
     landforms: { aec: 'strong' },
     climate: 'Mean 16.1 °C, 99 mm of precipitation a year (NASA POWER 2001–2020)',
-    why: 'One of the best-studied barchan (crescent) dune corridors on Earth; its hyper-arid soils are also studied as Mars-like soil.',
+    why: 'A corridor of barchan (crescent) dunes studied in the field and compared with others; its hyper-arid soils are also studied as Mars-like soil.',
     sources: [
       {
         title: 'Barchan dune corridors: field characterization (JGR Earth Surface)',
@@ -580,7 +580,7 @@ export const ANALOG_SITES: AnalogSite[] = [
     precision: 'region',
     landforms: { moon: 'moderate' },
     climate: 'Mean 6.0 °C, 1,212 mm of precipitation a year (NASA POWER 2001–2020)',
-    why: 'One of the finest exposures of anorthosite on Earth, a rock rare here but common in the bright lunar highlands; ESA astronauts learn Moon geology there.',
+    why: 'One of the few places on Earth that shares geological features with the bright lunar highlands, with anorthosite rocks like theirs; ESA astronauts learn Moon geology there.',
     sources: [
       {
         title: 'Astronauts learn Moon geology in a fjord (ESA Pangaea, 2025)',
