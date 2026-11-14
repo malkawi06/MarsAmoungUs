@@ -231,10 +231,11 @@ describe('scoreLevels', () => {
 
 describe('compare', () => {
   it('maps the mean score to 0–100% and ignores factors without data', () => {
-    const t = target({ slopeMaxDeg: 5 })
+    // No landform for the target, and no day–night swing: two of the four rover factors score.
+    const t = target({ slopeMaxDeg: 5, landforms: [] })
     const best = compare(t, purpose('rover'), site({ slopeDeg: 1, materials: ['anorthosite'] }))
     assert.equal(best.scored, 2)
-    assert.equal(best.factors.length, 3)
+    assert.equal(best.factors.length, 4)
     assert.equal(best.percent, 100)
     const worst = compare(t, purpose('rover'), site({ slopeDeg: 20, materials: ['ice'] }))
     assert.equal(worst.percent, 0)
@@ -416,6 +417,16 @@ describe('data files', () => {
         [...ranks].sort((a, b) => a - b),
         code,
       )
+    }
+  })
+})
+
+describe('Artemis regions', () => {
+  it('get different rover and base twins by the kind of ground (massif, crater rim, plain)', () => {
+    const moon = TARGETS.filter((t) => t.body === 'Moon')
+    for (const id of ['rover', 'base']) {
+      const tops = new Set(moon.map((t) => rank(t, purpose(id), EARTH_SITES)[0].site.id))
+      assert.ok(tops.size > 1, `${id}: every Artemis region has the same first site`)
     }
   })
 })

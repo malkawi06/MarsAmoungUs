@@ -177,17 +177,19 @@ const RADIATION: PlannedFactor = {
 
 export const PURPOSES: Purpose[] = [
   {
+    // Landform: a rover is tested, and a base sited, on the same kind of ground as the target
+    // (massif, crater rim, plain), which is what sets the Artemis regions apart.
     id: 'rover',
     label: 'Rover testing',
     bodies: ['Moon', 'Mars'],
-    factors: ['slope', 'rock', 'dailyRange'],
+    factors: ['slope', 'rock', 'dailyRange', 'landform'],
     planned: [RELIEF],
   },
   {
     id: 'base',
     label: 'Base / habitat',
     bodies: ['Moon', 'Mars'],
-    factors: ['dailyRange', 'meanTemp', 'slope', 'rock'],
+    factors: ['dailyRange', 'meanTemp', 'slope', 'rock', 'landform'],
     planned: [SUNLIGHT],
     maxSlopeDeg: 8,
   },
