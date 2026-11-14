@@ -1,7 +1,7 @@
 import { InfoTip } from '../components/InfoTip'
 import { MoreDetails } from '../components/MoreDetails'
-import { useCallback, useState } from 'react'
-import { useSearchParams } from 'react-router'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import { useLocation, useSearchParams } from 'react-router'
 import { ChevronDown, MapPin, Orbit, Briefcase, Trophy } from 'lucide-react'
 import { FactorEvidence, NasaDataLinks, SourceLink } from '../components/FactorEvidence'
 import { MoonEnvironment } from '../components/MoonEnvironment'
@@ -101,6 +101,29 @@ export default function Compare() {
     update({ site: id })
     setSheetOpen(true)
   }
+
+  // On a phone the sheet opens; on a desktop the panel is beside the list, so bring it into view.
+  const why = useRef<HTMLElement>(null)
+  const location = useLocation()
+  const scrollToWhy = () => {
+    why.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    why.current?.focus({ preventScroll: true })
+  }
+  // Set when the selection must change first: the router restores its scroll on that change, so
+  // scroll only once it has.
+  const whyAfterChange = useRef(false)
+  const seeWhy = () => {
+    const best = matches[0].site.id
+    if (!window.matchMedia(DESKTOP).matches) return select(best)
+    if (selected.site.id === best) return scrollToWhy()
+    whyAfterChange.current = true
+    update({ site: best })
+  }
+  useEffect(() => {
+    if (!whyAfterChange.current) return
+    whyAfterChange.current = false
+    scrollToWhy()
+  }, [location.key])
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8">
@@ -211,12 +234,7 @@ export default function Compare() {
         <TargetSummary target={target} brief />
       </section>
 
-      <BestMatch
-        match={matches[0]}
-        target={target}
-        purpose={purpose}
-        onSee={() => select(matches[0].site.id)}
-      />
+      <BestMatch match={matches[0]} target={target} purpose={purpose} onSee={seeWhy} />
 
       {selected.scored < MIN_FACTORS && (
         <div className="mt-4 rounded-xl border border-warning/40 bg-warning/10 px-4 py-3 text-sm text-fg-2">
@@ -296,7 +314,11 @@ export default function Compare() {
           label={`${selected.site.name}: why it matches`}
           className="lg:sticky lg:top-24 lg:col-span-3 lg:self-start"
         >
-          <section className="border-border bg-surface lg:rounded-2xl lg:border">
+          <section
+            ref={why}
+            tabIndex={-1}
+            className="scroll-mt-24 border-border bg-surface focus:outline-none focus-visible:ring-2 focus-visible:ring-accent lg:rounded-2xl lg:border"
+          >
             <header className="flex items-start justify-between gap-4 p-5">
               <div className="min-w-0">
                 <p className="text-xs font-medium tracking-wide text-accent uppercase">
