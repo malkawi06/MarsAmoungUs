@@ -5,12 +5,12 @@
 
 Live: **https://malkawi06.github.io/mars-among-us/**
 
-| Page                           | What it does                                                                                                                                                                                                                                                                       |
-| ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Discover** (`/discover`)     | Pick a known Moon or Mars analog site; every 0.5° land cell on Earth is compared with it on the same NASA POWER climate, terrain and rock-type data, and the closest regions, including ones not yet studied as analogs, are shown on a map. Built by `scripts/build_discover.py`. |
-| **Compare** (`/compare`)       | Pick a place on the Moon (the nine Artemis landing regions) or Mars and a purpose (rover testing, base, local resources, search for life, training). Every Earth site is scored factor by factor, with the target's orbital image next to the site.                                |
-| **Earth Analogs** (`/analogs`) | The analog sites on a satellite map, filtered by landform, each with the published research behind it.                                                                                                                                                                             |
-| **About** (`/about`)           | The challenge, the solution, the data used and the team: the sections of the Space Apps submission form.                                                                                                                                                                           |
+| Page                           | What it does                                                                                                                                                                                                                                                                                                                                                                     |
+| ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Discover** (`/discover`)     | Pick a known Moon or Mars analog site; every 0.5° land cell on Earth is compared with it on the same NASA POWER climate, terrain and rock-type data, and the closest regions, including ones not yet studied as analogs, are shown on a map, with desert, cold and ESA permafrost filters and NASA terrain relief inside a selected patch. Built by `scripts/build_discover.py`. |
+| **Compare** (`/compare`)       | Pick a place on the Moon (the nine Artemis landing regions) or Mars and a purpose (rover testing, base, permanent Moon base, local resources, search for life, training). Every Earth site is scored factor by factor, with the target's orbital image next to the site and, for the Moon, what NASA's LRO measured there.                                                       |
+| **Earth Analogs** (`/analogs`) | The analog sites on a satellite map, filtered by landform, each with the published research behind it.                                                                                                                                                                                                                                                                           |
+| **About** (`/about`)           | The challenge, the solution, the data used and the team: the sections of the Space Apps submission form.                                                                                                                                                                                                                                                                         |
 
 **Stack:** Vite · React 19 · TypeScript · Tailwind CSS v4 · React Router · Leaflet · Python (data scripts).
 
@@ -33,7 +33,7 @@ These files are built on every deploy and are not committed.
 ### Compare scoring
 
 Each purpose compares its own factors (slope, rock type, landform, temperature, day–night swing, aridity,
-ice). Every factor scores 1, 2 or 3 with equal weights, after the NASA-led analog framework of Stern et al.
+ice, and for a permanent Moon base frozen ground and ground ice). Every factor scores 1, 2 or 3 with equal weights, after the NASA-led analog framework of Stern et al.
 2025 (JGR Planets, doi 10.1029/2024JE008803). Factors with no sourced value are left out, and a score based
 on fewer than two factors is flagged as low confidence.
 
