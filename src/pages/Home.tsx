@@ -88,17 +88,6 @@ export default function Home() {
         </ul>
       </Panel>
 
-      <Panel
-        photo={site.photos.method}
-        eyebrow="How it is scored"
-        title={home.methodTitle}
-        body={home.scoring}
-        cta={{ label: 'Read the method', href: compare.methodSource }}
-        side="right"
-      >
-        <p className="text-white/70">{home.noData}</p>
-      </Panel>
-
       <Sources />
     </div>
   )
@@ -453,10 +442,11 @@ function Sources() {
             Data
           </p>
           <h2 className="font-display text-4xl font-bold uppercase sm:text-5xl">
-            Where the data comes from
+            {site.home.methodTitle}
           </h2>
           <p className="max-w-2xl text-white/70">
-            Every number on the site links back to one of these, or to a published paper.
+            Every number on the site links back to one of these, or to a published paper.{' '}
+            {site.home.scoring} {site.home.noData}
           </p>
         </div>
         <ul className="mt-10 flex flex-wrap gap-2">
