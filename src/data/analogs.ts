@@ -90,6 +90,26 @@ export const LANDFORM_PROCESS: Record<LandformCode, string> = {
   tex: TERRAIN,
 }
 
+/** Each landform in everyday words, shown beside its name for people new to the subject. */
+export const LANDFORM_PLAIN: Record<LandformCode, string> = {
+  aec: 'curved dunes',
+  ael: 'straight dunes',
+  cli: 'steep rock walls',
+  cra: 'one impact crater',
+  fse: 'dark streaks on slopes',
+  fsf: 'dry river beds',
+  fsg: 'small gullies on slopes',
+  fss: 'landslides',
+  mix: 'several kinds together',
+  moon: 'Moon-like ground',
+  rid: 'long raised ridges',
+  rou: 'rough, broken ground',
+  sfe: 'small rounded hills',
+  sfx: 'many small craters',
+  smo: 'flat, smooth ground',
+  tex: 'patterned ground',
+}
+
 export interface Source {
   title: string
   url: string

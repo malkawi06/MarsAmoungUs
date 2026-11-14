@@ -11,6 +11,7 @@ import {
   ANALOG_SITES,
   CONFIDENCE_MEANING,
   LANDFORM_NAMES,
+  LANDFORM_PLAIN,
   LANDFORM_PROCESS,
   PROCESS_SOURCE,
   analogsFor,
@@ -100,7 +101,8 @@ export default function Analogs() {
               onClick={() => setLandform(code)}
               className={chip(landform === code)}
             >
-              {LANDFORM_NAMES[code]} ({analogsFor(code).length})
+              {LANDFORM_NAMES[code]} <span className="opacity-70">· {LANDFORM_PLAIN[code]}</span> (
+              {analogsFor(code).length})
             </button>
           ))}
         </div>
@@ -156,7 +158,11 @@ export default function Analogs() {
               <p className="text-sm text-muted">
                 {sites.length} {sites.length === 1 ? 'site' : 'sites'}
                 {landform !== 'all' && (
-                  <> for {LANDFORM_NAMES[landform].toLowerCase()}, strongest evidence first</>
+                  <>
+                    {' '}
+                    for {LANDFORM_NAMES[landform].toLowerCase()} ({LANDFORM_PLAIN[landform]}),
+                    strongest evidence first
+                  </>
                 )}
               </p>
               {landform !== 'all' && (
