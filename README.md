@@ -1,8 +1,6 @@
 # Mars Among Us
 
-**Find the places on Earth that resemble the Moon and Mars, and see why.** Built for the
-[NASA Space Apps Challenge 2026](https://www.spaceappschallenge.org) 
-
+**Find the places on Earth that resemble the Moon and Mars, and see why.** 
 Live: **https://malkawi06.github.io/MarsAmoungUs/**
 
 | Page                           | What it does                                                                                                                                                                                                                                                                                                                                                                     |
