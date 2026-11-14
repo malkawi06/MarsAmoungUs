@@ -11,6 +11,8 @@ declare const __HOME_STATS__: {
   /** Patches of land in the Discover grid, and the traits each is compared on. */
   landCells: number
   discoverTraits: number
+  /** The grid cell with the lowest mean air temperature (NASA POWER T2M), °C. */
+  coldestLand: { tempC: number; lat: number; lon: number }
   /** Discover checked against analogs found by other researchers (checkAgainstKnown). */
   check: {
     seeds: number

@@ -35,6 +35,12 @@ const knownCells = EARTH_SITES.map((s) => ({ id: s.id, cell: cellAt(cells, s.lat
 )
 const siteName = (id: string) => EARTH_SITES.find((s) => s.id === id)!.name
 
+// The coldest land in the grid, to set against the Moon's Diviner temperatures.
+let coldest = -1
+cells.meanTempC10.forEach((t, i) => {
+  if (t !== null && (coldest < 0 || t < cells.meanTempC10[coldest]!)) coldest = i
+})
+
 // The check against analogs found by other researchers (see checkAgainstKnown).
 const check = checkAgainstKnown(cells, knownCells)
 
@@ -103,6 +109,11 @@ export default defineConfig({
       sources: sourceCount,
       landCells,
       discoverTraits: TRAITS.length,
+      coldestLand: {
+        tempC: cells.meanTempC10[coldest]! / 10,
+        lat: cellLat(cells, coldest),
+        lon: cellLon(cells, coldest),
+      },
       check: {
         seeds: check.seeds,
         medianTopPct: check.medianTopPct,

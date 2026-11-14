@@ -1,4 +1,6 @@
 import { Moon, Snowflake, Sun, Thermometer } from 'lucide-react'
+import { Link } from 'react-router'
+import { EARTH_SITES } from '../data/compare'
 import type { MoonEnvironment as Environment } from '../lib/similarity'
 import { SourceLink } from './FactorEvidence'
 
@@ -14,6 +16,14 @@ const MOON_DATA = {
 }
 
 const celsius = (kelvin: number) => `${Math.round(kelvin - 273.15)}\u00a0°C`
+
+const { coldestLand } = __HOME_STATS__
+/** Our Earth sites with ground ice, coldest first. */
+const ICY_SITES = EARTH_SITES.filter((s) => s.materials.includes('ice')).sort(
+  (a, b) => a.meanTempC - b.meanTempC,
+)
+const latLon = (lat: number, lon: number) =>
+  `${Math.abs(lat)}°${lat < 0 ? 'S' : 'N'} ${Math.abs(lon)}°${lon < 0 ? 'W' : 'E'}`
 
 /**
  * What NASA's Lunar Reconnaissance Orbiter measured around an Artemis region: sunlight, shadow,
@@ -66,10 +76,42 @@ export function MoonEnvironment({ environment: e }: { environment: Environment }
           </div>
         ))}
       </dl>
-      <p className="mt-3 text-xs text-muted">
-        Shown, not scored: Earth sites have air temperatures and no comparable sunlight value, so
-        there is nothing to compare these with on Earth.
-      </p>
+      <div className="mt-4 border-t border-border pt-3">
+        <h4 className="text-xs font-semibold tracking-wide text-fg uppercase">On Earth</h4>
+        <p className="mt-1 text-sm text-fg-2">
+          The coldest land on Earth in our NASA POWER grid averages{' '}
+          <span className="font-medium text-fg">{Math.round(coldestLand.tempC)}&nbsp;°C</span> (
+          {latLon(coldestLand.lat, coldestLand.lon)}
+          {coldestLand.lat < -60 && ', Antarctica'}). This region averages{' '}
+          <span className="font-medium text-fg">
+            {Math.round(coldestLand.tempC) - Math.round(e.tempAvgMedianK - 273.15)}&nbsp;°C colder
+          </span>
+          : no place on Earth is this cold.
+        </p>
+        <p className="mt-2 text-sm text-fg-2">
+          Our Earth sites with ground ice, the closest to the Moon&apos;s icy cold:
+        </p>
+        <ul className="mt-1 space-y-0.5 text-sm">
+          {ICY_SITES.map((s) => (
+            <li key={s.id}>
+              <Link
+                to={`/discover?from=${s.id}&climate=cold`}
+                className="text-accent hover:underline"
+              >
+                {s.name}
+              </Link>{' '}
+              <span className="text-muted">
+                · {Math.round(s.meanTempC)}&nbsp;°C · {s.country}
+              </span>
+            </li>
+          ))}
+        </ul>
+        <p className="mt-2 text-xs text-muted">
+          Shown, not scored. Diviner measures the ground&apos;s surface; NASA POWER measures the air
+          2 m up, so the numbers give a sense of scale, not an exact match. These ice sites are
+          studied as Mars analogs; each link opens Discover to find more cold places like it.
+        </p>
+      </div>
       <ul className="mt-2 space-y-0.5 text-xs">
         {Object.values(MOON_DATA).map((s) => (
           <li key={s.url}>
