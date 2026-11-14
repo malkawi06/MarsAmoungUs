@@ -73,7 +73,8 @@ EARTH = [
       'https://www.researchgate.net/publication/241208537_Mistastin_Impact_Structure_Labrador_A_Geological_Analogue_for_Lunar_Highland_Craters')),
     ('ries', 'Moon', [], ['impact'],
      ('Nördlinger Ries crater', 'Germany', 48.88, 10.58, 'https://blogs.esa.int/caves/2017/09/18/the-astronauts-are-back/')),
-    ('lofoten', 'Moon', ['anorthosite'], [],
+    # Landform from the same source: the region was carved "into dramatic peaks and sweeping valleys".
+    ('lofoten', 'Moon', ['anorthosite'], ['massif'],
      ('Lofoten anorthosite', 'Norway', 68.10, 13.50, 'https://blogs.esa.int/caves/2025/07/28/astronauts-learn-moon-geology-in-a-fjord/')),
     ('craters-of-the-moon', 'Moon', ['basalt'], [],
      ('Craters of the Moon lava field', 'USA (Idaho)', 43.46, -113.51,
@@ -96,6 +97,15 @@ EARTH = [
      ('S P Crater, San Francisco Volcanic Field', 'USA (Arizona)', 35.586, -111.632,
       'https://www.nasa.gov/humans-in-space/nasa-to-practice-artemis-moonwalking-roving-operations-in-arizona-desert/')),
 ]
+
+# Why each added site stands in for the Moon or Mars, in the words of its source (sites in analogs.ts have their own).
+WHY = {
+    'lake-salda': 'Its white shore sediments are hydromagnesite, a carbonate similar to the carbonates detected at Jezero crater on Mars.',
+    'rio-tinto': 'An extreme acid environment that NASA calls a possible analog for the Martian subsurface; NASA tested a Mars drill there (MARTE).',
+    'bockfjorden': 'Its geology is much like Mars: hot-spring carbonate terraces and the Sverrefjell volcano, where AMASE teams test life-detection instruments.',
+    'death-valley': 'Named by the Space Apps challenge, with the Atacama and Haughton Crater, as a place where mission teams test equipment and methods before they fly.',
+    'sp-crater': 'NASA rehearses Artemis moonwalks and rover operations here, for its challenging terrain, geology and minimal communications, as near the lunar South Pole.',
+}
 
 JGR = 'https://agupubs.onlinelibrary.wiley.com/doi/10.1029/2025JE009434'
 LPI_HIGHLANDS = 'https://www.hou.usra.edu/meetings/lpsc2020/pdf/2867.pdf'
@@ -305,6 +315,8 @@ for sid, analog_for, materials, landforms, extra in EARTH:
     row['permafrostPct'] = permafrost_at(lat, lon)
     if d['flag']:
         row['note'] = d['flag']
+    if sid in WHY:
+        row['why'] = WHY[sid]
     earth_rows.append(row)
 
 targets = []

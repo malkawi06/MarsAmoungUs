@@ -243,6 +243,21 @@ export const site = {
         near: { lat: 72.75, lon: -115.25 },
       },
       {
+        fromId: 'death-valley',
+        holds: 35,
+        place: 'the coastal desert of southern Peru',
+        near: { lat: -14.75, lon: -75.25 },
+        /** Checked by hand: the study area runs from Pisco to Acarí, 13°40′ to 15°38′ S, 100–2,000 m. */
+        check: {
+          text: 'Already known for a Mars process: Hesse (2012) documented dust devil tracks across this coastal desert, as an analog for the dust devil streaks on Mars. Discover was given no landform data.',
+          source: {
+            title:
+              'Hesse (2012), Aeolian Research 5: dust devil tracks in the coastal desert of southern Peru',
+            url: 'https://doi.org/10.1016/j.aeolia.2011.10.003',
+          },
+        },
+      },
+      {
         fromId: 'green-river',
         holds: 35,
         place: 'Ningxia, northern China',

@@ -350,11 +350,14 @@ function MoreDiscoveries() {
         {stats.moreDiscoveries.length} more new twins
       </h3>
       <p className="mt-2 max-w-3xl text-white/70">
-        Found the same way from two more known analogs, on no list we know. We show only regions
-        that hold in at least 30 of 40 runs with every tolerance changed at random by up to ±50%.
+        Found the same way from more known analogs, on no list we know. We show only regions that
+        hold in at least 30 of 40 runs with every tolerance changed at random by up to ±50%. Where
+        published work already finds a Moon or Mars process there, the card says so; the others are
+        leads, not yet studied as analogs.
       </p>
-      <ul className="mt-8 grid border-t border-l border-white/10 sm:grid-cols-2">
+      <ul className="mt-8 grid border-t border-l border-white/10 sm:grid-cols-2 lg:grid-cols-3">
         {stats.moreDiscoveries.map((d, n) => {
+          const check = site.home.moreDiscoveries[n].check
           const weakest = d.traits
             .filter((t) => t.score !== null)
             .reduce((a, b) => (b.score! < a.score! ? b : a))
@@ -373,6 +376,20 @@ function MoreDiscoveries() {
                 {weakest.label.toLowerCase()} ({Math.round(weakest.score! * 100)}%). Holds in{' '}
                 {site.home.moreDiscoveries[n].holds} of 40 runs.
               </p>
+              {check ? (
+                <p className="border-l-2 border-accent pl-3 text-sm text-white/80">
+                  <span className="font-semibold text-accent">Confirmed. </span>
+                  {check.text}{' '}
+                  <a href={check.source.url} target="_blank" rel="noreferrer" className="underline">
+                    Source
+                  </a>
+                </p>
+              ) : (
+                <p className="border-l-2 border-white/30 pl-3 text-sm text-white/70">
+                  <span className="font-semibold text-white">Lead. </span>
+                  No published analog study of this region found yet: a place to check next.
+                </p>
+              )}
               <Link
                 to={`/discover?from=${d.fromId}&region=${d.cell}`}
                 className="btn-line mt-auto self-start"

@@ -87,9 +87,9 @@ rank in about the top 3%. The numbers are worked out from the data on every buil
 (`checkAgainstKnown` in `src/lib/discover.ts`) and shown on Home and Discover; a test fails if the method
 stops beating chance by at least two times.
 
-**New twins on Home.** The same search, run from three known sites (`site.home.discovery` and
+**New twins on Home.** The same search, run from four known sites (`site.home.discovery` and
 `moreDiscoveries`), names the best region on no list we know. The names are written by hand, so the build
-stops if the data moves a result more than 100 km. Discover matches environment, not landform shape.
+stops if the data moves a result more than 100 km. Discover matches environment, not landform shape. Two regions are confirmed by published work on a Moon or Mars process found there (pingos in northern Alaska, Jones et al. 2012; dust devil tracks in coastal Peru, Hesse 2012); the others are shown as leads.
 `scripts/check_discover_robustness.ts` (run by hand) checks the method against stricter nulls
 (climate alone ranks the other known sites in the top 1.6%, terrain and rock alone 1.8%, all seven
 traits 0.8%) and counts how often each Home region holds when every tolerance is changed at random by up

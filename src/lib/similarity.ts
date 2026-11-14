@@ -32,6 +32,8 @@ export interface EarthSite {
   landforms: string[]
   source: string
   note?: string
+  /** Why the site stands in for the Moon or Mars, for sites not in analogs.ts. */
+  why?: string
   /** MODIS ground (land surface) temperature, °C: the year's mean and the warmest month's mean. */
   groundTempC?: number | null
   groundWarmestMonthC?: number | null

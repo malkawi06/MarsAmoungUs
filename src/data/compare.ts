@@ -464,7 +464,7 @@ export const EARTH_SITES: EarthSite[] = [
     slopeDeg: 2.7,
     reliefM: 166,
     materials: ['anorthosite'],
-    landforms: [],
+    landforms: ['massif'],
     source: 'https://blogs.esa.int/caves/2025/07/28/astronauts-learn-moon-geology-in-a-fjord/',
     groundTempC: 4.1,
     groundWarmestMonthC: 19.0,
@@ -531,6 +531,7 @@ export const EARTH_SITES: EarthSite[] = [
     groundTempC: null,
     groundWarmestMonthC: null,
     permafrostPct: null,
+    why: 'Its white shore sediments are hydromagnesite, a carbonate similar to the carbonates detected at Jezero crater on Mars.',
   },
   {
     id: 'rio-tinto',
@@ -551,6 +552,7 @@ export const EARTH_SITES: EarthSite[] = [
     groundTempC: null,
     groundWarmestMonthC: null,
     permafrostPct: null,
+    why: 'An extreme acid environment that NASA calls a possible analog for the Martian subsurface; NASA tested a Mars drill there (MARTE).',
   },
   {
     id: 'bockfjorden',
@@ -571,6 +573,7 @@ export const EARTH_SITES: EarthSite[] = [
     groundTempC: null,
     groundWarmestMonthC: null,
     permafrostPct: 100,
+    why: 'Its geology is much like Mars: hot-spring carbonate terraces and the Sverrefjell volcano, where AMASE teams test life-detection instruments.',
   },
   {
     id: 'death-valley',
@@ -592,6 +595,7 @@ export const EARTH_SITES: EarthSite[] = [
     groundTempC: null,
     groundWarmestMonthC: null,
     permafrostPct: null,
+    why: 'Named by the Space Apps challenge, with the Atacama and Haughton Crater, as a place where mission teams test equipment and methods before they fly.',
   },
   {
     id: 'sp-crater',
@@ -613,6 +617,7 @@ export const EARTH_SITES: EarthSite[] = [
     groundTempC: null,
     groundWarmestMonthC: null,
     permafrostPct: null,
+    why: 'NASA rehearses Artemis moonwalks and rover operations here, for its challenging terrain, geology and minimal communications, as near the lunar South Pole.',
   },
 ]
 

@@ -192,6 +192,23 @@ function Explorer({ cells }: { cells: Cells }) {
           ))}
         </div>
         <p className="mt-3 text-sm text-fg-2">
+          <span className="font-medium text-fg">
+            Why {seed.site.name} stands in for{' '}
+            {seed.site.analogFor === 'Moon' ? 'the Moon' : 'Mars'}:
+          </span>{' '}
+          {ANALOG_SITES.find((a) => a.id === seed.site.id)?.why ??
+            seed.site.why ??
+            'see its published source.'}{' '}
+          <a
+            href={seed.site.source}
+            target="_blank"
+            rel="noreferrer"
+            className="text-accent underline"
+          >
+            Source
+          </a>
+        </p>
+        <p className="mt-2 text-sm text-fg-2">
           The map lights up every patch of land at least {SHOW_FROM}% like {seed.site.name}. Of the{' '}
           {picks.length} closest regions,{' '}
           <span className="font-medium text-accent">
