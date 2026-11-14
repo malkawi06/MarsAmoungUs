@@ -103,3 +103,22 @@ test('the real grid: known analogs rank far above chance from each other', () =>
     assert.ok(distanceKm(...at(a), ...at(b)) >= 400, `${r.id} -> ${r.closestId}`)
   }
 })
+
+// The country names Discover shows (scripts/build_countries.py), checked on places we know.
+test('the country file covers every cell and names known places right', () => {
+  const grid = JSON.parse(
+    readFileSync(new URL('../public/discover/cells.json', import.meta.url), 'utf8'),
+  ) as Cells
+  const { names, cell } = JSON.parse(
+    readFileSync(new URL('../public/discover/countries.json', import.meta.url), 'utf8'),
+  ) as { names: string[]; cell: number[] }
+  assert.equal(cell.length, grid.row.length)
+  const at = (lat: number, lon: number) => names[cell[cellAt(grid, lat, lon)]]
+  assert.equal(at(29.57, 35.42), 'Jordan') // Wadi Rum
+  assert.equal(at(33.6, 56.9), 'Iran') // near Tabas
+  assert.equal(at(70.25, -155.75), 'United States of America') // Alaska's Arctic coastal plain
+  assert.equal(at(72.75, -115.25), 'Canada') // Victoria Island
+  assert.equal(at(37.75, 106.25), 'China') // Ningxia
+  assert.equal(at(66.5, 100.5), 'Russia') // Siberia, east of the date line split
+  assert.equal(at(-77.62, 163.0), 'Antarctica') // Taylor Valley
+})

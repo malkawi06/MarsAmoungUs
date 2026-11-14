@@ -157,6 +157,7 @@ scripts/
 ├── build_discover.py    ← builds the Discover grid (run by hand, result committed)
 ├── build_moon_environment.py ← LRO sunlight, temperature, ice and radar per Artemis region (run by hand)
 ├── build_permafrost.py  ← adds ESA permafrost to the Discover grid (run by hand, after build_discover.py)
+├── build_countries.py   ← country of every Discover cell, from Natural Earth (run by hand)
 ├── build_ground_temperature.py ← MODIS ground temperature per Earth site (run by hand)
 ├── build_mars_slope.py  ← MOLA slope around the Mars targets (run by hand)
 ├── fetch_earth_images.py ← deploy-time orbital images
@@ -184,6 +185,8 @@ tests/                   ← unit tests for both scoring modules and checks on t
 - **Mars slope:** MGS MOLA MEGDR topography, 128 pixels/degree (PDS Geosciences Node).
 - **Elevation and relief (Discover):** Terrain Tiles on AWS (SRTM and other elevation data).
 - **Rock type (Discover):** GLiM Global Lithological Map, Hartmann & Moosdorf 2012 (CC BY 3.0).
+- **Country names (Discover):** Natural Earth 1:50m countries (public domain), in the TopoJSON of world-atlas 2.0.2;
+  `scripts/build_countries.py` writes `public/discover/countries.json`.
 - **Earth satellite images and map:** EOxCloudless 2016 by EOX IT Services GmbH (contains modified Copernicus Sentinel data 2016 & 2017), CC BY 4.0.
 - **Street map:** © OpenStreetMap contributors, ODbL.
 - **Page photos:** NASA Image and Video Library: Curiosity (PIA23898, NASA/JPL-Caltech/MSSS), Perseverance

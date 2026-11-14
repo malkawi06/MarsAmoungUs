@@ -25,6 +25,8 @@ export interface Cells {
   rock: string[]
   /** Share of the ground underlain by permafrost (ESA Permafrost_cci), %; null outside its coverage. */
   permafrostPct?: (number | null)[]
+  /** Country of each cell (public/discover/countries.json, scripts/build_countries.py), or null. */
+  country?: (string | null)[]
 }
 
 /** Cell centre from its row (0 = 89.75°N) and column (0 = 179.75°W). */

@@ -30,11 +30,23 @@ import {
   type Cells,
 } from '../lib/discover'
 
-/** The grid built by scripts/build_discover.py: every 0.5° land cell, about 3 MB. */
+/**
+ * The grid built by scripts/build_discover.py (every 0.5° land cell, about 3 MB), with each cell's
+ * country from scripts/build_countries.py. Without the countries file the page shows coordinates only.
+ */
 async function loadCells(): Promise<Cells> {
-  const response = await fetch(`${import.meta.env.BASE_URL}discover/cells.json`)
-  if (!response.ok) throw new Error(`Could not load the Discover grid (HTTP ${response.status}).`)
-  return (await response.json()) as Cells
+  const base = import.meta.env.BASE_URL
+  const [grid, countries] = await Promise.all([
+    fetch(`${base}discover/cells.json`),
+    fetch(`${base}discover/countries.json`).catch(() => null),
+  ])
+  if (!grid.ok) throw new Error(`Could not load the Discover grid (HTTP ${grid.status}).`)
+  const cells = (await grid.json()) as Cells
+  if (countries?.ok) {
+    const { names, cell } = (await countries.json()) as { names: string[]; cell: number[] }
+    cells.country = cell.map((i) => names[i] ?? null)
+  }
+  return cells
 }
 
 const DEFAULT_SEED = 'wadi-rum'
@@ -229,8 +241,11 @@ function Explorer({ cells }: { cells: Cells }) {
                       {n + 1}
                     </span>
                     <span className="min-w-0 flex-1">
-                      <span className="block truncate font-medium tabular-nums">
-                        {formatLat(cellLat(cells, i))} {formatLon(cellLon(cells, i))}
+                      <span className="block truncate font-medium">
+                        {cells.country?.[i] ?? 'Region'}{' '}
+                        <span className="font-normal text-muted tabular-nums">
+                          · {formatLat(cellLat(cells, i))} {formatLon(cellLon(cells, i))}
+                        </span>
                       </span>
                       <span className="block truncate text-xs">
                         {name ? (
@@ -378,7 +393,10 @@ function RegionDetails({
           </p>
           <h2 className="mt-1 flex items-center gap-2 text-xl font-semibold tabular-nums">
             <MapPin className="size-5 text-accent" aria-hidden />
-            {formatLat(cellLat(cells, cell))} {formatLon(cellLon(cells, cell))}
+            {cells.country?.[cell] ?? 'Region'}
+            <span className="text-base font-normal text-muted">
+              {formatLat(cellLat(cells, cell))} {formatLon(cellLon(cells, cell))}
+            </span>
           </h2>
           <p className="mt-1 text-sm text-muted">
             {knownName
