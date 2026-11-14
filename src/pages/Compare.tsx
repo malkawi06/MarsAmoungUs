@@ -302,8 +302,8 @@ export default function Compare() {
                 </p>
                 <p className="text-sm text-muted">{verdict(selected)}</p>
                 {selected.scored < selected.factors.length && (
-                  <p className="text-xs text-warning">
-                    on {selected.scored} of {selected.factors.length} factors only
+                  <p className="text-xs text-muted">
+                    on {selected.scored} of {selected.factors.length} factors
                   </p>
                 )}
               </div>
@@ -537,7 +537,7 @@ function SiteButton({
         {match.percent === null ? '—' : `${match.percent}%`}
         {match.scored < match.factors.length && (
           <span
-            className="block text-[0.65rem] font-normal text-warning"
+            className="block text-[0.65rem] font-normal text-muted"
             title={`Based on ${match.scored} of ${match.factors.length} factors`}
           >
             {match.scored}/{match.factors.length} factors

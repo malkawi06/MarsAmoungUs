@@ -278,9 +278,19 @@ function Discovery() {
           </p>
           <p className="text-white/70">
             About 50 km across, at {coord(discovery.lat, 'N', 'S')} {coord(discovery.lon, 'E', 'W')}
-            . On no list of known analogs: a lead to check, not a proven analog. Holds in{' '}
-            {site.home.discovery.holds} of 40 runs with every tolerance changed at random by up to
-            ±50%.
+            . On no list of known analogs. Holds in {site.home.discovery.holds} of 40 runs with
+            every tolerance changed at random by up to ±50%.
+          </p>
+          <p className="border-l-2 border-accent pl-3 text-white/80">
+            {site.home.discovery.check.text}{' '}
+            <a
+              href={site.home.discovery.check.source.url}
+              target="_blank"
+              rel="noreferrer"
+              className="underline"
+            >
+              Source
+            </a>
           </p>
           <div>
             <Link to={discoveryLink} className="btn-line">
@@ -327,14 +337,11 @@ function MoreDiscoveries() {
         {stats.moreDiscoveries.length} more new twins
       </h3>
       <p className="mt-2 max-w-3xl text-white/70">
-        Each starts from a known analog and lands on a region on no list we know. Discover matches
-        the environment (climate, terrain, rock), not the landform: check landform and slope on the
-        map before calling any of them an analog. Robustness: every tolerance changed at random by
-        up to ±50%, 40 times; each card says how often its region stays within 100 km.
+        Found the same way from two more known analogs, on no list we know. We show only regions
+        that hold in at least 30 of 40 runs with every tolerance changed at random by up to ±50%.
       </p>
-      <ul className="mt-8 grid border-t border-l border-white/10 sm:grid-cols-2 lg:grid-cols-3">
+      <ul className="mt-8 grid border-t border-l border-white/10 sm:grid-cols-2">
         {stats.moreDiscoveries.map((d, n) => {
-          const check = site.home.moreDiscoveries[n].check
           const weakest = d.traits
             .filter((t) => t.score !== null)
             .reduce((a, b) => (b.score! < a.score! ? b : a))
@@ -353,14 +360,6 @@ function MoreDiscoveries() {
                 {weakest.label.toLowerCase()} ({Math.round(weakest.score! * 100)}%). Holds in{' '}
                 {site.home.moreDiscoveries[n].holds} of 40 runs.
               </p>
-              {check && (
-                <p className="border-l-2 border-accent pl-3 text-sm text-white/80">
-                  {check.text}{' '}
-                  <a href={check.source.url} target="_blank" rel="noreferrer" className="underline">
-                    Source
-                  </a>
-                </p>
-              )}
               <Link
                 to={`/discover?from=${d.fromId}&region=${d.cell}`}
                 className="btn-line mt-auto self-start"

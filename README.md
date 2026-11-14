@@ -84,7 +84,7 @@ rank in about the top 3%. The numbers are worked out from the data on every buil
 (`checkAgainstKnown` in `src/lib/discover.ts`) and shown on Home and Discover; a test fails if the method
 stops beating chance by at least two times.
 
-**New twins on Home.** The same search, run from six known sites (`site.home.discovery` and
+**New twins on Home.** The same search, run from three known sites (`site.home.discovery` and
 `moreDiscoveries`), names the best region on no list we know. The names are written by hand, so the build
 stops if the data moves a result more than 100 km. Discover matches environment, not landform shape.
 `scripts/check_discover_robustness.ts` (run by hand) checks the method against stricter nulls

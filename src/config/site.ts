@@ -208,51 +208,32 @@ export const site = {
     /**
      * The new-analog example on Home: the best region from this known site that is not on our lists.
      * `place` is written by hand, so the build stops if the result moves more than 100 km from `near`.
+     * `holds`: of 40 runs with every tolerance changed at random by ×0.5–1.5, how many keep the region
+     * within 100 km (scripts/check_discover_robustness.ts; rerun it after changing the grid). Home shows
+     * only regions that hold in at least 30 of 40.
      */
     discovery: {
-      fromId: 'wadi-rum',
-      holds: 17,
-      place: 'near Tabas, central Iran',
-      near: { lat: 33.6, lon: 56.9 },
-    },
-    /**
-     * More new regions, found the same way from other known sites (same build check as above).
-     * `holds`: of 40 runs with every tolerance changed at random by ×0.5–1.5, how many keep the region
-     * within 100 km (scripts/check_discover_robustness.ts; rerun it after changing the grid).
-     */
-    moreDiscoveries: [
-      {
-        fromId: 'tuktoyaktuk',
-        holds: 31,
-        place: 'the Arctic coastal plain, northern Alaska',
-        near: { lat: 70.25, lon: -155.75 },
-        /** Checked by hand: the study area (69.5–70.6° N, 150.8–158.1° W) contains this patch. */
-        check: {
-          text: 'Already known for the same process: Jones et al. (2012) mapped 1,247 pingos in the 40,000 km² of the western Arctic Coastal Plain that contains this patch. Discover was given no landform data.',
-          source: {
-            title:
-              'Jones et al. (2012), Geomorphology 138(1): pingos of the western Arctic Coastal Plain',
-            url: 'https://doi.org/10.1016/j.geomorph.2011.08.007',
-          },
+      fromId: 'tuktoyaktuk',
+      holds: 31,
+      place: 'the Arctic coastal plain, northern Alaska',
+      near: { lat: 70.25, lon: -155.75 },
+      /** Checked by hand: the study area (69.5–70.6° N, 150.8–158.1° W) contains this patch. */
+      check: {
+        text: 'Already known for the same process: Jones et al. (2012) mapped 1,247 pingos in the 40,000 km² of the western Arctic Coastal Plain that contains this patch. Discover was given no landform data.',
+        source: {
+          title:
+            'Jones et al. (2012), Geomorphology 138(1): pingos of the western Arctic Coastal Plain',
+          url: 'https://doi.org/10.1016/j.geomorph.2011.08.007',
         },
       },
+    },
+    /** More new regions, found the same way from other known sites (same checks as above). */
+    moreDiscoveries: [
       {
         fromId: 'haughton',
         holds: 38,
         place: 'Victoria Island, Canadian Arctic',
         near: { lat: 72.75, lon: -115.25 },
-      },
-      {
-        fromId: 'mdrs-hanksville',
-        holds: 19,
-        place: 'northwest Afghanistan',
-        near: { lat: 35.25, lon: 63.75 },
-      },
-      {
-        fromId: 'white-sands',
-        holds: 16,
-        place: 'eastern Morocco',
-        near: { lat: 32.25, lon: -1.75 },
       },
       {
         fromId: 'green-river',
