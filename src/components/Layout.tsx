@@ -21,7 +21,8 @@ export function Layout() {
         </Suspense>
       </main>
       <Footer />
-      <ScrollRestoration />
+      {/* Keyed by path: changing a choice on a page (its ?query) keeps the scroll position. */}
+      <ScrollRestoration getKey={(location) => location.pathname} />
     </div>
   )
 }

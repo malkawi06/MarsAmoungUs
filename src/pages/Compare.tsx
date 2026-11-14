@@ -208,8 +208,15 @@ export default function Compare() {
             </div>
           </div>
         </div>
-        <TargetSummary target={target} />
+        <TargetSummary target={target} brief />
       </section>
+
+      <BestMatch
+        match={matches[0]}
+        target={target}
+        purpose={purpose}
+        onSee={() => select(matches[0].site.id)}
+      />
 
       {selected.scored < MIN_FACTORS && (
         <div className="mt-4 rounded-xl border border-warning/40 bg-warning/10 px-4 py-3 text-sm text-fg-2">
@@ -375,6 +382,11 @@ export default function Compare() {
           </section>
         </SheetOnPhone>
       </div>
+
+      <section className="mt-8 rounded-2xl border border-border bg-surface p-4 sm:p-5">
+        <h2 className="text-lg font-semibold">What we know about {target.name}</h2>
+        <TargetSummary target={target} />
+      </section>
     </div>
   )
 }
@@ -390,7 +402,60 @@ function StepLabel({ number, children }: { number: number; children: string }) {
   )
 }
 
-function TargetSummary({ target }: { target: Target }) {
+/** The answer first: the top Earth site for this place and job, before any detail. */
+function BestMatch({
+  match,
+  target,
+  purpose,
+  onSee,
+}: {
+  match: Match & { tied: boolean }
+  target: Target
+  purpose: Purpose
+  onSee: () => void
+}) {
+  return (
+    <section className="mt-4 flex flex-col gap-3 rounded-2xl border border-accent/40 bg-accent/10 p-4 sm:flex-row sm:items-center sm:justify-between sm:p-5">
+      <div className="min-w-0">
+        <p className="text-xs font-medium tracking-wide text-accent uppercase">
+          {match.tied ? 'Joint best' : 'Best'} place on Earth for {purpose.label.toLowerCase()} ·{' '}
+          {target.name}
+        </p>
+        <p className="mt-1 text-xl font-semibold">
+          {match.site.name} <span className="font-normal text-muted">· {match.site.country}</span>
+        </p>
+      </div>
+      <div className="flex items-center gap-4">
+        <p className="text-3xl font-semibold tabular-nums">
+          {match.percent === null ? '—' : `${match.percent}%`}
+        </p>
+        <button
+          type="button"
+          onClick={onSee}
+          className="rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-accent-fg hover:opacity-90"
+        >
+          See why
+        </button>
+      </div>
+    </section>
+  )
+}
+
+function TargetSummary({ target, brief = false }: { target: Target; brief?: boolean }) {
+  if (brief)
+    return (
+      <div className="mt-4 flex flex-wrap items-start gap-x-3 gap-y-1 border-t border-border pt-4 text-sm">
+        <span
+          className={`rounded-full px-2 py-0.5 text-xs font-medium ${
+            target.body === 'Mars' ? 'bg-accent/15 text-accent' : 'bg-surface-2 text-fg-2'
+          }`}
+        >
+          {target.body}
+        </span>
+        <span className="font-medium">{target.name}</span>
+        <p className="w-full text-fg-2">{target.setting ?? target.note}</p>
+      </div>
+    )
   return (
     <div className="mt-4 flex flex-wrap items-start gap-x-3 gap-y-1 border-t border-border pt-4 text-sm">
       <span
