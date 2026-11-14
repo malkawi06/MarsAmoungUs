@@ -123,7 +123,8 @@ python scripts/fetch_earth_images.py
 ## Deploy
 
 GitHub Pages is the main host: `.github/workflows/deploy-pages.yml` fetches the images, builds
-and publishes every push to `main`. `netlify.toml` and `vercel.json` keep the same app working on Netlify
+and publishes every push to `main`. Each page also gets its own copy of `index.html` (`discover/`, `compare/`,
+`analogs/`, `about/`), so a direct link answers 200 instead of GitHub Pages' 404 fallback. `netlify.toml` and `vercel.json` keep the same app working on Netlify
 and Vercel (SPA fallback), without the satellite images.
 
 ## Project layout
