@@ -1012,7 +1012,8 @@ export const TARGETS: Target[] = [
     precipMmYr: 0,
     iceAccess: false,
     dailyRangeC: 61,
-    note: 'Perseverance landing site (Octavia E. Butler Landing). Day–night swing: one sample day (sols 43–44), high −22 °C, low −83 °C, measured by MEDA.',
+    slopeMaxDeg: 7.4,
+    note: 'Perseverance landing site (Octavia E. Butler Landing). Day–night swing: one sample day (sols 43–44), high −22 °C, low −83 °C, measured by MEDA. Slope: 90% of the ground within 10 km is flatter than 7.4° (MOLA, 128 pixels/degree, about 460 m).',
     sources: [
       {
         title: 'Water-rich minerals at Jezero Crater (ESA, 2022)',
@@ -1028,6 +1029,11 @@ export const TARGETS: Target[] = [
         url: 'https://www.jpl.nasa.gov/news/nasas-first-weather-report-from-jezero-crater-on-mars/',
         supports: ['dailyRange'],
       },
+      {
+        title: 'Mars Global Surveyor MOLA topography (MEGDR), 128 pixels/degree (NASA PDS)',
+        url: 'https://pds-geosciences.wustl.edu/mgs/mgs-m-mola-5-megdr-l3-v1/mgsl_300x/meg128/',
+        supports: ['slope'],
+      },
     ],
   },
   {
@@ -1041,7 +1047,8 @@ export const TARGETS: Target[] = [
     precipMmYr: 0,
     iceAccess: false,
     dailyRangeC: 70,
-    note: 'Curiosity landing site (Bradbury Landing). Day–night swing: daily highs about 0 °C and lows about −70 °C, measured by REMS.',
+    slopeMaxDeg: 9.5,
+    note: 'Curiosity landing site (Bradbury Landing). Day–night swing: daily highs about 0 °C and lows about −70 °C, measured by REMS. Slope: 90% of the ground within 10 km is flatter than 9.5° (MOLA, 128 pixels/degree, about 460 m).',
     sources: [
       {
         title:
@@ -1057,6 +1064,11 @@ export const TARGETS: Target[] = [
         title: "PIA16913: Steady temperatures at Mars' Gale Crater (NASA JPL)",
         url: 'https://www.jpl.nasa.gov/images/pia16913-steady-temperatures-at-mars-gale-crater/',
         supports: ['dailyRange'],
+      },
+      {
+        title: 'Mars Global Surveyor MOLA topography (MEGDR), 128 pixels/degree (NASA PDS)',
+        url: 'https://pds-geosciences.wustl.edu/mgs/mgs-m-mola-5-megdr-l3-v1/mgsl_300x/meg128/',
+        supports: ['slope'],
       },
     ],
   },
@@ -1098,7 +1110,8 @@ export const TARGETS: Target[] = [
     landforms: ['impact'],
     precipMmYr: 0,
     iceAccess: false,
-    note: 'Crater explored by the Opportunity rover.',
+    slopeMaxDeg: 0.9,
+    note: 'Crater explored by the Opportunity rover. Slope: 90% of the ground within 10 km is flatter than 0.9° (MOLA, 128 pixels/degree, about 460 m).',
     sources: [
       {
         title: 'JGR Planets article on Victoria Crater, 2022 (doi 10.1029/2022JE007374)',
@@ -1107,6 +1120,11 @@ export const TARGETS: Target[] = [
       {
         title: 'Victoria (crater) (Wikipedia)',
         url: 'https://en.wikipedia.org/wiki/Victoria_(crater)',
+      },
+      {
+        title: 'Mars Global Surveyor MOLA topography (MEGDR), 128 pixels/degree (NASA PDS)',
+        url: 'https://pds-geosciences.wustl.edu/mgs/mgs-m-mola-5-megdr-l3-v1/mgsl_300x/meg128/',
+        supports: ['slope'],
       },
     ],
   },
@@ -1120,7 +1138,8 @@ export const TARGETS: Target[] = [
     landforms: [],
     precipMmYr: 0,
     iceAccess: true,
-    note: 'Candidate human landing site AP-1 (39.8°N, 202.1°E), with evidence of near-surface ice.',
+    slopeMaxDeg: 0.6,
+    note: 'Candidate human landing site AP-1 (39.8°N, 202.1°E), with evidence of near-surface ice. Slope: 90% of the ground within 10 km is flatter than 0.6° (MOLA, 128 pixels/degree, about 460 m).',
     sources: [
       {
         title:
@@ -1128,6 +1147,11 @@ export const TARGETS: Target[] = [
         url: 'https://agupubs.onlinelibrary.wiley.com/doi/10.1029/2024JE008724',
         says: 'Maps about 9,000 thermal contraction polygons at candidate landing sites AP-1, AP-8 and AP-9 and estimates the ice beneath them lies within tens of centimetres of the surface.',
         supports: ['ice'],
+      },
+      {
+        title: 'Mars Global Surveyor MOLA topography (MEGDR), 128 pixels/degree (NASA PDS)',
+        url: 'https://pds-geosciences.wustl.edu/mgs/mgs-m-mola-5-megdr-l3-v1/mgsl_300x/meg128/',
+        supports: ['slope'],
       },
     ],
   },

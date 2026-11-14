@@ -134,6 +134,11 @@
   filter: invert(1);
 }
 
+/* Shaded relief laid over the satellite image: the image keeps its colours, the relief adds the shape. */
+.relief-multiply {
+  mix-blend-mode: multiply;
+}
+
 /* NASA's colour scale for the ground temperature layer; its text is dark, so it keeps a light card. */
 .map-legend {
   max-width: 70vw;

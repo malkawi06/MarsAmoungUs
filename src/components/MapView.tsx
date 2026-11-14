@@ -217,3 +217,40 @@ export function ImageOverlay({
   }, [layer, url])
   return null
 }
+
+/** An outlined rectangle, e.g. one Discover patch. */
+export function Rectangle({
+  bounds,
+  pathOptions,
+}: {
+  bounds: LatLngBoundsExpression
+  pathOptions?: PathOptions
+}) {
+  const [layer] = useState(() => L.rectangle(bounds, { interactive: false, ...pathOptions }))
+  useOnMap(layer)
+  useEffect(() => {
+    layer.setBounds(L.latLngBounds(bounds as L.LatLngBoundsLiteral))
+  }, [layer, bounds])
+  return null
+}
+
+/** A tile layer drawn over the basemap while mounted. */
+export function TileOverlay({
+  url,
+  attribution,
+  maxNativeZoom,
+  opacity = 1,
+  className,
+}: {
+  url: string
+  attribution: string
+  maxNativeZoom: number
+  opacity?: number
+  className?: string
+}) {
+  const [layer] = useState(() =>
+    L.tileLayer(url, { attribution, maxNativeZoom, maxZoom: 19, opacity, className }),
+  )
+  useOnMap(layer)
+  return null
+}

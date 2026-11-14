@@ -18,12 +18,14 @@ import {
   distanceKm,
   type Cells,
 } from './src/lib/discover.ts'
-import { PURPOSES, rank } from './src/lib/similarity.ts'
+import { PURPOSES, plannedFor, rank } from './src/lib/similarity.ts'
 
-// The home page's worked example: the best Earth match for a Moon region, computed from the real data.
-const exampleTarget = TARGETS.find((t) => t.id === 'moon-2')!
-const examplePurpose = PURPOSES.find((p) => p.id === 'training')!
-const exampleMatch = rank(exampleTarget, examplePurpose, EARTH_SITES)[0]
+// The home page's worked example: where to train for a permanent base in one Artemis region,
+// computed from the real data.
+const exampleTarget = TARGETS.find((t) => t.name === 'Slater Plain')!
+const examplePurpose = PURPOSES.find((p) => p.id === 'moonBase')!
+const exampleRanking = rank(exampleTarget, examplePurpose, EARTH_SITES)
+const exampleMatch = exampleRanking[0]
 
 // The Discover grid: how many patches of land it compares, and two results worked out from it.
 const cells = JSON.parse(
@@ -150,6 +152,13 @@ export default defineConfig({
           .filter((f) => f.score !== null)
           .map((f) => ({ label: f.label, score: f.score, reason: f.reason })),
         notScored: exampleMatch.factors.filter((f) => f.score === null).map((f) => f.label),
+        notComparable: plannedFor(examplePurpose, exampleTarget.body).map((f) => f.label),
+        shortlist: exampleRanking.slice(0, 3).map((m) => ({
+          place: m.place,
+          name: m.site.name,
+          country: m.site.country,
+          percent: m.percent,
+        })),
       },
     }),
   },

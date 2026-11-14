@@ -1,3 +1,4 @@
+import { MoreDetails } from '../components/MoreDetails'
 import { useCallback, useMemo, useState } from 'react'
 import { useSearchParams } from 'react-router'
 import { Sparkles, MapPin } from 'lucide-react'
@@ -270,7 +271,11 @@ function Explorer({ cells }: { cells: Cells }) {
 
       <section className="mt-10 border-t border-border pt-6 text-sm text-fg-2">
         <h2 className="text-lg font-semibold text-fg">How Discover works</h2>
-        <p className="mt-2 max-w-4xl">{page.method}</p>
+        <div className="mt-2">
+          <MoreDetails summary={page.methodShort}>
+            <p>{page.method}</p>
+          </MoreDetails>
+        </div>
         <ul className="mt-3 space-y-1">
           {page.sources.map((s) => (
             <li key={s.url}>
@@ -298,20 +303,34 @@ function CheckSection() {
   return (
     <section className="mt-10 border-t border-border pt-6 text-sm text-fg-2">
       <h2 className="text-lg font-semibold text-fg">Does it find real analogs?</h2>
-      <p className="mt-2 max-w-4xl">
-        We started from each of the {check.seeds} known analog sites and looked at where the other
-        known sites, at least 400 km away and found by other researchers, land in the ranking of all{' '}
-        {__HOME_STATS__.landCells.toLocaleString('en')} patches of land. The closest of them ranks
-        in the <span className="font-medium text-fg">top {check.medianTopPct.toFixed(1)}%</span> of
-        Earth&apos;s land (median). If Discover matched by chance, it would rank in the top{' '}
-        {check.randomMedianTopPct.toFixed(1)}%: the method does about {Math.round(times)} times
-        better than chance.
-      </p>
-      <p className="mt-2 max-w-4xl">
-        For example: {check.examples.map((e) => `${e.from} → ${e.to}`).join('; ')}. The Antarctic
-        valleys and some impact craters match less well, because landform and fine terrain are not
-        in the global data.
-      </p>
+      <div className="mt-2">
+        <MoreDetails
+          label="How we checked"
+          summary={
+            <>
+              Yes: known analogs rank in the{' '}
+              <span className="font-medium text-fg">top {check.medianTopPct.toFixed(1)}%</span> of
+              Earth&apos;s land, about {Math.round(times)} times better than chance.
+            </>
+          }
+        >
+          <p>
+            We started from each of the {check.seeds} known analog sites and looked at where the
+            other known sites, at least 400 km away and found by other researchers, land in the
+            ranking of all {__HOME_STATS__.landCells.toLocaleString('en')} patches of land. The
+            closest of them ranks in the{' '}
+            <span className="font-medium text-fg">top {check.medianTopPct.toFixed(1)}%</span> of
+            Earth&apos;s land (median). If Discover matched by chance, it would rank in the top{' '}
+            {check.randomMedianTopPct.toFixed(1)}%: the method does about {Math.round(times)} times
+            better than chance.
+          </p>
+          <p>
+            For example: {check.examples.map((e) => `${e.from} → ${e.to}`).join('; ')}. The
+            Antarctic valleys and some impact craters match less well, because landform and fine
+            terrain are not in the global data.
+          </p>
+        </MoreDetails>
+      </div>
     </section>
   )
 }
@@ -406,8 +425,9 @@ function RegionDetails({
           <p>Every trait we can measure is at least 50% similar.</p>
         )}
         <p>
-          Not measured at this scale: landform, ground ice and fine slope. Check them on the
-          satellite map before calling it an analog. And no place on Earth reproduces the lower
+          Not measured at this scale: landform, ground ice and fine slope. Check them on the map,
+          where the dashed box is this patch and NASA&apos;s ASTER terrain relief shows its shape at
+          about 30 m, before calling it an analog. And no place on Earth reproduces the lower
           gravity, the Moon&apos;s vacuum, Mars&apos;s thin atmosphere or their radiation.
         </p>
       </div>

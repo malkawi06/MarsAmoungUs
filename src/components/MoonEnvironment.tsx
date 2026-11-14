@@ -3,6 +3,7 @@ import { Link } from 'react-router'
 import { EARTH_SITES } from '../data/compare'
 import type { MoonEnvironment as Environment } from '../lib/similarity'
 import { SourceLink } from './FactorEvidence'
+import { MoreDetails } from './MoreDetails'
 
 const MOON_DATA = {
   lola: {
@@ -116,12 +117,19 @@ export function MoonEnvironment({ environment: e }: { environment: Environment }
             </li>
           ))}
         </ul>
-        <p className="mt-2 text-xs text-muted">
-          Diviner measures the ground&apos;s surface; NASA POWER measures the air 2 m up, so these
-          numbers give a sense of scale, not an exact match. The Permanent Moon base purpose
-          compares the ground itself, with MODIS on Earth. These ice sites are studied as Mars
-          analogs; each link opens Discover to find more cold places like it.
-        </p>
+        <div className="mt-2 text-xs text-muted">
+          <MoreDetails
+            label="What these numbers mean"
+            summary="A sense of scale, not an exact match."
+          >
+            <p>
+              Diviner measures the ground&apos;s surface; NASA POWER measures the air 2 m up. The
+              Permanent Moon base purpose compares the ground itself, with MODIS on Earth. These ice
+              sites are studied as Mars analogs; each link opens Discover to find more cold places
+              like it.
+            </p>
+          </MoreDetails>
+        </div>
         <p className="mt-2 text-sm">
           <Link
             to="/discover?from=tuktoyaktuk&climate=permafrost"

@@ -8,6 +8,7 @@ Inputs (see analysis/README.md for how each was made):
   data/moon_environment.json Sunlight (LOLA), temperature and stable ice (Diviner) per Artemis region,
                            built by scripts/build_moon_environment.py
   data/ground_temp.csv     MODIS ground temperature per Earth site, built by scripts/build_ground_temperature.py
+  data/mars_slope.json     MOLA slope around each Mars target, built by scripts/build_mars_slope.py
   ../public/discover/cells.json  ESA Permafrost_cci share of each 0.5° patch (scripts/build_permafrost.py)
 """
 
@@ -24,6 +25,7 @@ dem = {r['id']: r for r in csv.DictReader(open(DATA / 'dem.csv'))}
 moon_centroids = json.load(open(DATA / 'moon_centroids.json'))
 moon_environment = json.load(open(DATA / 'moon_environment.json'))
 ground = {r['id']: r for r in csv.DictReader(open(DATA / 'ground_temp.csv'))}
+mars_slope = json.load(open(DATA / 'mars_slope.json'))
 cells = json.load(open(ROOT / 'public' / 'discover' / 'cells.json'))
 patch = {(r, c): i for i, (r, c) in enumerate(zip(cells['row'], cells['col']))}
 
@@ -91,6 +93,7 @@ SOUTH_POLE = 'https://www.nature.com/articles/s41467-024-50155-w'
 
 # Title of every target source, what it reports (only when checked against the source) and which
 # factors' target values it supports, so the Compare page can show where each value comes from.
+MOLA = 'https://pds-geosciences.wustl.edu/mgs/mgs-m-mola-5-megdr-l3-v1/mgsl_300x/meg128/'
 SOURCE_INFO = {
     JGR: dict(
         title='Wueller, Berger & Kring (2026), JGR Planets: Assessing potential landing sites with favorable '
@@ -159,6 +162,8 @@ SOURCE_INFO = {
         says='Maps about 9,000 thermal contraction polygons at candidate landing sites AP-1, AP-8 and AP-9 and '
              'estimates the ice beneath them lies within tens of centimetres of the surface.',
         supports=['ice']),
+    MOLA: dict(title='Mars Global Surveyor MOLA topography (MEGDR), 128 pixels/degree (NASA PDS)',
+               supports=['slope']),
 }
 
 
@@ -282,6 +287,13 @@ for i, (name, cold_trap, landform, setting, setting_sources) in enumerate(MOON, 
 for sid, name, lat, lon, materials, landforms, ice, note, sources, measured in MARS:
     # No rain falls on Mars today. Site temperatures are left out until a sourced local value is added:
     # the planet-wide average is not a site value.
+    # Targets without a published slope get MOLA's: 90% of the ground within 10 km is flatter than this.
+    if 'slopeMaxDeg' not in measured and sid in mars_slope['targets']:
+        p90 = mars_slope['targets'][sid]['slopeP90Deg']
+        measured = {**measured, 'slopeMaxDeg': p90}
+        note += (f' Slope: 90% of the ground within {mars_slope["radiusKm"]} km is flatter than {p90}° '
+                 '(MOLA, 128 pixels/degree, about 460 m).')
+        sources = [*sources, MOLA]
     targets.append({
         'id': f'mars-{sid}', 'name': name, 'body': 'Mars', 'lat': lat, 'lon': lon,
         'materials': materials, 'landforms': landforms, 'precipMmYr': 0, 'iceAccess': ice,

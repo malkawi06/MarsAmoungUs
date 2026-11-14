@@ -48,6 +48,9 @@ on fewer than two factors is flagged as low confidence.
   colder than any of our Earth sites (Diviner), so cold is scored as frozen or not. Near-constant sunlight,
   vacuum and radiation have no Earth match and are named, not scored. `scripts/build_ground_temperature.py`
   reads the MODIS values from NASA GIBS into `analysis/data/ground_temp.csv`.
+- **Mars slope.** Jezero, Gale, Victoria and Arcadia have no published slope limit, so
+  `scripts/build_mars_slope.py` measures one from MGS MOLA topography (128 pixels/degree): 90% of the ground
+  within 10 km is flatter than it. Oxia Planum keeps its published 8° (MOLA gives 1.3° there).
 - **Slope limits.** The 8° Artemis landing limit is a Moon rule: it gives Moon targets a partial score and
   the base / habitat landing rule. A Mars target is compared with its own published slope only.
 
@@ -73,7 +76,9 @@ again after `build_discover.py`.
 
 The maps also offer NASA's monthly MODIS land surface temperature (GIBS, the imagery behind Worldview), the
 temperature of the ground itself, like Diviner's on the Moon. Every Earth site links to NASA Worldview and
-Earthdata Search.
+Earthdata Search. Selecting a Discover region fits its 50 km patch on the map, outlined, with NASA's ASTER GDEM
+shaded relief (via GIBS) over the satellite image, so the terrain inside the patch shows at about 30 m. The
+patch itself stays 0.5° because NASA POWER climate is no finer.
 
 **Check against known analogs.** From each known analog site, the closest other known site (at least 400 km
 away, found by other researchers) ranks in about the top 1% of Earth's land; places picked at random would
@@ -146,6 +151,7 @@ scripts/
 ├── build_moon_environment.py ← LRO sunlight, temperature, ice and radar per Artemis region (run by hand)
 ├── build_permafrost.py  ← adds ESA permafrost to the Discover grid (run by hand, after build_discover.py)
 ├── build_ground_temperature.py ← MODIS ground temperature per Earth site (run by hand)
+├── build_mars_slope.py  ← MOLA slope around the Mars targets (run by hand)
 ├── fetch_earth_images.py ← deploy-time orbital images
 └── lroc_roi.py          ← LROC Artemis site mosaics, used by fetch_earth_images.py
 tests/                   ← unit tests for both scoring modules and checks on the data files
@@ -167,7 +173,8 @@ tests/                   ← unit tests for both scoring modules and checks on t
   values per Earth site). Frozen ground and permafrost definitions: NSIDC.
 - **Permafrost (Discover):** ESA Permafrost_cci, permafrost extent v3.0 (2019), via the ESA Open Science Catalog
   and CEDA.
-- **Elevation and slope (Compare):** ASTER GDEM (NASA/METI).
+- **Elevation and slope (Compare):** ASTER GDEM (NASA/METI); its shaded relief via NASA GIBS on Discover.
+- **Mars slope:** MGS MOLA MEGDR topography, 128 pixels/degree (PDS Geosciences Node).
 - **Elevation and relief (Discover):** Terrain Tiles on AWS (SRTM and other elevation data).
 - **Rock type (Discover):** GLiM Global Lithological Map, Hartmann & Moosdorf 2012 (CC BY 3.0).
 - **Earth satellite images and map:** EOxCloudless 2016 by EOX IT Services GmbH (contains modified Copernicus Sentinel data 2016 & 2017), CC BY 4.0.

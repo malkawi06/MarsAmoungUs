@@ -1,6 +1,6 @@
 import { useEffect, useMemo } from 'react'
 import { useMap } from '../hooks/useMap'
-import { CircleMarker, ImageOverlay, MapView, Tooltip } from './MapView'
+import { CircleMarker, ImageOverlay, MapView, Rectangle, TileOverlay, Tooltip } from './MapView'
 import { cellLat, cellLon, type Cells } from '../lib/discover'
 
 /** Web Mercator stops here; the overlay covers the same band as the map. */
@@ -8,6 +8,19 @@ const MAX_LAT = 85.0511
 const SIZE = 1024
 /** Below this similarity a patch is left clear, so the map shows only the promising ones. */
 export const SHOW_FROM = 60
+const RELIEF_URL =
+  'https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/ASTER_GDEM_Greyscale_Shaded_Relief/default/GoogleMapsCompatible_Level12/{z}/{y}/{x}.jpeg'
+
+/** The corners of one grid patch, for its outline on the map. */
+function patchBounds(cells: Cells, cell: number): [[number, number], [number, number]] {
+  const half = cells.cellDeg / 2
+  const lat = cellLat(cells, cell)
+  const lon = cellLon(cells, cell)
+  return [
+    [lat - half, lon - half],
+    [lat + half, lon + half],
+  ]
+}
 
 /**
  * Paints every grid cell's similarity (0–100) onto a Web Mercator image, so Leaflet can lay it over
@@ -97,6 +110,21 @@ export function DiscoverMap({
           </Tooltip>
         </CircleMarker>
       ))}
+      {selected !== undefined && (
+        <>
+          {/* The patch the numbers describe, and the terrain inside it at about 30 m. */}
+          <TileOverlay
+            url={RELIEF_URL}
+            attribution="Terrain: NASA/METI ASTER GDEM shaded relief, via NASA GIBS"
+            maxNativeZoom={12}
+            className="relief-multiply"
+          />
+          <Rectangle
+            bounds={patchBounds(cells, selected)}
+            pathOptions={{ color: '#ffffff', weight: 2, fill: false, dashArray: '6 4' }}
+          />
+        </>
+      )}
       <FlyTo cells={cells} cell={selected} />
     </MapView>
   )
@@ -105,7 +133,8 @@ export function DiscoverMap({
 function FlyTo({ cells, cell }: { cells: Cells; cell?: number }) {
   const map = useMap()
   useEffect(() => {
-    if (cell !== undefined) map.flyTo([cellLat(cells, cell), cellLon(cells, cell)], 8)
+    // Fit the whole patch, so the terrain inside it is visible.
+    if (cell !== undefined) map.flyToBounds(patchBounds(cells, cell), { padding: [24, 24] })
   }, [map, cells, cell])
   return null
 }

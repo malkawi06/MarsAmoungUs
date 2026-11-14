@@ -223,6 +223,8 @@ export const site = {
     title: 'Discover new analogs',
     intro:
       'Pick a place already used to study the Moon or Mars. Every 0.5° patch of land on Earth is compared with it on the same NASA data, and the closest matches light up, including places nobody has studied as analogs yet.',
+    methodShort:
+      'Each 50 km patch of land is compared with the known site on seven traits from NASA climate, terrain and rock-type data; the closer every trait, the higher the match.',
     method:
       'Each patch of land is about 50 km across. Climate is the NASA POWER annual average (MERRA-2): mean temperature, day–night swing, rain and snow, and wind at 10 m. Elevation and relief come from SRTM-based terrain tiles at about 1 km: elevation is the mean of the patch and relief its highest point minus its lowest, so both differ from the Compare page, which measures a 0.6 km window at the site. Slope is left out because small slopes vanish at this scale. Rock type is the dominant class of the GLiM global lithological map. The known site is compared through its own patch, so both sides are measured the same way. For each trait, similarity falls in a straight line from 100% (equal) to 0% at a gap we chose, shown next to it; the match is the average. Landform, ground ice and fine slope are not in global data, so check them on the satellite image and in Compare.',
     sources: [
@@ -256,6 +258,8 @@ export const site = {
     title: 'Compare with the Moon and Mars',
     intro:
       'Pick a place on the Moon or Mars and what you need an Earth analog for. Every Earth site is scored factor by factor, so you can see exactly where it matches and where it does not.',
+    methodShort:
+      'Each factor scores 3 (strong), 2 (partial) or 1 (weak); the match is their average as a percentage.',
     method:
       'Each factor scores 1 (weak), 2 (partial) or 3 (strong), and all factors count equally, following the NASA-led framework of Stern et al. (2025). Factors without sourced data for the target are left out. Sites with the same match are ordered by how close their measured values are to the target; sites that are still equal share a place. Earth climate: NASA POWER 2001–2020; Earth slope and elevation: ASTER 30 m elevation model, in a 0.6 km window at the pin.',
     methodSource: 'https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2024JE008803',
@@ -333,7 +337,14 @@ export const site = {
       {
         name: 'ASTER Global Digital Elevation Model (NASA/METI)',
         url: 'https://asterweb.jpl.nasa.gov/gdem.asp',
-        howWeUseIt: 'Slope and local relief at every Earth analog site.',
+        howWeUseIt:
+          'Slope and local relief at every Earth analog site, and the shaded terrain relief (via NASA GIBS) shown inside a selected Discover patch.',
+      },
+      {
+        name: 'Mars Global Surveyor MOLA topography (PDS)',
+        url: 'https://pds-geosciences.wustl.edu/mgs/mgs-m-mola-5-megdr-l3-v1/mgsl_300x/meg128/',
+        howWeUseIt:
+          'Slope around the Mars targets without a published value (Jezero, Gale, Victoria, Arcadia): 90% of the ground within 10 km is flatter than the value used.',
       },
       {
         name: 'LRO Mini-RF global radar mosaic (PDS)',

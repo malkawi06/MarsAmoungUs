@@ -336,6 +336,35 @@ Meteor Crater ← Craters of the Moon. وديان أنتاركتيكا وبعض 
 
 ---
 
+## 16. تحسينات بعد التقييم على معايير التحكيم
+
+**ليش:** قيّمنا المشروع على المعايير الخمسة، وطلع فيه نقاط ضعف بـ Impact وسهولة الاستخدام وبيانات المريخ ودقة
+Discover.
+
+**شو انعمل:**
+
+- **مثال عملي (Impact):** القسم اللي بالرئيسية صار قصة: «A base at Slater Plain. Where should the crew
+  train?». فيه أحسن 3 مواقع، وليش الأول طلع أول، والأشياء اللي ما إلها مقابل على الأرض. الأرقام بتنحسب وقت
+  الـ build من البيانات.
+- **صفحات أخف:** شروحات الطريقة الطويلة (Discover و Compare والفحص ولوحة LRO) صار فوقها ملخص سطر واحد،
+  والتفاصيل تحت «Read the full method» بتنفتح بضغطة.
+- **ميل المريخ من MOLA:** Jezero و Gale و Victoria و Arcadia ما كان إلهم ميل منشور، فصار من MOLA: 90% من
+  الأرض بقطر 10 كم أقل ميلاً من القيمة. Oxia بيضل على الـ 8° المنشورة (MOLA بيعطي 1.3° هناك، يعني متوافقين).
+  ما ضل أي هدف على المريخ بيتقيّم على عامل واحد بأغراض Base و Rover.
+- **تفاصيل Discover:** لما تختار منطقة، الخريطة بتكبّر على المربع (50 كم) وبترسمه، وبتحط فوق صورة القمر
+  الصناعي تضاريس ASTER GDEM من ناسا بدقة حوالي 30 م. المربع ضل 0.5° لأنه بيانات المناخ من ناسا (POWER) دقتها
+  هيك، وتصغيره بدون بيانات أدق بيكون دقة وهمية.
+
+**اللي ما انعمل:** حرارة المريخ المحلية. ما في قيمة منشورة لكل هدف، فـ «Using local resources» بيضل على
+عامل واحد لمعظم أهداف المريخ.
+
+**الملفات:** `src/pages/Home.tsx`، `vite.config.ts`، `src/components/MoreDetails.tsx`، `src/pages/Discover.tsx`،
+`src/pages/Compare.tsx`، `src/components/MoonEnvironment.tsx`، `src/components/DiscoverMap.tsx`،
+`src/components/MapView.tsx`، `scripts/build_mars_slope.py`، `analysis/data/mars_slope.json`،
+`analysis/build_compare_data.py`، `src/data/compare.ts`.
+
+---
+
 ## اللي ما انعمل ولازم تعرفه
 
 - **ملف الـ Excel** (`analysis/mars-among-us-analog-data.xlsx`) ما تعدّل. إذا فيه شرح للطريقة، لازم يتراجع.

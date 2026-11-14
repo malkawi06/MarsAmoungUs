@@ -1,3 +1,4 @@
+import { MoreDetails } from '../components/MoreDetails'
 import { useCallback, useState } from 'react'
 import { useSearchParams } from 'react-router'
 import { ChevronDown, MapPin } from 'lucide-react'
@@ -343,17 +344,19 @@ export default function Compare() {
                   Why this site is a {selected.site.analogFor} analog (source)
                 </a>
               </p>
-              <p>
-                {page.method}{' '}
-                <a
-                  href={page.methodSource}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="text-accent hover:underline"
-                >
-                  Stern et al. 2025
-                </a>
-              </p>
+              <MoreDetails summary={page.methodShort}>
+                <p>
+                  {page.method}{' '}
+                  <a
+                    href={page.methodSource}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-accent hover:underline"
+                  >
+                    Stern et al. 2025
+                  </a>
+                </p>
+              </MoreDetails>
             </footer>
           </section>
         </SheetOnPhone>

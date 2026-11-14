@@ -347,16 +347,35 @@ function Example() {
       >
         <div className="reveal flex flex-col gap-6">
           <p className="font-display text-sm font-semibold tracking-[0.3em] text-white/70 uppercase">
-            One real result · {example.purposeLabel}
+            A worked example · {example.purposeLabel}
           </p>
           <h2 className="font-display text-3xl leading-tight font-bold uppercase sm:text-5xl">
-            {example.targetName}
-            <span className="block text-white/50">
-              on Earth: {example.siteName}, {example.siteCountry}
-            </span>
+            A base at {example.targetName}
+            <span className="block text-white/50">Where should the crew train?</span>
           </h2>
-          <p className="font-display text-[clamp(6rem,16vw,12rem)] leading-none font-bold tabular-nums">
-            {example.percent === null ? '—' : `${example.percent}%`}
+          <p className="text-white/80">
+            {example.targetName} is one of NASA&apos;s Artemis landing regions near the Moon&apos;s
+            south pole. Pick it and the {example.purposeLabel} purpose, and every Earth site is
+            scored on what a base there faces. The shortlist:
+          </p>
+          <ol className="divide-y divide-white/15 border-y border-white/15">
+            {example.shortlist.map((s) => (
+              <li key={s.name} className="flex items-baseline gap-4 py-3">
+                <span className="font-display text-2xl font-bold tabular-nums text-white/50">
+                  {s.place}
+                </span>
+                <span className="min-w-0 flex-1">
+                  <span className="font-medium">{s.name}</span>
+                  <span className="block text-sm text-white/60">{s.country}</span>
+                </span>
+                <span className="font-display text-2xl font-bold tabular-nums">
+                  {s.percent === null ? '—' : `${s.percent}%`}
+                </span>
+              </li>
+            ))}
+          </ol>
+          <p className="font-display text-sm font-semibold tracking-[0.2em] text-white/70 uppercase">
+            Why {example.siteName} comes first
           </p>
           <ul className="divide-y divide-white/15 border-y border-white/15">
             {example.factors.map((factor) => (
@@ -381,9 +400,16 @@ function Example() {
               No sourced data yet, so not scored: {example.notScored.join(', ').toLowerCase()}.
             </p>
           )}
+          {example.notComparable.length > 0 && (
+            <p className="text-sm text-white/60">
+              No place on Earth matches the Moon on{' '}
+              {example.notComparable.join(' or ').toLowerCase()}, so the page names them instead of
+              scoring them.
+            </p>
+          )}
           <div>
             <Link to={exampleLink} className="btn-line">
-              Open this comparison
+              Open the full shortlist
               <ArrowRight className="size-4" aria-hidden />
             </Link>
           </div>

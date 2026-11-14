@@ -50,5 +50,9 @@ declare const __HOME_STATS__: {
     percent: number | null
     factors: { label: string; score: 1 | 2 | 3; reason: string }[]
     notScored: string[]
+    /** Named by the purpose as having no comparable value on Earth. */
+    notComparable: string[]
+    /** The top three Earth sites, best first. */
+    shortlist: { place: number; name: string; country: string; percent: number | null }[]
   }
 }
