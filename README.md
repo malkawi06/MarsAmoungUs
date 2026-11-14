@@ -42,10 +42,13 @@ on fewer than two factors is flagged as low confidence.
   target, so they are not scored. The page names them under each purpose instead of counting them as factors.
 - **Permanent Moon base.** For the challenge's polar base sites, Earth sites are scored on frozen ground
   (MODIS ground temperature: below 0 °C all year, or on average) and ground ice (ice in the site's sources, or
-  ESA Permafrost_cci continuous / discontinuous permafrost), plus slope and rock. Every Artemis region is
+  ESA Permafrost_cci continuous / discontinuous permafrost), plus slope, rock and landform. Every Artemis region is
   colder than any of our Earth sites (Diviner), so cold is scored as frozen or not. Near-constant sunlight,
   vacuum and radiation have no Earth match and are named, not scored. `scripts/build_ground_temperature.py`
   reads the MODIS values from NASA GIBS into `analysis/data/ground_temp.csv`.
+- **Landform.** Rover testing, base / habitat and the permanent Moon base also compare the kind of ground
+  (massif, crater rim, plain), which is what sets the Artemis regions apart. A site with no recorded landform
+  is left out of that factor, not scored as a mismatch.
 - **Mars slope.** Jezero, Gale, Victoria and Arcadia have no published slope limit, so
   `scripts/build_mars_slope.py` measures one from MGS MOLA topography (128 pixels/degree): 90% of the ground
   within 10 km is flatter than it. Oxia Planum keeps its published 8° (MOLA gives 1.0° there).

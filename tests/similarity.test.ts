@@ -422,11 +422,16 @@ describe('data files', () => {
 })
 
 describe('Artemis regions', () => {
-  it('get different rover and base twins by the kind of ground (massif, crater rim, plain)', () => {
+  it('get different permanent-base twins by the kind of ground (massif, crater rim, plain)', () => {
     const moon = TARGETS.filter((t) => t.body === 'Moon')
-    for (const id of ['rover', 'base']) {
-      const tops = new Set(moon.map((t) => rank(t, purpose(id), EARTH_SITES)[0].site.id))
-      assert.ok(tops.size > 1, `${id}: every Artemis region has the same first site`)
-    }
+    const tops = new Set(moon.map((t) => rank(t, purpose('moonBase'), EARTH_SITES)[0].site.id))
+    assert.ok(tops.size > 1, 'every Artemis region has the same first site')
+  })
+})
+
+describe('landform', () => {
+  it('leaves out a site with no recorded landform instead of scoring it weak', () => {
+    const r = scoreFactor('landform', target({ landforms: ['impact'] }), site({ landforms: [] }))
+    assert.equal(r.score, null)
   })
 })

@@ -199,7 +199,7 @@ export const PURPOSES: Purpose[] = [
     id: 'moonBase',
     label: 'Permanent Moon base',
     bodies: ['Moon'],
-    factors: ['frozenGround', 'groundIce', 'slope', 'rock'],
+    factors: ['frozenGround', 'groundIce', 'slope', 'rock', 'landform'],
     planned: [POLAR_SUNLIGHT, VACUUM, COLD_TRAPS],
     maxSlopeDeg: 8,
   },
@@ -359,7 +359,8 @@ export function scoreFactor(factor: FactorId, target: Target, site: EarthSite): 
     }
     case 'landform': {
       const earth = list(site.landforms)
-      if (!target.landforms.length) return noData(factor, earth)
+      // No landform recorded for either place: left out, not scored as a mismatch.
+      if (!target.landforms.length || !site.landforms.length) return noData(factor, earth)
       const shared = site.landforms.filter((l) => target.landforms.includes(l))
       return shared.length
         ? result(factor, 3, list(target.landforms), earth, `Same landform: ${list(shared)}.`)
