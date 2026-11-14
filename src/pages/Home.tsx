@@ -278,7 +278,9 @@ function Discovery() {
           </p>
           <p className="text-white/70">
             About 50 km across, at {coord(discovery.lat, 'N', 'S')} {coord(discovery.lon, 'E', 'W')}
-            . On no list of known analogs: a lead to check, not a proven analog.
+            . On no list of known analogs: a lead to check, not a proven analog. Holds in{' '}
+            {site.home.discovery.holds} of 40 runs with every tolerance changed at random by up to
+            ±50%.
           </p>
           <div>
             <Link to={discoveryLink} className="btn-line">
@@ -327,8 +329,8 @@ function MoreDiscoveries() {
       <p className="mt-2 max-w-3xl text-white/70">
         Each starts from a known analog and lands on a region on no list we know. Discover matches
         the environment (climate, terrain, rock), not the landform: check landform and slope on the
-        map before calling any of them an analog. All six stay the same when every tolerance is
-        halved or raised by half; a test checks this on every build.
+        map before calling any of them an analog. Robustness: every tolerance changed at random by
+        up to ±50%, 40 times; each card says how often its region stays within 100 km.
       </p>
       <ul className="mt-8 grid border-t border-l border-white/10 sm:grid-cols-2 lg:grid-cols-3">
         {stats.moreDiscoveries.map((d, n) => {
@@ -348,7 +350,8 @@ function MoreDiscoveries() {
               </p>
               <p className="text-sm text-white/70">
                 {coord(d.lat, 'N', 'S')} {coord(d.lon, 'E', 'W')}. Weakest trait:{' '}
-                {weakest.label.toLowerCase()} ({Math.round(weakest.score! * 100)}%).
+                {weakest.label.toLowerCase()} ({Math.round(weakest.score! * 100)}%). Holds in{' '}
+                {site.home.moreDiscoveries[n].holds} of 40 runs.
               </p>
               {check && (
                 <p className="border-l-2 border-accent pl-3 text-sm text-white/80">

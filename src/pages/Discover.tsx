@@ -330,6 +330,12 @@ function CheckSection() {
             Antarctic valleys and some impact craters match less well, because landform and fine
             terrain are not in the global data.
           </p>
+          <p>
+            Chance here means land picked at random, and most known analogs are deserts or cold
+            places. A stricter test uses climate alone: the four climate traits rank the other known
+            sites in the top 1.4%, terrain and rock alone in the top 1.8%, all seven together in the
+            top 0.8%. Each part adds something (scripts/check_discover_robustness.ts).
+          </p>
         </MoreDetails>
       </div>
     </section>
@@ -453,6 +459,9 @@ function RegionDetails({
             Landform, ground ice and fine slope are not in global data. On the map, the dashed box
             is this patch, with NASA&apos;s ASTER terrain relief at about 30 m. No place on Earth
             has the lower gravity, the Moon&apos;s vacuum, Mars&apos;s thin air or their radiation.
+            Rock type is the most common class across the 50 km patch, so a small outcrop can be
+            lost: at Wadi Rum it reads unconsolidated sediments, not the sandstone the place is
+            known for.
           </p>
         </MoreDetails>
       </div>

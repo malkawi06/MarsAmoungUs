@@ -301,6 +301,11 @@ export default function Compare() {
                   {selected.percent === null ? '—' : `${selected.percent}%`}
                 </p>
                 <p className="text-sm text-muted">{verdict(selected)}</p>
+                {selected.scored < selected.factors.length && (
+                  <p className="text-xs text-warning">
+                    on {selected.scored} of {selected.factors.length} factors only
+                  </p>
+                )}
               </div>
             </header>
             <HowScored match={selected} target={target} planned={planned} />
@@ -528,8 +533,16 @@ function SiteButton({
           />
         </span>
       </span>
-      <span className="w-12 shrink-0 text-right font-semibold tabular-nums">
+      <span className="w-16 shrink-0 text-right font-semibold tabular-nums">
         {match.percent === null ? '—' : `${match.percent}%`}
+        {match.scored < match.factors.length && (
+          <span
+            className="block text-[0.65rem] font-normal text-warning"
+            title={`Based on ${match.scored} of ${match.factors.length} factors`}
+          >
+            {match.scored}/{match.factors.length} factors
+          </span>
+        )}
       </span>
     </button>
   )

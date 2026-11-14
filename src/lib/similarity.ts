@@ -157,7 +157,12 @@ const SUNLIGHT: PlannedFactor = {
 }
 const POLAR_SUNLIGHT: PlannedFactor = {
   label: 'Near-constant sunlight',
-  why: 'The best-lit spots of each Artemis region are in sunlight most of the time (LOLA, above). Beyond Earth’s polar circles there are months of daylight and months of darkness, but no place on Earth stays lit almost all year, so this cannot be matched.',
+  why: 'The best-lit spots of each Artemis region are in sunlight most of the time (LOLA, above). Beyond Earth’s polar circles there are months of daylight and months of darkness, but no place on Earth stays lit almost all year, so this cannot be matched. Low Sun angles and long shadows, which matter for crews, are matched in part at high latitudes in summer.',
+  bodies: ['Moon'],
+}
+const COLD_TRAPS: PlannedFactor = {
+  label: 'Ice in cold traps',
+  why: 'The Moon’s polar ice is frozen into the regolith of permanently shadowed cold traps, far colder than anywhere on Earth (Diviner, Paige et al. 2010); it is not permafrost. Frozen ground and ground ice on Earth stand in only for working on and digging into frozen soil.',
   bodies: ['Moon'],
 }
 const VACUUM: PlannedFactor = {
@@ -193,7 +198,7 @@ export const PURPOSES: Purpose[] = [
     label: 'Permanent Moon base',
     bodies: ['Moon'],
     factors: ['frozenGround', 'groundIce', 'slope', 'rock'],
-    planned: [POLAR_SUNLIGHT, VACUUM],
+    planned: [POLAR_SUNLIGHT, VACUUM, COLD_TRAPS],
     maxSlopeDeg: 8,
   },
   {

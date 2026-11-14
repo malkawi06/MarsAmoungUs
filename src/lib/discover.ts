@@ -173,21 +173,13 @@ function tenth(v: number | null) {
 
 const linear = (a: number | null, b: number | null, zeroAt: number) =>
   a === null || b === null ? null : Math.max(0, 1 - Math.abs(a - b) / zeroAt)
-const ratio = (a: number | null, b: number | null, offset: number, scale = 1) =>
+const ratio = (a: number | null, b: number | null, offset: number) =>
   a === null || b === null
     ? null
-    : Math.max(0, 1 - Math.abs(Math.log10((a + offset) / (b + offset))) / scale)
+    : Math.max(0, 1 - Math.abs(Math.log10((a + offset) / (b + offset))))
 
-/**
- * Similarity of cell i to cell s for each trait, 0–1, or null when either cell lacks the value.
- * `scale` widens (>1) or narrows (<1) every tolerance; the stability test uses it.
- */
-export function traitScores(
-  cells: Cells,
-  s: number,
-  i: number,
-  scale = 1,
-): Record<TraitId, number | null> {
+/** Similarity of cell i to cell s for each trait, 0–1, or null when either cell lacks the value. */
+export function traitScores(cells: Cells, s: number, i: number): Record<TraitId, number | null> {
   const rockScore =
     cells.rock[s] === cells.rock[i]
       ? 1
@@ -195,21 +187,19 @@ export function traitScores(
         ? 0.5
         : 0
   return {
-    meanTemp: linear(cells.meanTempC10[s], cells.meanTempC10[i], 150 * scale),
-    dailyRange: linear(cells.dailyRangeC10[s], cells.dailyRangeC10[i], 80 * scale),
-    precip: ratio(cells.precipMmYr[s], cells.precipMmYr[i], 10, scale),
-    wind: linear(cells.windMs10[s], cells.windMs10[i], 30 * scale),
-    elevation: linear(cells.elevationM[s], cells.elevationM[i], 1500 * scale),
-    relief: ratio(cells.reliefM[s], cells.reliefM[i], 50, scale),
+    meanTemp: linear(cells.meanTempC10[s], cells.meanTempC10[i], 150),
+    dailyRange: linear(cells.dailyRangeC10[s], cells.dailyRangeC10[i], 80),
+    precip: ratio(cells.precipMmYr[s], cells.precipMmYr[i], 10),
+    wind: linear(cells.windMs10[s], cells.windMs10[i], 30),
+    elevation: linear(cells.elevationM[s], cells.elevationM[i], 1500),
+    relief: ratio(cells.reliefM[s], cells.reliefM[i], 50),
     rock: rockScore,
   }
 }
 
 /** Overall similarity 0–100: the mean of the traits both cells have. */
-export function similarity(cells: Cells, s: number, i: number, scale = 1): number {
-  const scores = Object.values(traitScores(cells, s, i, scale)).filter(
-    (v): v is number => v !== null,
-  )
+export function similarity(cells: Cells, s: number, i: number): number {
+  const scores = Object.values(traitScores(cells, s, i)).filter((v): v is number => v !== null)
   return scores.length ? (scores.reduce((a, b) => a + b, 0) / scores.length) * 100 : 0
 }
 
@@ -265,9 +255,9 @@ export function knownPlaceNear<T extends { lat: number; lon: number }>(
 }
 
 /** Similarity of every cell to cell s, 0–100. */
-export function scoresFrom(cells: Cells, s: number, scale = 1): Float32Array {
+export function scoresFrom(cells: Cells, s: number): Float32Array {
   const out = new Float32Array(cells.row.length)
-  for (let i = 0; i < out.length; i++) out[i] = similarity(cells, s, i, scale)
+  for (let i = 0; i < out.length; i++) out[i] = similarity(cells, s, i)
   return out
 }
 

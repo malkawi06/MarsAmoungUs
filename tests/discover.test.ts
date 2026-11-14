@@ -10,7 +10,6 @@ import {
   distanceKm,
   knownPlaceNear,
   passes,
-  scoresFrom,
   similarity,
   topRegions,
   traitScores,
@@ -102,26 +101,5 @@ test('the real grid: known analogs rank far above chance from each other', () =>
     const b = known.find((k) => k.id === r.closestId)!.cell
     const at = (i: number) => [cellLat(grid, i), cellLon(grid, i)] as const
     assert.ok(distanceKm(...at(a), ...at(b)) >= 400, `${r.id} -> ${r.closestId}`)
-  }
-})
-
-// The Home page's new regions, found from the real grid, must not hinge on the exact tolerances.
-test('the new regions on Home stay put when every tolerance is halved or raised by half', async () => {
-  const { site } = await import('../src/config/site.ts')
-  const { ANALOG_SITES } = await import('../src/data/analogs.ts')
-  const grid = JSON.parse(
-    readFileSync(new URL('../public/discover/cells.json', import.meta.url), 'utf8'),
-  ) as Cells
-  const places = [...EARTH_SITES, ...ANALOG_SITES]
-  const found = (fromId: string, scale: number) => {
-    const s = EARTH_SITES.find((x) => x.id === fromId)!
-    const seed = cellAt(grid, s.lat, s.lon)
-    const scores = scoresFrom(grid, seed, scale)
-    return topRegions(grid, scores, seed, 10).find((i) => !knownPlaceNear(grid, i, places))
-  }
-  for (const { fromId } of [site.home.discovery, ...site.home.moreDiscoveries]) {
-    const base = found(fromId, 1)
-    for (const scale of [0.5, 1.5])
-      assert.equal(found(fromId, scale), base, `${fromId} at ${scale}`)
   }
 })

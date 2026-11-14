@@ -116,7 +116,7 @@ export const site = {
       to: '/discover',
       label: 'Discover',
       description:
-        'Pick a known Moon or Mars analog site and find the places anywhere on Earth whose environment matches it, including ones nobody has studied as analogs.',
+        'Pick a known Moon or Mars analog site and find the places anywhere on Earth whose environment matches it, including ones not on any list of analogs we know.',
     },
     {
       to: '/compare',
@@ -211,13 +211,19 @@ export const site = {
      */
     discovery: {
       fromId: 'wadi-rum',
+      holds: 17,
       place: 'near Tabas, central Iran',
       near: { lat: 33.6, lon: 56.9 },
     },
-    /** More new regions, found the same way from other known sites (same build check as above). */
+    /**
+     * More new regions, found the same way from other known sites (same build check as above).
+     * `holds`: of 40 runs with every tolerance changed at random by ×0.5–1.5, how many keep the region
+     * within 100 km (scripts/check_discover_robustness.ts; rerun it after changing the grid).
+     */
     moreDiscoveries: [
       {
         fromId: 'tuktoyaktuk',
+        holds: 31,
         place: 'the Arctic coastal plain, northern Alaska',
         near: { lat: 70.25, lon: -155.75 },
         /** Checked by hand: the study area (69.5–70.6° N, 150.8–158.1° W) contains this patch. */
@@ -232,21 +238,25 @@ export const site = {
       },
       {
         fromId: 'haughton',
+        holds: 38,
         place: 'Victoria Island, Canadian Arctic',
         near: { lat: 72.75, lon: -115.25 },
       },
       {
         fromId: 'mdrs-hanksville',
+        holds: 19,
         place: 'northwest Afghanistan',
         near: { lat: 35.25, lon: 63.75 },
       },
       {
         fromId: 'white-sands',
+        holds: 16,
         place: 'eastern Morocco',
         near: { lat: 32.25, lon: -1.75 },
       },
       {
         fromId: 'green-river',
+        holds: 35,
         place: 'Ningxia, northern China',
         near: { lat: 37.75, lon: 106.25 },
       },
@@ -257,7 +267,7 @@ export const site = {
   discover: {
     title: 'Discover new analogs',
     intro:
-      'Pick a known analog site. Every patch of land on Earth is compared with it, and the closest light up, including places nobody has studied yet.',
+      'Pick a known analog site. Every patch of land on Earth is compared with it, and the closest light up, including places on no list of analogs we know.',
     methodShort:
       'Each 50 km patch is compared with the known site on seven traits: climate, terrain and rock type.',
     method:
@@ -296,7 +306,7 @@ export const site = {
     methodShort:
       'Each factor counts 100% (strong), 50% (partial) or 0% (weak); the match is the average of the factors with a published value.',
     method:
-      'Each factor scores 1 (weak), 2 (partial) or 3 (strong), and all factors count equally, following the NASA-led framework of Stern et al. (2025). Factors without sourced data for the target are left out. Sites with the same match are ordered by how close their measured values are to the target; sites that are still equal share a place. Earth climate: NASA POWER 2001–2020; Earth slope and elevation: ASTER 30 m elevation model, in a 0.6 km window at the pin.',
+      'Each factor scores strong (100%), partial (50%) or weak (0%), and all factors count equally, following the NASA-led framework of Stern et al. (2025). Factors without sourced data for the target are left out. Sites with the same match are ordered by how close their measured values are to the target; sites that are still equal share a place. Earth climate: NASA POWER 2001–2020; Earth slope and elevation: ASTER 30 m elevation model, in a 0.6 km window at the pin.',
     methodSource: 'https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2024JE008803',
   },
 
