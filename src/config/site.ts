@@ -58,7 +58,7 @@ export const site = {
     /** Leave empty to hide. */
     name: 'Identify Earth Locations that Analog the Permanent Moon Base Locations and Mars',
     /** Link to the challenge page on spaceappschallenge.org. */
-    url: 'https://www.spaceappschallenge.org/2026/challenges/identify-earth-locations-that-analog-the-permanent-moon-base-locations-and-mars/',
+    url: 'https://www.spaceappschallenge.org/2026/challenges/permanent-moon-base-locations-and-mars/',
   },
 
   team: {
