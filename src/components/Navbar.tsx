@@ -55,11 +55,6 @@ export function Navbar() {
                   {({ isActive }) => (
                     <>
                       {item.label}
-                      {'soon' in item && item.soon && (
-                        <span className="ml-1.5 border border-white/40 px-1 py-0.5 text-[10px] tracking-[0.12em] text-white/70">
-                          Soon
-                        </span>
-                      )}
                       <span
                         className={`absolute inset-x-0 -bottom-0.5 h-0.5 origin-left bg-current transition-transform duration-300 ${
                           isActive ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'
@@ -83,7 +78,10 @@ export function Navbar() {
         aria-label="Pages"
         className="dark fixed inset-x-0 bottom-0 z-50 border-t border-white/10 bg-black/95 pb-[env(safe-area-inset-bottom)] text-white backdrop-blur lg:hidden"
       >
-        <ul className="mx-auto grid max-w-xl grid-cols-6">
+        <ul
+          className="mx-auto grid max-w-xl"
+          style={{ gridTemplateColumns: `repeat(${site.nav.length}, minmax(0, 1fr))` }}
+        >
           {site.nav.map((item) => {
             const Icon = PAGE_ICONS[item.to]
             return (

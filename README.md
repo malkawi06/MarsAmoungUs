@@ -10,7 +10,6 @@ Live: **https://malkawi06.github.io/mars-among-us/**
 | **Discover** (`/discover`)     | Pick a known Moon or Mars analog site; every 0.5° land cell on Earth is compared with it on the same NASA POWER climate, terrain and rock-type data, and the closest regions, including ones not yet studied as analogs, are shown on a map. Built by `scripts/build_discover.py`. |
 | **Compare** (`/compare`)       | Pick a place on the Moon (the nine Artemis landing regions) or Mars and a purpose (rover testing, base, local resources, search for life, training). Every Earth site is scored factor by factor, with the target's orbital image next to the site.                                |
 | **Earth Analogs** (`/analogs`) | The analog sites on a satellite map, filtered by landform, each with the published research behind it.                                                                                                                                                                             |
-| **Analyze** (`/analyze`)       | Upload a Moon or Mars orbital image. The landform model is being retrained on the challenge data, so for now the page only shows the image.                                                                                                                                        |
 | **About** (`/about`)           | The challenge, the solution, the data used and the team: the sections of the Space Apps submission form.                                                                                                                                                                           |
 
 **Stack:** Vite · React 19 · TypeScript · Tailwind CSS v4 · React Router · Leaflet · Python (data scripts).
@@ -109,7 +108,7 @@ src/
 │   ├── similarity.ts    ← Compare: factor scores, match percentage, ranking and ties
 │   └── orbitalImages.ts ← reads the deploy-time orbital images
 ├── components/          ← shared UI (PageHeader, Photo, TargetImages, AnalogMap, DiscoverMap, …)
-├── pages/               ← Home, Discover, Compare, Analogs, Analyze, About
+├── pages/               ← Home, Discover, Compare, Analogs, About
 └── index.css            ← Tailwind, light/dark color tokens, scroll and photo animations
 public/
 ├── discover/cells.json  ← the Discover grid, built by scripts/build_discover.py

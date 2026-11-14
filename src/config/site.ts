@@ -39,8 +39,6 @@ export interface NavItem {
   shortLabel?: string
   /** One sentence on what the page does. */
   description: string
-  /** The page is not working yet: the menu marks it. */
-  soon?: boolean
 }
 
 export const site = {
@@ -135,13 +133,6 @@ export const site = {
         'A map of places on Earth that look like Moon and Mars landforms, each with its published source.',
     },
     {
-      to: '/analyze',
-      label: 'Analyze',
-      soon: true,
-      description:
-        'Upload a Moon or Mars image. The landform model is being retrained, so this page does not analyze images yet.',
-    },
-    {
       to: '/about',
       label: 'About',
       description: 'The challenge, the team and every NASA data source used.',
@@ -157,7 +148,7 @@ export const site = {
       credit: 'NASA/JPL-Caltech/MSSS',
       page: 'https://images.nasa.gov/details/PIA23898',
     },
-    analyze: {
+    discover: {
       file: 'mars-jezero',
       alt: 'Rocks on the floor of Jezero Crater on Mars, seen by the Perseverance rover',
       title: "Perseverance's Mastcam-Z First High-Resolution Panorama",
@@ -196,33 +187,6 @@ export const site = {
       'Each factor scores 3 (strong), 2 (partial) or 1 (weak), and all factors count the same. The match is the average turned into a percentage: all 3s give 100%, all 1s give 0%. Sites with the same match are ordered by how close their measured values are to the target, and sites the data cannot tell apart share a place. The method follows the NASA-led analog framework of Stern et al. (2025).',
     noData:
       'Some values are not published yet, such as the mean temperature at most Mars sites. Those factors are left out of the score instead of guessed, and the page says so. When fewer than two factors can be scored, the page warns that the result is rough.',
-  },
-
-  analyze: {
-    title: 'Analyze a Moon or Mars image',
-    intro:
-      'Upload an orbital image of the Moon or Mars. A landform model will name what it shows and find the places on Earth that look like it, with sources.',
-    /** Shown at the top of the page until the landform model is ready. */
-    comingSoon: {
-      title: 'Hold on! 🛠️',
-      body: "Malkawi isn't a robot. He's still working on this page, so check back soon. Meanwhile, Discover and Compare already work.",
-    },
-    notReady:
-      'The landform model is being retrained on the Space Apps challenge data, so this page does not analyze images yet. Your image stays in your browser.',
-    steps: [
-      {
-        title: 'Upload a Moon or Mars image',
-        body: 'Drop an orbital image. It stays in your browser and is never uploaded.',
-      },
-      {
-        title: 'Name the landform',
-        body: 'An image model trained on labelled NASA Moon and Mars images names the landform it sees.',
-      },
-      {
-        title: 'Find it on Earth',
-        body: 'See the places on Earth with the same landform, next to their satellite images and the research behind them.',
-      },
-    ],
   },
 
   discover: {

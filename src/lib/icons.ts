@@ -13,13 +13,11 @@ import {
   Mountain,
   Pickaxe,
   Satellite,
-  ScanSearch,
   Snowflake,
   Tent,
   Thermometer,
   ThermometerSun,
   TrendingUp,
-  Upload,
   type LucideIcon,
 } from 'lucide-react'
 import type { FactorId } from './similarity'
@@ -27,7 +25,6 @@ import type { FactorId } from './similarity'
 /** One icon per page, keyed by route (phone tab bar). */
 export const PAGE_ICONS: Record<string, LucideIcon> = {
   '/': House,
-  '/analyze': ScanSearch,
   '/discover': Telescope,
   '/compare': GitCompareArrows,
   '/analogs': Earth,
@@ -52,7 +49,4 @@ export const FACTOR_ICONS: Record<FactorId, LucideIcon> = {
   ice: Snowflake,
   dailyRange: ThermometerSun,
 }
-
-/** Icons for the three "how it works" steps on Analyze, in order. */
-export const ANALYZE_STEP_ICONS = [Upload, ScanSearch, Earth]
 export { ListChecks, Satellite }

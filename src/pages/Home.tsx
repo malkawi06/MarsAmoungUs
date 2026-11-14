@@ -21,7 +21,7 @@ export default function Home() {
       <Hero />
 
       <Panel
-        photo={site.photos.analyze}
+        photo={site.photos.discover}
         eyebrow="01 · Discover"
         title={discover.title}
         body={discover.intro}
@@ -91,8 +91,6 @@ export default function Home() {
       >
         <p className="text-white/70">{home.noData}</p>
       </Panel>
-
-      <ComingSoon />
 
       <Sources />
     </div>
@@ -312,41 +310,6 @@ function Example() {
             </figcaption>
           </figure>
         )}
-      </div>
-    </section>
-  )
-}
-
-/** The Analyze page is not working yet, so it gets a short note here instead of a full section. */
-function ComingSoon() {
-  const ref = useReveal<HTMLElement>()
-  const { analyze } = site
-  return (
-    <section ref={ref} className="border-t border-white/10 bg-black">
-      <div className="reveal mx-auto flex max-w-[90rem] flex-col gap-5 px-5 py-16 sm:px-8 sm:py-24">
-        <p className="font-display text-sm font-semibold tracking-[0.3em] text-white/70 uppercase">
-          04 · Analyze · Coming soon
-        </p>
-        <h2 className="font-display text-3xl leading-tight font-bold uppercase sm:text-5xl">
-          {analyze.title}
-        </h2>
-        <p className="max-w-2xl text-white/70">{analyze.notReady}</p>
-        <ol className="grid max-w-4xl gap-4 sm:grid-cols-3">
-          {analyze.steps.map((step, i) => (
-            <li key={step.title} className="border-t border-white/30 pt-3">
-              <span className="font-display text-sm font-semibold tracking-[0.18em] text-white/60">
-                0{i + 1}
-              </span>
-              <p className="mt-1 font-medium">{step.title}</p>
-            </li>
-          ))}
-        </ol>
-        <div>
-          <Link to="/analyze" className="btn-line">
-            See what is planned
-            <ArrowRight className="size-4" aria-hidden />
-          </Link>
-        </div>
       </div>
     </section>
   )
