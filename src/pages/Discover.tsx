@@ -1,3 +1,4 @@
+import { InfoTip } from '../components/InfoTip'
 import { MoreDetails } from '../components/MoreDetails'
 import { useCallback, useMemo, useState } from 'react'
 import { useSearchParams } from 'react-router'
@@ -353,6 +354,7 @@ function RegionDetails({
   knownName?: string
 }) {
   const scores = traitScores(cells, seed, cell)
+  const measured = TRAITS.flatMap((t) => (scores[t.id] === null ? [] : [scores[t.id]!]))
   const weak = TRAITS.filter((t) => scores[t.id] !== null && scores[t.id]! < 0.5)
   const show = (v: number | string | null, unit: string) =>
     v === null ? 'no data' : typeof v === 'number' ? `${v.toLocaleString('en')} ${unit}` : v
@@ -394,7 +396,10 @@ function RegionDetails({
                 <tr key={t.id}>
                   <td className="py-2">
                     <span className="font-medium text-fg">{t.label}</span>
-                    <span className="block text-xs text-muted">{t.tolerance}</span>
+                    <span className="block text-xs text-muted">
+                      {apart(t.id, t.value(cells, seed), t.value(cells, cell), s, t.unit)}
+                      <span className="text-muted/70"> · {t.tolerance}</span>
+                    </span>
                   </td>
                   <td className="py-2">{show(t.value(cells, seed), t.unit)}</td>
                   <td className="py-2">{show(t.value(cells, cell), t.unit)}</td>
@@ -412,6 +417,22 @@ function RegionDetails({
             })}
           </tbody>
         </table>
+        <div className="mt-3 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-muted">
+          <span>Match = average of the {measured.length} traits with data:</span>
+          <span className="text-fg-2 tabular-nums">
+            ({measured.map((v) => Math.round(v * 100)).join(' + ')}) ÷ {measured.length} ={' '}
+            <span className="font-semibold text-fg">{Math.round(score)}%</span>
+          </span>
+          <InfoTip label="How the match is worked out" align="right">
+            <p>
+              Each trait scores 100% when both places have the same value and falls in a straight
+              line to 0% at the gap shown under it. Rain and relief compare how many times bigger
+              one value is: ten times scores 0%. Rock type scores 100% for the same class, 50% for
+              the same kind, 0% otherwise.
+            </p>
+            <p>A trait with no data in either place is left out of the average, never guessed.</p>
+          </InfoTip>
+        </div>
       </div>
 
       <div className="space-y-2 border-t border-border p-5 text-sm text-fg-2">
@@ -441,3 +462,24 @@ function RegionDetails({
 
 const formatLat = (v: number) => `${Math.abs(v).toFixed(2)}° ${v >= 0 ? 'N' : 'S'}`
 const formatLon = (v: number) => `${Math.abs(v).toFixed(2)}° ${v >= 0 ? 'E' : 'W'}`
+
+/**
+ * How far apart the two places are on one trait, in words, worked back from its score so the
+ * text always matches the number (see traitScores in lib/discover.ts).
+ */
+function apart(
+  id: string,
+  a: number | string | null,
+  b: number | string | null,
+  score: number | null,
+  unit: string,
+) {
+  if (score === null || a === null || b === null) return 'No data in one of the two places'
+  if (id === 'rock') return score === 1 ? 'Same class' : score > 0 ? 'Same kind' : 'Different kind'
+  if (id === 'precip' || id === 'relief') {
+    const times = 10 ** (1 - score)
+    return times < 1.05 ? 'Almost the same' : `${times.toFixed(1)} times apart`
+  }
+  const gap = Math.abs(Number(a) - Number(b))
+  return `${gap.toLocaleString('en', { maximumFractionDigits: 1 })} ${unit} apart`
+}
