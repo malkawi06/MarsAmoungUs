@@ -267,7 +267,7 @@ function Discovery() {
       <div className="mx-auto grid max-w-[90rem] gap-12 px-5 py-16 sm:px-8 sm:py-24 lg:grid-cols-2 lg:items-center lg:py-32">
         <div className="reveal flex flex-col gap-6">
           <p className="font-display text-sm font-semibold tracking-[0.3em] text-white/70 uppercase">
-            One new candidate · found by Discover
+            New twins · found by Discover
           </p>
           <h2 className="font-display text-3xl leading-tight font-bold uppercase sm:text-5xl">
             Start from {discovery.fromName}
@@ -312,7 +312,54 @@ function Discovery() {
           </p>
         </div>
       </div>
+      <MoreDiscoveries />
     </section>
+  )
+}
+
+/** The other new regions, one card each: where it starts, where it lands, and its weakest trait. */
+function MoreDiscoveries() {
+  return (
+    <div className="reveal mx-auto max-w-[90rem] px-5 pb-16 sm:px-8 sm:pb-24 lg:pb-32">
+      <h3 className="font-display text-2xl font-bold uppercase sm:text-3xl">
+        {stats.moreDiscoveries.length} more new twins
+      </h3>
+      <p className="mt-2 max-w-3xl text-white/70">
+        Each starts from a known analog and lands on a region on no list we know. Discover matches
+        the environment (climate, terrain, rock), not the landform: check landform and slope on the
+        map before calling any of them an analog.
+      </p>
+      <ul className="mt-8 grid border-t border-l border-white/10 sm:grid-cols-2 lg:grid-cols-3">
+        {stats.moreDiscoveries.map((d) => {
+          const weakest = d.traits
+            .filter((t) => t.score !== null)
+            .reduce((a, b) => (b.score! < a.score! ? b : a))
+          return (
+            <li
+              key={d.fromId}
+              className="flex flex-col gap-3 border-r border-b border-white/10 p-6"
+            >
+              <p className="text-sm text-white/60">From {d.fromName}</p>
+              <p className="font-display text-xl leading-tight font-bold uppercase">{d.place}</p>
+              <p className="font-display text-5xl leading-none font-bold tabular-nums">
+                {d.percent}%
+              </p>
+              <p className="text-sm text-white/70">
+                {coord(d.lat, 'N', 'S')} {coord(d.lon, 'E', 'W')}. Weakest trait:{' '}
+                {weakest.label.toLowerCase()} ({Math.round(weakest.score! * 100)}%).
+              </p>
+              <Link
+                to={`/discover?from=${d.fromId}&region=${d.cell}`}
+                className="btn-line mt-auto self-start"
+              >
+                See it on the map
+                <ArrowRight className="size-4" aria-hidden />
+              </Link>
+            </li>
+          )
+        })}
+      </ul>
+    </div>
   )
 }
 

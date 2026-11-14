@@ -56,23 +56,44 @@ for (const r of [...check.results].sort((a, b) => a.topPct - b.topPct)) {
   checkExamples.push({ from: siteName(r.id), to: siteName(r.closestId) })
 }
 
-// The Home page's discovery: the best region from one known site that is not on our lists.
-const { discovery } = site.home
-const seed = knownCells.find((s) => s.id === discovery.fromId)!
-const seedScores = scoresFrom(cells, seed.cell)
+// The Home page's discoveries: the best region from one known site that is not on our lists.
 const knownPlaces = [...EARTH_SITES, ...ANALOG_SITES]
-const found = topRegions(cells, seedScores, seed.cell, 10).find(
-  (i) => !knownPlaceNear(cells, i, knownPlaces),
-)!
-// The place name is written by hand in site.ts; stop the build if the data has moved the result.
-if (
-  distanceKm(cellLat(cells, found), cellLon(cells, found), discovery.near.lat, discovery.near.lon) >
-  100
-)
-  throw new Error(
-    `Home discovery moved: ${cellLat(cells, found)}, ${cellLon(cells, found)} is no longer near ${discovery.place}. Update site.home.discovery.`,
+function findNew(discovery: { fromId: string; place: string; near: { lat: number; lon: number } }) {
+  const seed = knownCells.find((s) => s.id === discovery.fromId)!
+  const seedScores = scoresFrom(cells, seed.cell)
+  const found = topRegions(cells, seedScores, seed.cell, 10).find(
+    (i) => !knownPlaceNear(cells, i, knownPlaces),
+  )!
+  // The place name is written by hand in site.ts; stop the build if the data has moved the result.
+  if (
+    distanceKm(
+      cellLat(cells, found),
+      cellLon(cells, found),
+      discovery.near.lat,
+      discovery.near.lon,
+    ) > 100
   )
-const foundTraits = traitScores(cells, seed.cell, found)
+    throw new Error(
+      `Home discovery moved: ${cellLat(cells, found)}, ${cellLon(cells, found)} is no longer near ${discovery.place}. Update site.home.`,
+    )
+  const foundTraits = traitScores(cells, seed.cell, found)
+  return {
+    fromId: seed.id,
+    fromName: siteName(seed.id),
+    cell: found,
+    lat: cellLat(cells, found),
+    lon: cellLon(cells, found),
+    place: discovery.place,
+    percent: Math.round(seedScores[found]),
+    traits: TRAITS.map((t) => ({
+      label: t.label,
+      unit: t.unit,
+      from: t.value(cells, seed.cell),
+      here: t.value(cells, found),
+      score: foundTraits[t.id],
+    })),
+  }
+}
 
 // Every distinct paper or page the data cites: Moon/Mars targets, Earth analogs and scored Earth sites.
 const sourceCount = new Set([
@@ -122,22 +143,8 @@ export default defineConfig({
         randomMedianTopPct: check.randomMedianTopPct,
         examples: checkExamples,
       },
-      discovery: {
-        fromId: seed.id,
-        fromName: siteName(seed.id),
-        cell: found,
-        lat: cellLat(cells, found),
-        lon: cellLon(cells, found),
-        place: discovery.place,
-        percent: Math.round(seedScores[found]),
-        traits: TRAITS.map((t) => ({
-          label: t.label,
-          unit: t.unit,
-          from: t.value(cells, seed.cell),
-          here: t.value(cells, found),
-          score: foundTraits[t.id],
-        })),
-      },
+      discovery: findNew(site.home.discovery),
+      moreDiscoveries: site.home.moreDiscoveries.map(findNew),
       landforms: Object.entries(LANDFORM_NAMES),
       example: {
         targetId: exampleTarget.id,

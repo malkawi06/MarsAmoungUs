@@ -21,22 +21,9 @@ declare const __HOME_STATS__: {
     examples: { from: string; to: string }[]
   }
   /** The best region from one known site that is not on our lists, with every trait compared. */
-  discovery: {
-    fromId: string
-    fromName: string
-    cell: number
-    lat: number
-    lon: number
-    place: string
-    percent: number
-    traits: {
-      label: string
-      unit: string
-      from: number | string | null
-      here: number | string | null
-      score: number | null
-    }[]
-  }
+  discovery: Discovery
+  /** More regions found the same way, from other known sites. */
+  moreDiscoveries: Discovery[]
   landforms: [string, string][]
   /** The best Earth match for one Moon region and purpose, computed from the data at build time. */
   example: {
@@ -55,4 +42,22 @@ declare const __HOME_STATS__: {
     /** The top three Earth sites, best first. */
     shortlist: { place: number; name: string; country: string; percent: number | null }[]
   }
+}
+
+/** The best region from one known site that is not on our lists (vite.config.ts findNew). */
+interface Discovery {
+  fromId: string
+  fromName: string
+  cell: number
+  lat: number
+  lon: number
+  place: string
+  percent: number
+  traits: {
+    label: string
+    unit: string
+    from: number | string | null
+    here: number | string | null
+    score: number | null
+  }[]
 }

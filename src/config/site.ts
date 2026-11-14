@@ -214,6 +214,34 @@ export const site = {
       place: 'near Tabas, central Iran',
       near: { lat: 33.6, lon: 56.9 },
     },
+    /** More new regions, found the same way from other known sites (same build check as above). */
+    moreDiscoveries: [
+      {
+        fromId: 'tuktoyaktuk',
+        place: 'the Arctic coastal plain, northern Alaska',
+        near: { lat: 70.25, lon: -155.75 },
+      },
+      {
+        fromId: 'haughton',
+        place: 'Victoria Island, Canadian Arctic',
+        near: { lat: 72.75, lon: -115.25 },
+      },
+      {
+        fromId: 'mdrs-hanksville',
+        place: 'northwest Afghanistan',
+        near: { lat: 35.25, lon: 63.75 },
+      },
+      {
+        fromId: 'white-sands',
+        place: 'eastern Morocco',
+        near: { lat: 32.25, lon: -1.75 },
+      },
+      {
+        fromId: 'green-river',
+        place: 'Ningxia, northern China',
+        near: { lat: 37.75, lon: 106.25 },
+      },
+    ],
     noData: 'Values nobody has published are left out, never guessed, and the page says so.',
   },
 

@@ -58,6 +58,38 @@ export const LANDFORM_NAMES: Record<LandformCode, string> = {
   tex: 'Textured Terrain',
 }
 
+/**
+ * The process behind each landform: the five groups of the DoMars16k paper (Wilhelm et al. 2020,
+ * Remote Sensing 12(23) 3981), so a landform reads as something that happens, not only a shape.
+ */
+export const PROCESS_SOURCE = {
+  title: 'Wilhelm et al. (2020): DoMars16k, Remote Sensing 12(23), 3981',
+  url: 'https://doi.org/10.3390/rs12233981',
+}
+const WIND = 'Aeolian bedforms: sand and dust shaped by wind.'
+const SLOPE = 'Slope features: material moving down slopes, by flows, streaks or landslides.'
+const IMPACT = 'Impact landforms: made by meteorite impacts, on the Moon and Mars alike.'
+const RELIEF = 'Topographic landforms: relief features such as cliffs, ridges, channels and mounds.'
+const TERRAIN = 'Basic terrain: the texture of the ground itself, from smooth to rough.'
+export const LANDFORM_PROCESS: Record<LandformCode, string> = {
+  aec: WIND,
+  ael: WIND,
+  cli: RELIEF,
+  cra: IMPACT,
+  fse: SLOPE,
+  fsf: RELIEF,
+  fsg: SLOPE,
+  fss: SLOPE,
+  mix: TERRAIN,
+  moon: 'Moon surfaces: not one of the DoMars16k Mars classes.',
+  rid: RELIEF,
+  rou: TERRAIN,
+  sfe: RELIEF,
+  sfx: IMPACT,
+  smo: TERRAIN,
+  tex: TERRAIN,
+}
+
 export interface Source {
   title: string
   url: string

@@ -84,6 +84,10 @@ rank in about the top 3%. The numbers are worked out from the data on every buil
 (`checkAgainstKnown` in `src/lib/discover.ts`) and shown on Home and Discover; a test fails if the method
 stops beating chance by at least two times.
 
+**New twins on Home.** The same search, run from six known sites (`site.home.discovery` and
+`moreDiscoveries`), names the best region on no list we know. The names are written by hand, so the build
+stops if the data moves a result more than 100 km. Discover matches environment, not landform shape.
+
 Discover and Compare measure terrain at different scales, and each page labels its own. Compare measures a
 0.6 km window at the site on the 30 m ASTER model; Discover averages a patch about 50 km across at about
 1 km. The same place therefore has different elevation and relief on the two pages. Slope is not in the

@@ -11,6 +11,8 @@ import {
   ANALOG_SITES,
   CONFIDENCE_MEANING,
   LANDFORM_NAMES,
+  LANDFORM_PROCESS,
+  PROCESS_SOURCE,
   analogsFor,
   type LandformCode,
 } from '../data/analogs'
@@ -167,6 +169,19 @@ export default function Analogs() {
                   <> for {LANDFORM_NAMES[landform].toLowerCase()}, strongest evidence first</>
                 )}
               </p>
+              {landform !== 'all' && (
+                <p className="text-sm text-fg-2">
+                  Process: {LANDFORM_PROCESS[landform]}{' '}
+                  <a
+                    href={PROCESS_SOURCE.url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-muted underline"
+                  >
+                    Groups after DoMars16k
+                  </a>
+                </p>
+              )}
               <ul className="space-y-2 lg:max-h-[520px] lg:overflow-y-auto lg:pr-1">
                 {sites.map((s) => (
                   <li key={s.id}>
