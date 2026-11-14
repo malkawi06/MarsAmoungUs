@@ -288,10 +288,8 @@ function Discovery() {
             {discovery.percent}%
           </p>
           <p className="text-white/70">
-            A patch about 50 km across at {coord(discovery.lat, 'N', 'S')}{' '}
-            {coord(discovery.lon, 'E', 'W')}, on none of our lists of known analogs. It is the
-            closest match to {discovery.fromName} that nobody has listed yet: a lead to check, not a
-            proven analog.
+            About 50 km across, at {coord(discovery.lat, 'N', 'S')} {coord(discovery.lon, 'E', 'W')}
+            . On no list of known analogs: a lead to check, not a proven analog.
           </p>
           <div>
             <Link to={discoveryLink} className="btn-line">
@@ -320,10 +318,8 @@ function Discovery() {
             </tbody>
           </table>
           <p className="text-sm text-white/60">
-            Checked against analogs other researchers found: from each of {check.seeds} known sites,
-            the closest other known site ranks in the top {check.medianTopPct.toFixed(1)}% of
-            Earth&apos;s land (median). Places picked at random would rank in the top{' '}
-            {check.randomMedianTopPct.toFixed(1)}%.
+            Known analogs rank in the top {check.medianTopPct.toFixed(1)}% of Earth&apos;s land with
+            this method; places picked at random, the top {check.randomMedianTopPct.toFixed(1)}%.
           </p>
         </div>
       </div>
@@ -354,9 +350,8 @@ function Example() {
             <span className="block text-white/50">Where should the crew train?</span>
           </h2>
           <p className="text-white/80">
-            {example.targetName} is one of NASA&apos;s Artemis landing regions near the Moon&apos;s
-            south pole. Pick it and the {example.purposeLabel} purpose, and every Earth site is
-            scored on what a base there faces. The shortlist:
+            An Artemis landing region near the Moon&apos;s south pole. The best Earth sites to train
+            for a base there:
           </p>
           <ol className="divide-y divide-white/15 border-y border-white/15">
             {example.shortlist.map((s) => (
@@ -457,24 +452,28 @@ function Sources() {
             Where the data comes from
           </h2>
           <p className="max-w-2xl text-white/70">
-            Every number on the site links back to one of these sources or to a published paper.
+            Every number on the site links back to one of these, or to a published paper.
           </p>
         </div>
-        <ul className="mt-12 grid gap-x-10 gap-y-8 sm:grid-cols-2 lg:grid-cols-3">
-          {site.about.nasaData.map((source) => (
-            <li key={source.name} className="border-t border-white/20 pt-4">
+        <ul className="mt-10 flex flex-wrap gap-2">
+          {[...site.about.nasaData, ...site.about.partnerData].map((source) => (
+            <li key={source.name}>
               <a
                 href={source.url}
                 target="_blank"
                 rel="noreferrer"
-                className="font-display text-lg font-semibold tracking-wide uppercase hover:underline"
+                title={source.howWeUseIt}
+                className="block border border-white/30 px-3 py-1.5 text-sm text-white/85 transition-colors hover:border-white hover:bg-white hover:text-black"
               >
                 {source.name}
               </a>
-              <p className="mt-1 text-sm text-white/60">{source.howWeUseIt}</p>
             </li>
           ))}
         </ul>
+        <Link to="/about#sources" className="btn-line mt-10">
+          What each source is used for
+          <ArrowRight className="size-4" aria-hidden />
+        </Link>
       </div>
     </section>
   )

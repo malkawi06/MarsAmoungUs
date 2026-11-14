@@ -424,12 +424,16 @@ function RegionDetails({
         ) : (
           <p>Every trait we can measure is at least 50% similar.</p>
         )}
-        <p>
-          Not measured at this scale: landform, ground ice and fine slope. Check them on the map,
-          where the dashed box is this patch and NASA&apos;s ASTER terrain relief shows its shape at
-          about 30 m, before calling it an analog. And no place on Earth reproduces the lower
-          gravity, the Moon&apos;s vacuum, Mars&apos;s thin atmosphere or their radiation.
-        </p>
+        <MoreDetails
+          label="What is not measured"
+          summary="Check landform and slope on the map before calling it an analog."
+        >
+          <p>
+            Landform, ground ice and fine slope are not in global data. On the map, the dashed box
+            is this patch, with NASA&apos;s ASTER terrain relief at about 30 m. No place on Earth
+            has the lower gravity, the Moon&apos;s vacuum, Mars&apos;s thin air or their radiation.
+          </p>
+        </MoreDetails>
       </div>
     </section>
   )

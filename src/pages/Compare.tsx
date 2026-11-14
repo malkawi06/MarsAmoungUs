@@ -302,16 +302,12 @@ export default function Compare() {
               </p>
             )}
 
-            <AboutSite site={selected.site} analog={ANALOGS.get(selected.site.id)} />
-
             <div className="border-t border-border p-5">
               <h3 className="mb-3 flex items-center gap-2 text-sm font-semibold">
                 <ListChecks className="size-4 text-accent" aria-hidden />
                 Why it matches
               </h3>
-              <p className="mb-3 text-xs text-muted">
-                Open a factor to see where both values come from and how the score was worked out.
-              </p>
+              <p className="mb-3 text-xs text-muted">Open a factor to see its evidence.</p>
               <Factors
                 match={selected}
                 target={target}
@@ -331,6 +327,8 @@ export default function Compare() {
                 images={imagesError ? null : images}
               />
             </div>
+
+            <AboutSite site={selected.site} analog={ANALOGS.get(selected.site.id)} />
 
             <footer className="space-y-2 border-t border-border p-5 text-xs text-muted">
               {selected.site.note && <p>Note: {selected.site.note}</p>}
@@ -390,8 +388,7 @@ function TargetSummary({ target }: { target: Target }) {
       <span className="text-muted tabular-nums">
         {target.lat.toFixed(2)}, {target.lon.toFixed(2)}
       </span>
-      {target.setting && <p className="w-full text-fg">{target.setting}</p>}
-      <p className="w-full text-fg-2">{target.note}</p>
+      <p className="w-full text-fg">{target.setting ?? target.note}</p>
       {target.environment && <MoonEnvironment environment={target.environment} />}
       <details className="group w-full">
         <summary className="mt-2 flex cursor-pointer list-none items-center gap-1 text-xs font-medium tracking-wide text-muted uppercase [&::-webkit-details-marker]:hidden">
@@ -401,7 +398,8 @@ function TargetSummary({ target }: { target: Target }) {
             aria-hidden
           />
         </summary>
-        <ul className="mt-1 space-y-2">
+        {target.setting && <p className="mt-2 text-xs text-fg-2">{target.note}</p>}
+        <ul className="mt-2 space-y-2">
           {target.sources.map((s) => (
             <li key={s.url}>
               <SourceLink title={s.title} url={s.url} />
@@ -428,40 +426,46 @@ function AboutSite({ site, analog }: { site: Match['site']; analog?: AnalogSite 
         About {site.name}
       </h3>
       {analog && <p className="text-sm text-fg-2">{analog.why}</p>}
-      <dl className="mt-3 grid grid-cols-2 gap-x-4 gap-y-2 text-sm sm:grid-cols-4">
-        <Fact label="Mean temperature" value={`${site.meanTempC.toFixed(1)} °C`} />
-        <Fact label="Day–night swing" value={`${site.dailyRangeC.toFixed(1)} °C`} />
-        <Fact label="Rain and snow" value={`${site.precipMmYr} mm a year`} />
-        <Fact label="Elevation at the pin" value={`${site.elevationM} m`} />
-        <Fact
-          label="Slope at the pin"
-          value={site.slopeDeg === null ? 'not measured' : `${site.slopeDeg.toFixed(1)}°`}
-        />
-        <Fact
-          label="Relief within 0.6 km"
-          value={site.reliefM === null ? 'not measured' : `${site.reliefM} m`}
-        />
-        <Fact label="Rock / surface" value={site.materials.join(', ') || 'not recorded'} />
-        <Fact label="Landform" value={site.landforms.join(', ') || 'not recorded'} />
-      </dl>
-      {analog?.precision === 'region' && (
+      <details className="group mt-3">
+        <summary className="inline-flex cursor-pointer list-none items-center gap-1 text-sm font-medium text-accent hover:underline [&::-webkit-details-marker]:hidden">
+          Measured values and sources
+          <ChevronDown className="size-4 transition-transform group-open:rotate-180" aria-hidden />
+        </summary>
+        <dl className="mt-3 grid grid-cols-2 gap-x-4 gap-y-2 text-sm sm:grid-cols-4">
+          <Fact label="Mean temperature" value={`${site.meanTempC.toFixed(1)} °C`} />
+          <Fact label="Day–night swing" value={`${site.dailyRangeC.toFixed(1)} °C`} />
+          <Fact label="Rain and snow" value={`${site.precipMmYr} mm a year`} />
+          <Fact label="Elevation at the pin" value={`${site.elevationM} m`} />
+          <Fact
+            label="Slope at the pin"
+            value={site.slopeDeg === null ? 'not measured' : `${site.slopeDeg.toFixed(1)}°`}
+          />
+          <Fact
+            label="Relief within 0.6 km"
+            value={site.reliefM === null ? 'not measured' : `${site.reliefM} m`}
+          />
+          <Fact label="Rock / surface" value={site.materials.join(', ') || 'not recorded'} />
+          <Fact label="Landform" value={site.landforms.join(', ') || 'not recorded'} />
+        </dl>
+        {analog?.precision === 'region' && (
+          <p className="mt-3 text-xs text-muted">
+            The pin marks the approximate centre of the area, so the climate and terrain values
+            describe that point.
+          </p>
+        )}
         <p className="mt-3 text-xs text-muted">
-          The pin marks the approximate centre of the area, so the climate and terrain values
-          describe that point.
+          Terrain here is measured in a 0.6 km window at the pin. Discover averages a patch about 50
+          km across, so its elevation and relief for the same place differ.
         </p>
-      )}
-      <p className="mt-3 text-xs text-muted">
-        Terrain here is measured in a 0.6 km window at the pin. Discover averages a patch about 50
-        km across, so its elevation and relief for the same place differ.
-      </p>
-      <ul className="mt-3 space-y-0.5 text-sm">
-        {(analog?.sources ?? [{ title: 'Source for this site', url: site.source }]).map((s) => (
-          <li key={s.url}>
-            <SourceLink title={s.title} url={s.url} />
-          </li>
-        ))}
-        <NasaDataLinks lat={site.lat} lon={site.lon} />
-      </ul>
+        <ul className="mt-3 space-y-0.5 text-sm">
+          {(analog?.sources ?? [{ title: 'Source for this site', url: site.source }]).map((s) => (
+            <li key={s.url}>
+              <SourceLink title={s.title} url={s.url} />
+            </li>
+          ))}
+          <NasaDataLinks lat={site.lat} lon={site.lon} />
+        </ul>
+      </details>
     </div>
   )
 }
@@ -543,15 +547,8 @@ function Factors({
   return (
     <>
       <ul className="divide-y divide-border">
-        {scored.map((f, i) => (
-          <FactorRow
-            key={f.factor}
-            factor={f}
-            target={target}
-            site={match.site}
-            analog={analog}
-            open={i === 0}
-          />
+        {scored.map((f) => (
+          <FactorRow key={f.factor} factor={f} target={target} site={match.site} analog={analog} />
         ))}
       </ul>
       {noData.length > 0 && (
@@ -565,11 +562,20 @@ function Factors({
           {f.label}: {f.reason}
         </p>
       ))}
-      {planned.map((f) => (
-        <p key={f.label} className="mt-3 text-xs text-muted">
-          {f.label}, not compared yet: {f.why}
-        </p>
-      ))}
+      {planned.length > 0 && (
+        <div className="mt-3 text-xs text-muted">
+          <MoreDetails
+            label="Why"
+            summary={`Not compared: ${planned.map((f) => f.label.toLowerCase()).join(', ')}.`}
+          >
+            {planned.map((f) => (
+              <p key={f.label}>
+                <span className="font-medium text-fg-2">{f.label}:</span> {f.why}
+              </p>
+            ))}
+          </MoreDetails>
+        </div>
+      )}
     </>
   )
 }
@@ -579,19 +585,17 @@ function FactorRow({
   target,
   site,
   analog,
-  open,
 }: {
   factor: FactorResult
   target: Target
   site: Match['site']
   analog?: AnalogSite
-  open: boolean
 }) {
   const style = SCORE_STYLE[factor.score!]
   const Icon = FACTOR_ICONS[factor.factor]
   return (
     <li className="py-3 first:pt-0">
-      <details open={open} className="group">
+      <details className="group">
         <summary className="flex cursor-pointer list-none items-start gap-3 [&::-webkit-details-marker]:hidden">
           <span className="grid size-9 shrink-0 place-items-center rounded-lg bg-surface-2 text-accent">
             <Icon className="size-4" aria-hidden />

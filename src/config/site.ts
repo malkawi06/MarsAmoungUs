@@ -45,8 +45,7 @@ export const site = {
   /** Project name: navbar, hero, browser tab. */
   name: 'Mars Among Us',
   /** One-line pitch: hero subtitle and <meta description>. */
-  pitch:
-    'Find the places on Earth that resemble the Moon and Mars, scored factor by factor with the research to back up every number.',
+  pitch: 'Find the places on Earth most like the Moon and Mars, with a source behind every number.',
 
   event: {
     name: 'NASA Space Apps Challenge 2026',
@@ -184,19 +183,19 @@ export const site = {
       eyebrow: 'Why it matters',
       title: 'Before the Moon and Mars, there is Earth',
       intro:
-        'Rovers, instruments and crews headed for the Moon and Mars are tested first at places on Earth that resemble them. Where they train decides what those tests can prove, and today the right place is found by searching scattered research papers by hand.',
+        'Crews and rovers train on Earth before they fly. Finding the right place means reading scattered papers; Mars Among Us puts it in one search.',
       audiences: [
         {
           who: 'Mission and training planners',
-          what: 'A ranked shortlist of Earth sites for one Artemis region or Mars site and one job, with the evidence behind every score.',
+          what: 'A ranked shortlist for one Moon or Mars place and one job, with the evidence.',
         },
         {
           who: 'Analog researchers',
-          what: 'New candidate regions found across all of Earth’s land, beyond the handful of places already in use.',
+          what: 'New candidate regions, found across all of Earth’s land.',
         },
         {
           who: 'Students and the public',
-          what: 'A way to see how places on Earth relate to the Moon and Mars, with every number traced to NASA data or a published study.',
+          what: 'How Earth relates to the Moon and Mars, every number sourced.',
         },
       ],
     },
@@ -205,7 +204,7 @@ export const site = {
     /** Title of the Home section on how scores are worked out. */
     methodTitle: 'A source for every number',
     scoring:
-      'Each factor scores 3 (strong), 2 (partial) or 1 (weak), and all factors count the same. The match is the average turned into a percentage: all 3s give 100%, all 1s give 0%. Sites with the same match are ordered by how close their measured values are to the target, and sites the data cannot tell apart share a place. The method follows the NASA-led analog framework of Stern et al. (2025).',
+      'Every factor scores 3 (strong), 2 (partial) or 1 (weak); the match is their average as a percentage, after Stern et al. (2025).',
     /**
      * The new-analog example on Home: the best region from this known site that is not on our lists.
      * `place` is written by hand, so the build stops if the result moves more than 100 km from `near`.
@@ -215,16 +214,15 @@ export const site = {
       place: 'near Tabas, central Iran',
       near: { lat: 33.6, lon: 56.9 },
     },
-    noData:
-      'Some values are not published yet, such as the mean temperature at most Mars sites. Those factors are left out of the score instead of guessed, and the page says so. When fewer than two factors can be scored, the page warns that the result is rough.',
+    noData: 'Values nobody has published are left out, never guessed, and the page says so.',
   },
 
   discover: {
     title: 'Discover new analogs',
     intro:
-      'Pick a place already used to study the Moon or Mars. Every 0.5° patch of land on Earth is compared with it on the same NASA data, and the closest matches light up, including places nobody has studied as analogs yet.',
+      'Pick a known analog site. Every patch of land on Earth is compared with it, and the closest light up, including places nobody has studied yet.',
     methodShort:
-      'Each 50 km patch of land is compared with the known site on seven traits from NASA climate, terrain and rock-type data; the closer every trait, the higher the match.',
+      'Each 50 km patch is compared with the known site on seven traits: climate, terrain and rock type.',
     method:
       'Each patch of land is about 50 km across. Climate is the NASA POWER annual average (MERRA-2): mean temperature, day–night swing, rain and snow, and wind at 10 m. Elevation and relief come from SRTM-based terrain tiles at about 1 km: elevation is the mean of the patch and relief its highest point minus its lowest, so both differ from the Compare page, which measures a 0.6 km window at the site. Slope is left out because small slopes vanish at this scale. Rock type is the dominant class of the GLiM global lithological map. The known site is compared through its own patch, so both sides are measured the same way. For each trait, similarity falls in a straight line from 100% (equal) to 0% at a gap we chose, shown next to it; the match is the average. Landform, ground ice and fine slope are not in global data, so check them on the satellite image and in Compare.',
     sources: [
@@ -251,13 +249,13 @@ export const site = {
   analogs: {
     title: 'Earth Analogs',
     intro:
-      'Places on Earth that look like landforms on Mars or the Moon, each backed by published sources. Pick a landform, then select a site on the list or the map to see why it counts and where that comes from.',
+      'Real places on Earth that look like the Moon or Mars, each with its published sources. Pick a landform to start.',
   },
 
   compare: {
     title: 'Compare with the Moon and Mars',
     intro:
-      'Pick a place on the Moon or Mars and what you need an Earth analog for. Every Earth site is scored factor by factor, so you can see exactly where it matches and where it does not.',
+      'Pick a place on the Moon or Mars and a job. Every Earth site is scored factor by factor.',
     methodShort:
       'Each factor scores 3 (strong), 2 (partial) or 1 (weak); the match is their average as a percentage.',
     method:
@@ -267,26 +265,26 @@ export const site = {
 
   about: {
     challenge:
-      'Scientists test rovers, instruments and crews at places on Earth that resemble the Moon or Mars, called terrestrial analogs. Finding the right analog for a given landing site and purpose usually means searching scattered research papers by hand.',
+      'Crews and rovers train at places on Earth that resemble the Moon or Mars. Finding the right one means searching scattered papers by hand.',
     solution:
-      'Mars Among Us answers two questions. Compare: which known Earth analog best matches a given place on the Moon or Mars, for a given job? Pick one of the nine Artemis landing regions or a Mars landing site, and a purpose such as rover testing, a base or astronaut training; every Earth analog site is scored factor by factor (slope, rock type, temperature, dryness, ice) following the NASA-led framework of Stern et al. (2025), with a source for every number. Discover: where else on Earth is like a known analog? Every half-degree patch of land is compared with it on seven traits, which points to regions nobody has listed as analogs yet. Factors without sourced data are left out rather than guessed.',
+      'Two tools. Compare ranks known Earth analogs for one Moon or Mars place and one job, factor by factor, with a source for every number. Discover searches all of Earth’s land for places like a known analog, including ones nobody has listed yet. Missing data is left out, never guessed.',
     /** How the project is built, in order. Shown as numbered steps on the About page. */
     build: [
       {
         title: 'Gather sourced data',
-        text: 'Python scripts read NASA and ESA data straight from the archives, often only the bytes around each place: climate from NASA POWER, terrain, rock type from GLiM, permafrost from ESA, and for each Artemis region sunlight (LOLA), temperature and ice (Diviner) and radar (Mini-RF) from NASA’s Lunar Reconnaissance Orbiter. They write small data files that ship with the site.',
+        text: 'Python scripts read NASA and ESA archives (climate, terrain, rock type, permafrost, and LRO sunlight, temperature, ice and radar) into small data files.',
       },
       {
         title: 'Score every match',
-        text: 'Compare scores each factor 3 (strong), 2 (partial) or 1 (weak) and averages them, as in Stern et al. (2025). Discover measures how close two patches of land are on each of seven traits, within tolerances, and turns the average into a percentage.',
+        text: 'Compare scores each factor 1 to 3 and averages them, after Stern et al. (2025). Discover compares seven traits between patches of land.',
       },
       {
         title: 'Check against known analogs',
-        text: 'From each known analog site, Discover should rank the other known analogs, found by other researchers, near the top. It does, far better than places picked at random; the Discover page shows the numbers. Unit tests check the scoring and the data files, and one fails if that check stops beating chance by at least two times.',
+        text: 'Known analogs rank far above places picked at random; the Discover page shows the numbers. Unit tests guard the scoring and the data.',
       },
       {
         title: 'Show the evidence',
-        text: 'A React and TypeScript web app scores everything in the browser and links each number to its source. Real orbital images of the target and the Earth site are shown side by side at the same scale. It is built with Vite, Tailwind CSS and Leaflet, and deployed to GitHub Pages by GitHub Actions.',
+        text: 'A React web app links every number to its source and shows orbital images of both places side by side, at the same scale.',
       },
     ],
     nasaData: [
@@ -338,31 +336,28 @@ export const site = {
         name: 'ASTER Global Digital Elevation Model (NASA/METI)',
         url: 'https://asterweb.jpl.nasa.gov/gdem.asp',
         howWeUseIt:
-          'Slope and local relief at every Earth analog site, and the shaded terrain relief (via NASA GIBS) shown inside a selected Discover patch.',
+          'Slope at every Earth site, and the terrain relief inside a selected Discover patch.',
       },
       {
         name: 'Mars Global Surveyor MOLA topography (PDS)',
         url: 'https://pds-geosciences.wustl.edu/mgs/mgs-m-mola-5-megdr-l3-v1/mgsl_300x/meg128/',
-        howWeUseIt:
-          'Slope around the Mars targets without a published value (Jezero, Gale, Victoria, Arcadia): 90% of the ground within 10 km is flatter than the value used.',
+        howWeUseIt: 'Slope around the Mars targets that have no published value.',
       },
       {
         name: 'LRO Mini-RF global radar mosaic (PDS)',
         url: 'https://pds-geosciences.wustl.edu/lro/lro-l-mrflro-5-global-mosaic-v1/',
-        howWeUseIt:
-          'Radar returns of each Artemis region: the share of the area with a circular polarization ratio above 1, which ice gives, and so does rough ground.',
+        howWeUseIt: 'Radar of each Artemis region: a sign of ice, or of rough ground.',
       },
       {
         name: 'MODIS Terra land surface temperature, via NASA Worldview/GIBS',
         url: 'https://worldview.earthdata.nasa.gov',
         howWeUseIt:
-          "The ground's own temperature, the Earth counterpart of Diviner on the Moon: a map layer, and each Earth site's monthly values for 2025, which score frozen ground for a permanent Moon base.",
+          'Ground temperature on the map, and frozen ground at each Earth site for the Moon base score.',
       },
       {
         name: 'NASA Worldview and Earthdata Search',
         url: 'https://search.earthdata.nasa.gov',
-        howWeUseIt:
-          'Every Earth site links to its satellite imagery in Worldview and to the NASA datasets covering it in Earthdata Search.',
+        howWeUseIt: 'Links from every Earth site to its imagery and to the NASA data covering it.',
       },
     ] satisfies NasaDataSource[],
     /** Data from the challenge's partner space agencies, listed on the Space Apps form separately. */
