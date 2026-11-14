@@ -244,7 +244,26 @@ export const site = {
     challenge:
       'Scientists test rovers, instruments and crews at places on Earth that resemble the Moon or Mars, called terrestrial analogs. Finding the right analog for a given landing site and purpose usually means searching scattered research papers by hand.',
     solution:
-      'Mars Among Us ranks places on Earth by how well they match a place on the Moon or Mars for a given purpose. Pick one of the nine Artemis landing regions or a Mars landing site, and a purpose such as rover testing, a base or astronaut training. Every Earth analog site is scored factor by factor (slope, rock type, temperature, dryness, ice), following the NASA-led analog framework of Stern et al. (2025), with a source for every number; factors without sourced data are left out rather than guessed. Real orbital images of the target and the Earth site are shown side by side at the same scale, and the Earth Analogs map groups sourced analog sites by landform. Built with React, TypeScript, Tailwind CSS and Leaflet.',
+      'Mars Among Us answers two questions. Compare: which known Earth analog best matches a given place on the Moon or Mars, for a given job? Pick one of the nine Artemis landing regions or a Mars landing site, and a purpose such as rover testing, a base or astronaut training; every Earth analog site is scored factor by factor (slope, rock type, temperature, dryness, ice) following the NASA-led framework of Stern et al. (2025), with a source for every number. Discover: where else on Earth is like a known analog? Every half-degree patch of land is compared with it on seven traits, which points to regions nobody has listed as analogs yet. Factors without sourced data are left out rather than guessed.',
+    /** How the project is built, in order. Shown as numbered steps on the About page. */
+    build: [
+      {
+        title: 'Gather sourced data',
+        text: 'Python scripts read NASA and ESA data straight from the archives, often only the bytes around each place: climate from NASA POWER, terrain, rock type from GLiM, permafrost from ESA, and for each Artemis region sunlight (LOLA), temperature and ice (Diviner) and radar (Mini-RF) from NASA’s Lunar Reconnaissance Orbiter. They write small data files that ship with the site.',
+      },
+      {
+        title: 'Score every match',
+        text: 'Compare scores each factor 3 (strong), 2 (partial) or 1 (weak) and averages them, as in Stern et al. (2025). Discover measures how close two patches of land are on each of seven traits, within tolerances, and turns the average into a percentage.',
+      },
+      {
+        title: 'Check against known analogs',
+        text: 'From each known analog site, Discover should rank the other known analogs, found by other researchers, near the top. It does, far better than places picked at random; the Discover page shows the numbers. Unit tests check the scoring and the data files, and one fails if that check stops beating chance by at least two times.',
+      },
+      {
+        title: 'Show the evidence',
+        text: 'A React and TypeScript web app scores everything in the browser and links each number to its source. Real orbital images of the target and the Earth site are shown side by side at the same scale. It is built with Vite, Tailwind CSS and Leaflet, and deployed to GitHub Pages by GitHub Actions.',
+      },
+    ],
     nasaData: [
       {
         name: 'NASA Earth Observatory',
@@ -328,6 +347,93 @@ export const site = {
         howWeUseIt: 'The satellite map and the Earth site images on the Compare page.',
       },
     ] satisfies NasaDataSource[],
+    /**
+     * Every other source behind the site, for the About page's Sources section and the Space Apps
+     * References field. Each Earth analog site also lists its own published sources where it is shown.
+     */
+    references: {
+      papers: [
+        {
+          name: 'Stern et al. (2025), JGR Planets: A Comprehensive Framework for Assessing Terrestrial Analogue Field Sites for Ocean Worlds',
+          url: 'https://doi.org/10.1029/2024JE008803',
+          howWeUseIt: 'The 1–3 factor scoring that Compare adapts to the Moon and Mars.',
+        },
+        {
+          name: 'Wueller, Berger & Kring (2026), JGR Planets: Assessing Potential Landing Sites … Within Artemis Candidate Landing Regions',
+          url: 'https://doi.org/10.1029/2025JE009434',
+          howWeUseIt: 'The landing sites whose mean gives each Artemis region’s centre.',
+        },
+        {
+          name: 'Wueller et al. (2025), JGR Planets: Geologic History of the Mons Malapert and Mons Mouton Regions',
+          url: 'https://doi.org/10.1029/2025JE009127',
+          howWeUseIt: 'Geology of the Mons Mouton and Malapert regions.',
+        },
+        {
+          name: 'Mazarico et al. (2011), Icarus: Illumination conditions of the lunar polar regions using LOLA topography',
+          url: 'https://doi.org/10.1016/j.icarus.2010.10.030',
+          howWeUseIt: 'The LOLA sunlight maps behind each region’s sunlight and shadow.',
+        },
+        {
+          name: 'Paige et al. (2010), Science: Diviner Lunar Radiometer Observations of Cold Traps in the Moon’s South Polar Region',
+          url: 'https://doi.org/10.1126/science.1187726',
+          howWeUseIt: 'The Diviner temperature and ice-stability data.',
+        },
+        {
+          name: 'Spudis et al. (2013), JGR Planets: Evidence for water ice on the Moon … from the LRO Mini-RF imaging radar',
+          url: 'https://doi.org/10.1002/jgre.20156',
+          howWeUseIt: 'What a radar CPR above 1 can and cannot mean.',
+        },
+        {
+          name: 'Hartmann & Moosdorf (2012), G³: The new global lithological map database GLiM',
+          url: 'https://doi.org/10.1029/2012GC004370',
+          howWeUseIt: 'The rock type of every Discover patch.',
+        },
+        {
+          name: 'Wilhelm et al. (2020): DoMars16k, a dataset of Mars landforms',
+          url: 'https://doi.org/10.5281/zenodo.4291940',
+          howWeUseIt: 'The Mars landform classes on the Earth Analogs page.',
+        },
+      ],
+      data: [
+        {
+          name: 'GLiM Global Lithological Map, 0.5° grid (PANGAEA) · CC BY 3.0',
+          url: 'https://doi.org/10.1594/PANGAEA.788537',
+          howWeUseIt: 'Rock type in Discover.',
+        },
+        {
+          name: 'Terrain Tiles on AWS Open Data (SRTM and other elevation data)',
+          url: 'https://registry.opendata.aws/terrain-tiles/',
+          howWeUseIt: 'Elevation and relief in Discover.',
+        },
+        {
+          name: 'OpenStreetMap · ODbL',
+          url: 'https://www.openstreetmap.org/copyright',
+          howWeUseIt: 'The street basemap.',
+        },
+      ],
+      software: [
+        {
+          name: 'React, React DOM and React Router · MIT',
+          url: 'https://react.dev',
+          howWeUseIt: 'The web app.',
+        },
+        {
+          name: 'Leaflet · BSD-2-Clause',
+          url: 'https://leafletjs.com',
+          howWeUseIt: 'The maps.',
+        },
+        {
+          name: 'Lucide icons · ISC',
+          url: 'https://lucide.dev',
+          howWeUseIt: 'The icons.',
+        },
+        {
+          name: 'Barlow and Barlow Condensed fonts · OFL-1.1',
+          url: 'https://github.com/jpt/barlow',
+          howWeUseIt: 'The typefaces.',
+        },
+      ],
+    } satisfies Record<string, NasaDataSource[]>,
     /** Each AI tool used and what for (the Space Apps form asks). Leave empty to hide the section. */
     ai: '',
   },

@@ -1,6 +1,6 @@
 import { useEffect, useState, type ReactNode } from 'react'
 import { PageHeader } from '../components/PageHeader'
-import { site } from '../config/site'
+import { site, type NasaDataSource } from '../config/site'
 import { usePageTitle } from '../hooks/usePageTitle'
 
 const stats = __HOME_STATS__
@@ -9,8 +9,10 @@ const stats = __HOME_STATS__
 const SECTIONS = [
   { id: 'challenge', title: 'The Challenge' },
   { id: 'solution', title: 'Our Solution' },
+  { id: 'build', title: "How It's Built" },
   { id: 'nasa-data', title: 'NASA Data Used' },
   { id: 'partner-data', title: 'Partner Agency Data' },
+  { id: 'sources', title: 'Sources' },
   ...(site.about.ai ? [{ id: 'ai', title: 'Use of AI' }] : []),
   { id: 'team', title: 'Team' },
 ]
@@ -110,40 +112,48 @@ export default function About() {
             <p>{about.solution}</p>
           </Section>
 
-          <Section id="nasa-data" number={number('nasa-data')} title="NASA Data Used">
-            <ul className="divide-y divide-border border-y border-border">
-              {about.nasaData.map((source) => (
-                <li key={source.name} className="py-4 sm:grid sm:grid-cols-[1fr_1.4fr] sm:gap-6">
-                  <a
-                    href={source.url}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="font-medium text-fg hover:text-accent hover:underline"
-                  >
-                    {source.name}
-                  </a>
-                  <p className="mt-1 text-fg-2 sm:mt-0">{source.howWeUseIt}</p>
+          <Section id="build" number={number('build')} title="How It's Built">
+            <ol className="grid gap-px overflow-hidden border border-border bg-border sm:grid-cols-2">
+              {about.build.map((step, i) => (
+                <li key={step.title} className="bg-bg p-6">
+                  <p className="font-display text-sm font-semibold tracking-[0.2em] text-accent tabular-nums">
+                    {String(i + 1).padStart(2, '0')}
+                  </p>
+                  <h3 className="mt-2 font-display text-2xl font-bold text-fg">{step.title}</h3>
+                  <p className="mt-2 text-fg-2">{step.text}</p>
                 </li>
               ))}
-            </ul>
+            </ol>
+          </Section>
+
+          <Section id="nasa-data" number={number('nasa-data')} title="NASA Data Used">
+            <SourceList sources={about.nasaData} />
           </Section>
 
           <Section id="partner-data" number={number('partner-data')} title="Partner Agency Data">
-            <ul className="divide-y divide-border border-y border-border">
-              {about.partnerData.map((source) => (
-                <li key={source.name} className="py-4 sm:grid sm:grid-cols-[1fr_1.4fr] sm:gap-6">
-                  <a
-                    href={source.url}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="font-medium text-fg hover:text-accent hover:underline"
-                  >
-                    {source.name}
-                  </a>
-                  <p className="mt-1 text-fg-2 sm:mt-0">{source.howWeUseIt}</p>
-                </li>
-              ))}
-            </ul>
+            <SourceList sources={about.partnerData} />
+          </Section>
+
+          <Section id="sources" number={number('sources')} title="Sources">
+            <p className="mb-6">
+              Every number on this site comes from the data above, these sources, or the published
+              studies listed with each place on the Moon, Mars and Earth ({stats.sources} distinct
+              sources across those places).
+            </p>
+            {(
+              [
+                ['Research papers', about.references.papers],
+                ['Other data', about.references.data],
+                ['Software and fonts', about.references.software],
+              ] as const
+            ).map(([heading, sources]) => (
+              <div key={heading} className="mb-8 last:mb-0">
+                <h3 className="mb-3 font-display text-sm font-semibold tracking-[0.2em] text-muted uppercase">
+                  {heading}
+                </h3>
+                <SourceList sources={sources} />
+              </div>
+            ))}
           </Section>
 
           {about.ai && (
@@ -198,6 +208,27 @@ export default function About() {
         </div>
       </div>
     </div>
+  )
+}
+
+/** A source per row: its name, linked, and how the project uses it. */
+function SourceList({ sources }: { sources: NasaDataSource[] }) {
+  return (
+    <ul className="divide-y divide-border border-y border-border">
+      {sources.map((source) => (
+        <li key={source.name} className="py-4 sm:grid sm:grid-cols-[1fr_1.4fr] sm:gap-6">
+          <a
+            href={source.url}
+            target="_blank"
+            rel="noreferrer"
+            className="font-medium text-fg hover:text-accent hover:underline"
+          >
+            {source.name}
+          </a>
+          <p className="mt-1 text-fg-2 sm:mt-0">{source.howWeUseIt}</p>
+        </li>
+      ))}
+    </ul>
   )
 }
 
