@@ -54,7 +54,7 @@ jobs:
       # GitHub Pages answers unknown paths with 404.html; make it the app so /compare etc. survive a refresh.
       - run: cp dist/index.html dist/404.html
       # The app's own pages (src/App.tsx) also get a copy, so a direct link answers 200 rather than 404.
-      - run: for page in discover compare analogs about; do mkdir -p dist/$page && cp dist/index.html dist/$page/index.html; done
+      - run: for page in discover mars compare analogs about; do mkdir -p dist/$page && cp dist/index.html dist/$page/index.html; done
       - uses: actions/upload-pages-artifact@v5
         with:
           path: dist

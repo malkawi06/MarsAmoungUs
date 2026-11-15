@@ -376,7 +376,7 @@ export const site = {
     challenge:
       'Crews and rovers train at places on Earth that resemble the Moon or Mars. Finding the right one means searching scattered papers by hand.',
     solution:
-      'Two tools. Compare ranks known Earth analogs for one Moon or Mars place and one job, factor by factor, with a source for every number. Discover searches all of Earth’s land for places like a known analog, including ones nobody has listed yet. Missing data is left out, never guessed.',
+      'Three tools. Compare ranks known Earth analogs for one Moon or Mars place and one job, factor by factor, with a source for every number. Discover searches all of Earth’s land for places like a known analog, including ones nobody has listed yet. Closest to Mars ranks all of Earth’s ice-free land against Mars itself. Missing data is left out, never guessed.',
     /** How the project is built, in order. Shown as numbered steps on the About page. */
     build: [
       {
@@ -385,11 +385,11 @@ export const site = {
       },
       {
         title: 'Score every match',
-        text: 'Compare scores each factor 1 to 3 and averages them, after Stern et al. (2025). Discover compares seven traits between patches of land.',
+        text: 'Compare scores each factor 1 to 3 and averages them, after Stern et al. (2025). Discover compares seven traits between patches of land. Closest to Mars ranks each patch on four conditions where Mars goes beyond Earth.',
       },
       {
         title: 'Check against known analogs',
-        text: 'Known analogs rank far above places picked at random; the Discover page shows the numbers. Unit tests guard the scoring and the data.',
+        text: 'Known analogs rank far above places picked at random, in Discover and in Closest to Mars; both pages show the numbers. Unit tests guard the scoring, the data and every claim on those pages.',
       },
       {
         title: 'Show the evidence',
@@ -451,6 +451,12 @@ export const site = {
         name: 'Mars Global Surveyor MOLA topography (PDS)',
         url: 'https://pds-geosciences.wustl.edu/mgs/mgs-m-mola-5-megdr-l3-v1/mgsl_300x/meg128/',
         howWeUseIt: 'Slope around the Mars targets that have no published value.',
+      },
+      {
+        name: 'NASA Mars Fact Sheet (NSSDCA)',
+        url: 'https://nssdc.gsfc.nasa.gov/planetary/factsheet/marsfact.html',
+        howWeUseIt:
+          'Mars’s average temperature, day–night range and surface pressure, on the Closest to Mars page.',
       },
       {
         name: 'LRO Mini-RF global radar mosaic (PDS)',
