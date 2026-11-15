@@ -120,6 +120,13 @@ export const site = {
         'Pick a known Moon or Mars analog site and find the places anywhere on Earth whose environment matches it, including ones not on any list of analogs we know.',
     },
     {
+      to: '/mars',
+      label: 'Closest to Mars',
+      shortLabel: 'Mars',
+      description:
+        'All of Earth’s ice-free land ranked by how far it goes toward Mars’s cold, dry, thin-aired conditions.',
+    },
+    {
       to: '/compare',
       label: 'Compare',
       description:
@@ -262,6 +269,59 @@ export const site = {
         near: { lat: 37.75, lon: 106.25 },
       },
     ],
+  },
+
+  /** Closest to Mars: Earth ranked against Mars itself (src/lib/marsIndex.ts). */
+  mars: {
+    title: 'Closest to Mars',
+    intro:
+      'Mars is colder and drier than anywhere on Earth, with thinner air and a bigger day–night swing. We rank all of Earth’s ice-free land by how far it goes toward Mars on all four at once.',
+    /** Places space agencies or published studies chose as Mars analogs. The index never sees this list. */
+    checks: [
+      {
+        name: 'Licancabur, Andes',
+        who: 'NASA High Lakes Project',
+        lat: -22.83,
+        lon: -67.88,
+        source: {
+          title: 'Cabrol et al. (2009), JGR Biogeosciences: The High-Lakes Project',
+          url: 'https://doi.org/10.1029/2008JG000818',
+        },
+      },
+      {
+        name: 'Tso Kar, Ladakh',
+        who: 'ISRO’s HOPE analog mission',
+        lat: 33.3,
+        lon: 78.0,
+        source: {
+          title: 'ISRO: Space Analog Mission in Tso Kar Valley, Ladakh',
+          url: 'https://www.isro.gov.in/Space_Analog_Mission.html',
+        },
+      },
+      {
+        name: 'Qaidam Basin, Tibetan Plateau',
+        who: 'Published Mars analog',
+        lat: 38.3,
+        lon: 92.3,
+        source: {
+          title:
+            'Xiao et al. (2017), Earth-Science Reviews 164: the Qaidam Basin as a Mars analogue',
+          url: 'https://www.sciencedirect.com/science/article/abs/pii/S001282521630174X',
+        },
+      },
+    ],
+    marsSource: {
+      title: 'NASA Mars Fact Sheet (NSSDCA)',
+      url: 'https://nssdc.gsfc.nasa.gov/planetary/factsheet/marsfact.html',
+    },
+    limits: [
+      'It ranks how far a place goes toward Mars, not how close it gets: nowhere on Earth is as cold or has air as thin.',
+      'The four conditions count equally, a choice of ours. With the weights changed at random 40 times, the top region stayed on the Tibetan Plateau every time (tests/marsIndex.test.ts).',
+      'Radiation, ultraviolet light, soil chemistry and landform are not in the ranking.',
+      'Each patch is about 50 km across: a region to check on the ground, not a site.',
+    ],
+    whyNotMoon:
+      'Why not the Moon? It has no weather, so its twins are chosen by rock and landform, not climate: ranked this way, the known Moon analogs come out no better than random land. Compare scores them by rock and landform instead.',
   },
 
   discover: {

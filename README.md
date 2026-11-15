@@ -3,12 +3,13 @@
 **Find the places on Earth that resemble the Moon and Mars, and see why.**
 Live: **https://malkawi06.github.io/MarsAmoungUs/**
 
-| Page                           | What it does                                                                                                                                                                                                                                                                                                                                                                     |
-| ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Discover** (`/discover`)     | Pick a known Moon or Mars analog site; every 0.5° land cell on Earth is compared with it on the same NASA POWER climate, terrain and rock-type data, and the closest regions, including ones not yet studied as analogs, are shown on a map, with desert, cold and ESA permafrost filters and NASA terrain relief inside a selected patch. Built by `scripts/build_discover.py`. |
-| **Compare** (`/compare`)       | Pick a place on the Moon (the nine Artemis landing regions) or Mars and a purpose (rover testing, base, permanent Moon base, local resources, search for life, training). Every Earth site is scored factor by factor, with the target's orbital image next to the site and, for the Moon, what NASA's LRO measured there.                                                       |
-| **Earth Analogs** (`/analogs`) | The analog sites on a satellite map, filtered by landform, each with the published research behind it.                                                                                                                                                                                                                                                                           |
-| **About** (`/about`)           | The challenge, the solution, the data used and the team: the sections of the Space Apps submission form.                                                                                                                                                                                                                                                                         |
+| Page                           | What it does                                                                                                                                                                                                                                                                                                                                                                                                  |
+| ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Discover** (`/discover`)     | Pick a known Moon or Mars analog site; every 0.5° land cell on Earth is compared with it on the same NASA POWER climate, terrain and rock-type data, and the closest regions, including ones not yet studied as analogs, are shown on a map, with desert, cold and ESA permafrost filters and NASA terrain relief inside a selected patch. Built by `scripts/build_discover.py`.                              |
+| **Closest to Mars** (`/mars`)  | All ice-free land ranked against Mars itself: colder, bigger day–night swing, drier and higher (thinner air) than how much of Earth's land, averaged. Mars values from NASA's Mars Fact Sheet. Never given a list of analogs, it puts NASA's Licancabur, ISRO's Tso Kar and the Qaidam Basin in the top 1% (`tests/marsIndex.test.ts`). Mars only: Moon analogs are chosen by rock and landform, not climate. |
+| **Compare** (`/compare`)       | Pick a place on the Moon (the nine Artemis landing regions) or Mars and a purpose (rover testing, base, permanent Moon base, local resources, search for life, training). Every Earth site is scored factor by factor, with the target's orbital image next to the site and, for the Moon, what NASA's LRO measured there.                                                                                    |
+| **Earth Analogs** (`/analogs`) | The analog sites on a satellite map, filtered by landform, each with the published research behind it.                                                                                                                                                                                                                                                                                                        |
+| **About** (`/about`)           | The challenge, the solution, the data used and the team: the sections of the Space Apps submission form.                                                                                                                                                                                                                                                                                                      |
 
 **Stack:** Vite · React 19 · TypeScript · Tailwind CSS v4 · React Router · Leaflet · Python (data scripts).
 
@@ -66,6 +67,17 @@ Diviner, and the radar circular polarization ratio (CPR) from the Mini-RF global
 ice gives, and rough ground too, so it is shown as a measurement, not as ice. It downloads only the parts of each file around the regions and writes
 `analysis/data/moon_environment.json`, which `analysis/build_compare_data.py` adds to the Moon targets.
 Temperature and ice set the Moon side of the Permanent Moon base factors; sunlight and radar are shown only.
+
+### Closest to Mars
+
+`src/lib/marsIndex.ts` ranks every ice-free Discover cell on four conditions where Mars is more
+extreme than anywhere on Earth: mean temperature (lower), day–night swing (larger), precipitation
+(lower) and elevation (higher, so thinner air). Each condition becomes a percentile, the share of
+ice-free land the cell is more Mars-like than, and the index is their mean (0–100). It ranks how far
+a place goes toward Mars, not how close it gets. `tests/marsIndex.test.ts` checks the page's claims:
+the top region is on the Tibetan Plateau, also with the weights changed at random 40 times; the
+analog sites in `site.mars.checks` rank in the top 1%; known Mars analogs rank far above random land
+and known Moon analogs do not.
 
 ### Discover grid
 

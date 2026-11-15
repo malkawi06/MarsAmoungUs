@@ -215,26 +215,28 @@ export function distanceKm(lat1: number, lon1: number, lat2: number, lon2: numbe
 }
 
 /**
- * Best-matching cells, spread out: each pick is at least `spacingKm` from the seed and from every
- * earlier pick, so the list shows different regions instead of neighbouring cells.
+ * Best-matching cells, spread out: each pick is at least `spacingKm` from the seed (if any) and from
+ * every earlier pick, so the list shows different regions instead of neighbouring cells.
  */
 export function topRegions(
   cells: Cells,
   scores: Float32Array,
-  seed: number,
+  seed: number | undefined,
   count = 10,
   spacingKm = 400,
 ) {
   const order = Array.from(scores.keys()).sort((a, b) => scores[b] - scores[a])
   const picks: number[] = []
-  const seedLat = cellLat(cells, seed)
-  const seedLon = cellLon(cells, seed)
   for (const i of order) {
     // Sorted best first, so a 0 means every place left was filtered out.
     if (picks.length >= count || scores[i] <= 0) break
     const lat = cellLat(cells, i)
     const lon = cellLon(cells, i)
-    if (distanceKm(lat, lon, seedLat, seedLon) < spacingKm) continue
+    if (
+      seed !== undefined &&
+      distanceKm(lat, lon, cellLat(cells, seed), cellLon(cells, seed)) < spacingKm
+    )
+      continue
     if (picks.some((p) => distanceKm(lat, lon, cellLat(cells, p), cellLon(cells, p)) < spacingKm))
       continue
     picks.push(i)

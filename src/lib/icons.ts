@@ -1,5 +1,6 @@
 import {
   CarFront,
+  Orbit,
   GitCompareArrows,
   House,
   Landmark,
@@ -29,6 +30,7 @@ import type { FactorId } from './similarity'
 export const PAGE_ICONS: Record<string, LucideIcon> = {
   '/': House,
   '/discover': Telescope,
+  '/mars': Orbit,
   '/compare': GitCompareArrows,
   '/analogs': Earth,
   '/about': Users,

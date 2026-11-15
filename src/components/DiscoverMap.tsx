@@ -33,7 +33,7 @@ function patchBounds(cells: Cells, cell: number): [[number, number], [number, nu
  * Paints every grid cell's similarity (0–100) onto a Web Mercator image, so Leaflet can lay it over
  * the satellite map without distortion. Clear below SHOW_FROM, then dark red to bright yellow.
  */
-function paint(cells: Cells, scores: Float32Array): string {
+function paint(cells: Cells, scores: Float32Array, showFrom: number): string {
   const grid = new Float32Array(360 * 720).fill(-1)
   for (let i = 0; i < scores.length; i++) grid[cells.row[i] * 720 + cells.col[i]] = scores[i]
   const canvas = document.createElement('canvas')
@@ -47,8 +47,8 @@ function paint(cells: Cells, scores: Float32Array): string {
     for (let x = 0; x < SIZE; x++) {
       const col = Math.min(719, Math.floor(((x + 0.5) / SIZE) * 720))
       const s = grid[row * 720 + col]
-      if (s < SHOW_FROM) continue
-      const t = (s - SHOW_FROM) / (100 - SHOW_FROM)
+      if (s < showFrom) continue
+      const t = (s - showFrom) / (100 - showFrom)
       image.data.set(heat(t), (y * SIZE + x) * 4)
     }
   }
@@ -64,18 +64,22 @@ export function DiscoverMap({
   selected,
   known,
   onSelect,
+  showFrom = SHOW_FROM,
   className,
 }: {
   cells: Cells
   scores: Float32Array
-  seed: number
+  /** The known site the scores start from; none on a page that compares with Mars itself. */
+  seed?: number
   picks: number[]
   selected?: number
   known: Set<number>
   onSelect: (cell: number) => void
+  /** Patches scoring below this are left clear. */
+  showFrom?: number
   className?: string
 }) {
-  const url = useMemo(() => paint(cells, scores), [cells, scores])
+  const url = useMemo(() => paint(cells, scores, showFrom), [cells, scores, showFrom])
   return (
     <MapView basemap="satellite" center={[20, 0]} zoom={2} className={className}>
       <ImageOverlay
@@ -86,15 +90,17 @@ export function DiscoverMap({
         ]}
         opacity={0.85}
       />
-      <CircleMarker
-        center={[cellLat(cells, seed), cellLon(cells, seed)]}
-        radius={9}
-        pathOptions={{ color: '#000', weight: 2, fillColor: '#ffffff', fillOpacity: 1 }}
-      >
-        <Tooltip permanent direction="top" offset={[0, -8]}>
-          Known site
-        </Tooltip>
-      </CircleMarker>
+      {seed !== undefined && (
+        <CircleMarker
+          center={[cellLat(cells, seed), cellLon(cells, seed)]}
+          radius={9}
+          pathOptions={{ color: '#000', weight: 2, fillColor: '#ffffff', fillOpacity: 1 }}
+        >
+          <Tooltip permanent direction="top" offset={[0, -8]}>
+            Known site
+          </Tooltip>
+        </CircleMarker>
+      )}
       {picks.map((i, n) => (
         <CircleMarker
           key={i}
@@ -145,9 +151,15 @@ function FlyTo({ cells, cell }: { cells: Cells; cell?: number }) {
 /** What the colours and markers on the Discover map mean. */
 export function DiscoverLegend({
   seedName,
+  colour = 'how alike each patch is',
+  showFrom = SHOW_FROM,
   className = '',
 }: {
-  seedName: string
+  /** The start site; leave out when there is none. */
+  seedName?: string
+  /** What the colour shows, after "Colour: ". */
+  colour?: string
+  showFrom?: number
   className?: string
 }) {
   const dot = 'inline-block size-3.5 shrink-0 rounded-full border-2'
@@ -156,7 +168,7 @@ export function DiscoverLegend({
       className={`flex flex-col gap-3 text-xs text-muted sm:flex-row sm:items-start sm:gap-8 ${className}`}
     >
       <div className="min-w-0 sm:w-64">
-        <p className="mb-1.5 font-medium text-fg-2">Colour: how alike each patch is</p>
+        <p className="mb-1.5 font-medium text-fg-2">Colour: {colour}</p>
         <div
           className="h-3 rounded-full bg-[#9a9a9a]"
           style={{
@@ -164,15 +176,17 @@ export function DiscoverLegend({
           }}
         />
         <div className="mt-1 flex justify-between tabular-nums">
-          <span>{SHOW_FROM}%</span>
+          <span>{showFrom}%</span>
           <span>100%</span>
         </div>
-        <p className="mt-0.5">Below {SHOW_FROM}%: no colour.</p>
+        <p className="mt-0.5">Below {showFrom}%: no colour.</p>
       </div>
       <ul className="grid grid-cols-1 gap-1.5 sm:grid-cols-2 sm:gap-x-6">
-        <li className="flex items-center gap-2">
-          <span className={`${dot} border-black bg-white`} /> Start: {seedName}
-        </li>
+        {seedName && (
+          <li className="flex items-center gap-2">
+            <span className={`${dot} border-black bg-white`} /> Start: {seedName}
+          </li>
+        )}
         <li className="flex items-center gap-2">
           <span className={`${dot} border-white bg-accent`} /> New region, not on our list
         </li>
