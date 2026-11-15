@@ -3,7 +3,7 @@ import { MoreDetails } from '../components/MoreDetails'
 import { useCallback, useMemo, useState } from 'react'
 import { useSearchParams } from 'react-router'
 import { Sparkles, MapPin, MousePointerClick, ListFilter, Map } from 'lucide-react'
-import { DiscoverLegend, DiscoverMap, SHOW_FROM } from '../components/DiscoverMap'
+import { DiscoverLegend, DiscoverMap } from '../components/DiscoverMap'
 import { ErrorState } from '../components/ErrorState'
 import { LoadingState } from '../components/LoadingState'
 import { PageHeader } from '../components/PageHeader'
@@ -139,7 +139,6 @@ function Explorer({ cells }: { cells: Cells }) {
     update({ region: String(i) })
     setSheetOpen(true)
   }
-  const newCount = picks.length - known.size
 
   return (
     <>
@@ -207,14 +206,6 @@ function Explorer({ cells }: { cells: Cells }) {
           >
             Source
           </a>
-        </p>
-        <p className="mt-2 text-sm text-fg-2">
-          The map lights up every patch of land at least {SHOW_FROM}% like {seed.site.name}. Of the{' '}
-          {picks.length} closest regions,{' '}
-          <span className="font-medium text-accent">
-            {newCount} {newCount === 1 ? 'is' : 'are'} not on our list of known analogs
-          </span>
-          .
         </p>
       </section>
 
@@ -309,22 +300,22 @@ function Explorer({ cells }: { cells: Cells }) {
         <div className="mt-2">
           <MoreDetails summary={page.methodShort}>
             <p>{page.method}</p>
+            <ul className="space-y-1">
+              {page.sources.map((s) => (
+                <li key={s.url}>
+                  <a
+                    href={s.url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-accent hover:underline"
+                  >
+                    {s.title}
+                  </a>
+                </li>
+              ))}
+            </ul>
           </MoreDetails>
         </div>
-        <ul className="mt-3 space-y-1">
-          {page.sources.map((s) => (
-            <li key={s.url}>
-              <a
-                href={s.url}
-                target="_blank"
-                rel="noreferrer"
-                className="text-accent hover:underline"
-              >
-                {s.title}
-              </a>
-            </li>
-          ))}
-        </ul>
       </section>
     </>
   )
@@ -439,10 +430,6 @@ function RegionDetails({
                 <tr key={t.id}>
                   <td className="py-2">
                     <span className="font-medium text-fg">{t.label}</span>
-                    <span className="block text-xs text-muted">
-                      {apart(t.id, t.value(cells, seed), t.value(cells, cell), s, t.unit)}
-                      <span className="text-muted/70"> · {t.tolerance}</span>
-                    </span>
                   </td>
                   <td className="py-2">{show(t.value(cells, seed), t.unit)}</td>
                   <td className="py-2">{show(t.value(cells, cell), t.unit)}</td>
@@ -469,10 +456,16 @@ function RegionDetails({
           <InfoTip label="How the match is worked out" align="right">
             <p>
               Each trait scores 100% when both places have the same value and falls in a straight
-              line to 0% at the gap shown under it. Rain and relief compare how many times bigger
-              one value is: ten times scores 0%. Rock type scores 100% for the same class, 50% for
-              the same kind, 0% otherwise.
+              line to 0% at a set gap. Rock type scores 100% for the same class, 50% for the same
+              kind, 0% otherwise.
             </p>
+            <ul className="list-disc pl-4">
+              {TRAITS.filter((t) => t.id !== 'rock').map((t) => (
+                <li key={t.id}>
+                  {t.label}: {t.tolerance}
+                </li>
+              ))}
+            </ul>
             <p>A trait with no data in either place is left out of the average, never guessed.</p>
           </InfoTip>
         </div>
@@ -508,24 +501,3 @@ function RegionDetails({
 
 const formatLat = (v: number) => `${Math.abs(v).toFixed(2)}° ${v >= 0 ? 'N' : 'S'}`
 const formatLon = (v: number) => `${Math.abs(v).toFixed(2)}° ${v >= 0 ? 'E' : 'W'}`
-
-/**
- * How far apart the two places are on one trait, in words, worked back from its score so the
- * text always matches the number (see traitScores in lib/discover.ts).
- */
-function apart(
-  id: string,
-  a: number | string | null,
-  b: number | string | null,
-  score: number | null,
-  unit: string,
-) {
-  if (score === null || a === null || b === null) return 'No data in one of the two places'
-  if (id === 'rock') return score === 1 ? 'Same class' : score > 0 ? 'Same kind' : 'Different kind'
-  if (id === 'precip' || id === 'relief') {
-    const times = 10 ** (1 - score)
-    return times < 1.05 ? 'Almost the same' : `${times.toFixed(1)} times apart`
-  }
-  const gap = Math.abs(Number(a) - Number(b))
-  return `${gap.toLocaleString('en', { maximumFractionDigits: 1 })} ${unit} apart`
-}

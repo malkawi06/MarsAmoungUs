@@ -74,18 +74,6 @@ export default function Home() {
             { value: stats.landforms.length, label: 'Landforms' },
           ]}
         />
-        <ul className="no-scrollbar -mx-5 flex gap-2 overflow-x-auto px-5 sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0">
-          {stats.landforms.map(([code, name]) => (
-            <li key={code} className="shrink-0">
-              <Link
-                to={`/analogs?landform=${code}`}
-                className="block border border-white/40 px-3 py-1.5 font-display text-xs font-semibold tracking-[0.14em] uppercase transition-colors hover:border-white hover:bg-white hover:text-black"
-              >
-                {name}
-              </Link>
-            </li>
-          ))}
-        </ul>
       </Panel>
 
       <Sources />
@@ -289,12 +277,12 @@ function Discovery() {
           <p className="font-display text-[clamp(6rem,16vw,12rem)] leading-none font-bold tabular-nums">
             {discovery.percent}%
           </p>
-          <p className="text-white/70">
-            About 50 km across, at {coord(discovery.lat, 'N', 'S')} {coord(discovery.lon, 'E', 'W')}
-            . On no list of known analogs. Holds in {site.home.discovery.holds} of 40 runs with
-            every tolerance changed at random by up to ±50%.
+          <p className="text-sm text-white/60 tabular-nums">
+            {coord(discovery.lat, 'N', 'S')} {coord(discovery.lon, 'E', 'W')} · stable in{' '}
+            {site.home.discovery.holds}/40 runs
           </p>
           <p className="border-l-2 border-accent pl-3 text-white/80">
+            <span className="font-semibold text-accent">Confirmed. </span>
             {site.home.discovery.check.text}{' '}
             <a
               href={site.home.discovery.check.source.url}
@@ -332,8 +320,8 @@ function Discovery() {
             </tbody>
           </table>
           <p className="text-sm text-white/60">
-            Known analogs rank in the top {check.medianTopPct.toFixed(1)}% of Earth&apos;s land with
-            this method; places picked at random, the top {check.randomMedianTopPct.toFixed(1)}%.
+            Known analogs rank in the top {check.medianTopPct.toFixed(1)}% of Earth&apos;s land;
+            random places, {check.randomMedianTopPct.toFixed(1)}%.
           </p>
         </div>
       </div>
@@ -350,17 +338,11 @@ function MoreDiscoveries() {
         {stats.moreDiscoveries.length} more new twins
       </h3>
       <p className="mt-2 max-w-3xl text-white/70">
-        Found the same way from more known analogs, on no list we know. We show only regions that
-        hold in at least 30 of 40 runs with every tolerance changed at random by up to ±50%. Where
-        published work already finds a Moon or Mars process there, the card says so; the others are
-        leads, not yet studied as analogs.
+        Confirmed: published work finds the same process there. Lead: not studied yet.
       </p>
       <ul className="mt-8 grid border-t border-l border-white/10 sm:grid-cols-2 lg:grid-cols-3">
         {stats.moreDiscoveries.map((d, n) => {
           const check = site.home.moreDiscoveries[n].check
-          const weakest = d.traits
-            .filter((t) => t.score !== null)
-            .reduce((a, b) => (b.score! < a.score! ? b : a))
           return (
             <li
               key={d.fromId}
@@ -371,10 +353,9 @@ function MoreDiscoveries() {
               <p className="font-display text-5xl leading-none font-bold tabular-nums">
                 {d.percent}%
               </p>
-              <p className="text-sm text-white/70">
-                {coord(d.lat, 'N', 'S')} {coord(d.lon, 'E', 'W')}. Weakest trait:{' '}
-                {weakest.label.toLowerCase()} ({Math.round(weakest.score! * 100)}%). Holds in{' '}
-                {site.home.moreDiscoveries[n].holds} of 40 runs.
+              <p className="text-sm text-white/60 tabular-nums">
+                {coord(d.lat, 'N', 'S')} {coord(d.lon, 'E', 'W')} · stable in{' '}
+                {site.home.moreDiscoveries[n].holds}/40 runs
               </p>
               {check ? (
                 <p className="border-l-2 border-accent pl-3 text-sm text-white/80">
@@ -387,7 +368,7 @@ function MoreDiscoveries() {
               ) : (
                 <p className="border-l-2 border-white/30 pl-3 text-sm text-white/70">
                   <span className="font-semibold text-white">Lead. </span>
-                  No published analog study of this region found yet: a place to check next.
+                  No study yet: a place to check next.
                 </p>
               )}
               <Link
@@ -427,10 +408,6 @@ function Example() {
             A base at {example.targetName}
             <span className="block text-white/50">Where should the crew train?</span>
           </h2>
-          <p className="text-white/80">
-            An Artemis landing region near the Moon&apos;s south pole. The best Earth sites to train
-            for a base there:
-          </p>
           <ol className="divide-y divide-white/15 border-y border-white/15">
             {example.shortlist.map((s) => (
               <li key={s.name} className="flex items-baseline gap-4 py-3">
@@ -474,14 +451,12 @@ function Example() {
           </ul>
           {example.notScored.length > 0 && (
             <p className="text-sm text-white/60">
-              No sourced data yet, so not scored: {example.notScored.join(', ').toLowerCase()}.
+              Not scored, no data yet: {example.notScored.join(', ').toLowerCase()}.
             </p>
           )}
           {example.notComparable.length > 0 && (
             <p className="text-sm text-white/60">
-              No place on Earth matches the Moon on{' '}
-              {example.notComparable.join(' or ').toLowerCase()}, so the page names them instead of
-              scoring them.
+              No match anywhere on Earth: {example.notComparable.join(', ').toLowerCase()}.
             </p>
           )}
           <div>
@@ -534,8 +509,7 @@ function Sources() {
             {site.home.methodTitle}
           </h2>
           <p className="max-w-2xl text-white/70">
-            Every number on the site links back to one of these, or to a published paper.{' '}
-            {site.home.scoring} {site.home.noData}
+            Every number links to its source. Missing values are left out, never guessed.
           </p>
         </div>
         <ul className="mt-10 flex flex-wrap gap-2">

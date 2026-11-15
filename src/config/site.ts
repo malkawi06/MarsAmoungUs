@@ -184,25 +184,25 @@ export const site = {
       eyebrow: 'The idea in one minute',
       title: 'Earth has twins of the Moon and Mars',
       intro:
-        'Some places on Earth are so much like the Moon or Mars that NASA tests rovers and trains astronauts there. Scientists call them analogs. Finding the right one used to mean reading paper after paper; Mars Among Us does it in one search.',
+        'NASA tests rovers and trains astronauts in places on Earth that are like the Moon or Mars: analogs. We find them in one search.',
       steps: [
-        'Pick a place on the Moon or Mars, and a job: test a rover, build a base, look for signs of life.',
-        'We compare it with places on Earth using NASA measurements: temperature, rain, ground, ice and slope.',
-        'You get the best twins on Earth, ranked, with the reason and the source behind every number.',
+        'Pick a place on the Moon or Mars, and a job.',
+        'We compare it with Earth, using NASA data.',
+        'Get the best twins on Earth, ranked, with sources.',
       ],
       audiencesTitle: 'Who it helps',
       audiences: [
         {
           who: 'Mission and training planners',
-          what: 'A ranked shortlist for one Moon or Mars place and one job, with the evidence.',
+          what: 'A ranked shortlist, with the evidence.',
         },
         {
           who: 'Analog researchers',
-          what: 'New candidate regions, found across all of Earth’s land.',
+          what: 'New candidate regions, worldwide.',
         },
         {
           who: 'Students and the public',
-          what: 'How Earth relates to the Moon and Mars, every number sourced.',
+          what: 'Earth, Moon and Mars, every number sourced.',
         },
       ],
     },
@@ -210,8 +210,6 @@ export const site = {
     secondaryCta: { label: 'Find new twins on Earth', to: '/discover' },
     /** Title of the Home section on how scores are worked out. */
     methodTitle: 'A source for every number',
-    scoring:
-      'Every factor counts 100% (strong), 50% (partial) or 0% (weak); the match is the average of the factors with a published value, after Stern et al. (2025).',
     /**
      * The new-analog example on Home: the best region from this known site that is not on our lists.
      * `place` is written by hand, so the build stops if the result moves more than 100 km from `near`.
@@ -226,7 +224,7 @@ export const site = {
       near: { lat: 70.25, lon: -155.75 },
       /** Checked by hand: the study area (69.5–70.6° N, 150.8–158.1° W) contains this patch. */
       check: {
-        text: 'Already known for the same process: Jones et al. (2012) mapped 1,247 pingos in the 40,000 km² of the western Arctic Coastal Plain that contains this patch. Discover was given no landform data.',
+        text: 'Jones et al. (2012) mapped 1,247 pingos here. Discover had no landform data.',
         source: {
           title:
             'Jones et al. (2012), Geomorphology 138(1): pingos of the western Arctic Coastal Plain',
@@ -249,7 +247,7 @@ export const site = {
         near: { lat: -14.75, lon: -75.25 },
         /** Checked by hand: the study area runs from Pisco to Acarí, 13°40′ to 15°38′ S, 100–2,000 m. */
         check: {
-          text: 'Already known for a Mars process: Hesse (2012) documented dust devil tracks across this coastal desert, as an analog for the dust devil streaks on Mars. Discover was given no landform data.',
+          text: 'Hesse (2012) mapped dust devil tracks here, an analog for Mars. Discover had no landform data.',
           source: {
             title:
               'Hesse (2012), Aeolian Research 5: dust devil tracks in the coastal desert of southern Peru',
@@ -264,13 +262,12 @@ export const site = {
         near: { lat: 37.75, lon: 106.25 },
       },
     ],
-    noData: 'Values nobody has published are left out, never guessed, and the page says so.',
   },
 
   discover: {
     title: 'Find new twins on Earth',
     intro:
-      'Start from a place scientists already use to stand in for Mars or the Moon. We compare it with every patch of land on Earth and light up the places most like it, including ones on no list we know.',
+      'Start from a known analog. We compare it with all of Earth’s land and light up the places most like it.',
     methodShort:
       'Each 50 km patch is compared with the known site on seven traits: climate, terrain and rock type.',
     method:
