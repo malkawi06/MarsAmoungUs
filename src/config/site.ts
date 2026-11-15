@@ -276,6 +276,8 @@ export const site = {
     title: 'Closest to Mars',
     intro:
       'Mars is colder and drier than anywhere on Earth, with thinner air and a bigger day–night swing. We rank all of Earth’s ice-free land by how far it goes toward Mars on all four at once.',
+    /** The top region, named by hand: the build stops if the data moves it more than 300 km. */
+    top: { place: 'Western Tibet, on the Tibetan Plateau', near: { lat: 34.75, lon: 83.75 } },
     /** Places space agencies or published studies chose as Mars analogs. The index never sees this list. */
     checks: [
       {

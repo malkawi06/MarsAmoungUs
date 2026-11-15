@@ -7,7 +7,7 @@
  * thinner air). The index is the weighted mean of the four percentiles, 0–100. Ice sheets are left
  * out: Mars's surface is rock and dust. Mars values are from NASA's Mars Fact Sheet.
  */
-import type { Cells } from './discover'
+import type { Cells } from './discover.ts'
 
 export type MarsAxisId = 'cold' | 'swing' | 'dry' | 'thin'
 

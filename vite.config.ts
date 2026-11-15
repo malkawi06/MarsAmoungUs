@@ -18,6 +18,7 @@ import {
   distanceKm,
   type Cells,
 } from './src/lib/discover.ts'
+import { MARS_AXES, marsIndex, topShare } from './src/lib/marsIndex.ts'
 import { PURPOSES, plannedFor, rank } from './src/lib/similarity.ts'
 
 // The home page's worked example: where to train for a permanent base in one Artemis region,
@@ -95,6 +96,19 @@ function findNew(discovery: { fromId: string; place: string; near: { lat: number
   }
 }
 
+// Closest to Mars, for the home page: the top region and where the agencies' analog sites rank.
+const mars = marsIndex(cells)
+const marsTop = mars.score.reduce((b, s, i) => (s > mars.score[b] ? i : b), 0)
+if (
+  distanceKm(
+    cellLat(cells, marsTop),
+    cellLon(cells, marsTop),
+    site.mars.top.near.lat,
+    site.mars.top.near.lon,
+  ) > 300
+)
+  throw new Error(`Closest to Mars moved from ${site.mars.top.place}. Update site.mars.top.`)
+
 // Every distinct paper or page the data cites: Moon/Mars targets, Earth analogs and scored Earth sites.
 const sourceCount = new Set([
   ...TARGETS.flatMap((t) => t.sources.map((s) => s.url)),
@@ -142,6 +156,23 @@ export default defineConfig({
         medianTopPct: check.medianTopPct,
         randomMedianTopPct: check.randomMedianTopPct,
         examples: checkExamples,
+      },
+      mars: {
+        place: site.mars.top.place,
+        score: Math.round(mars.score[marsTop]),
+        ranked: mars.ranked,
+        traits: MARS_AXES.map((a) => ({
+          label: a.label,
+          unit: a.unit,
+          here: a.value(cells, marsTop),
+          mars: a.mars,
+        })),
+        checks: site.mars.checks.map((c) => ({
+          name: c.name,
+          who: c.who,
+          url: c.source.url,
+          topPct: topShare(mars, cellAt(cells, c.lat, c.lon)),
+        })),
       },
       discovery: findNew(site.home.discovery),
       moreDiscoveries: site.home.moreDiscoveries.map(findNew),

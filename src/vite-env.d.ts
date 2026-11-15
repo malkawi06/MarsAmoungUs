@@ -20,6 +20,14 @@ declare const __HOME_STATS__: {
     randomMedianTopPct: number
     examples: { from: string; to: string }[]
   }
+  /** Closest to Mars (src/lib/marsIndex.ts): the top region and where agencies' analog sites rank. */
+  mars: {
+    place: string
+    score: number
+    ranked: number
+    traits: { label: string; unit: string; here: number | null; mars: string }[]
+    checks: { name: string; who: string; url: string; topPct: number }[]
+  }
   /** The best region from one known site that is not on our lists, with every trait compared. */
   discovery: Discovery
   /** More regions found the same way, from other known sites. */

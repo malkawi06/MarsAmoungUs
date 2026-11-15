@@ -42,6 +42,8 @@ export default function Home() {
 
       <Discovery />
 
+      <ClosestToMars />
+
       <Panel
         photo={site.photos.compare}
         eyebrow="02 · Compare"
@@ -383,6 +385,67 @@ function MoreDiscoveries() {
         })}
       </ul>
     </div>
+  )
+}
+
+/** Closest to Mars: all ice-free land ranked against Mars itself, worked out at build time. */
+function ClosestToMars() {
+  const ref = useReveal<HTMLElement>()
+  const m = stats.mars
+  const top = (pct: number) => `top ${pct < 1 ? pct.toFixed(2) : pct.toFixed(1)}%`
+  return (
+    <section ref={ref} className="border-y border-white/10 bg-black">
+      <div className="mx-auto grid max-w-[90rem] gap-12 px-5 py-16 sm:px-8 sm:py-24 lg:grid-cols-2 lg:items-center lg:py-32">
+        <div className="reveal flex flex-col gap-6">
+          <p className="font-display text-sm font-semibold tracking-[0.3em] text-white/70 uppercase">
+            Closest to Mars · Earth against Mars itself
+          </p>
+          <h2 className="font-display text-3xl leading-tight font-bold uppercase sm:text-5xl">
+            Earth&apos;s most Mars-like land
+            <span className="block text-white/50">{m.place}</span>
+          </h2>
+          <p className="font-display text-[clamp(6rem,16vw,12rem)] leading-none font-bold tabular-nums">
+            {m.score}
+            <span className="text-3xl text-white/50 sm:text-5xl">/100</span>
+          </p>
+          <p className="text-white/70">
+            #1 of {m.ranked.toLocaleString('en')} patches of ice-free land, ranked on how cold, dry
+            and high they are and how big their day–night swing is, the four ways Mars goes beyond
+            Earth.
+          </p>
+          <div>
+            <Link to="/mars" className="btn-line">
+              See the ranking
+              <ArrowRight className="size-4" aria-hidden />
+            </Link>
+          </div>
+        </div>
+        <div className="reveal flex flex-col gap-4">
+          <p className="font-display text-sm font-semibold tracking-[0.2em] text-white/70 uppercase">
+            Never given a list of analogs, it ranks the sites agencies chose
+          </p>
+          <ul className="divide-y divide-white/15 border-y border-white/15">
+            {m.checks.map((c) => (
+              <li key={c.name} className="flex items-baseline gap-4 py-4">
+                <span className="w-36 shrink-0 font-display text-3xl font-bold tabular-nums text-accent">
+                  {top(c.topPct)}
+                </span>
+                <span className="min-w-0">
+                  <span className="font-medium">{c.name}</span>
+                  <span className="block text-sm text-white/60">
+                    {c.who} ·{' '}
+                    <a href={c.url} target="_blank" rel="noreferrer" className="underline">
+                      Source
+                    </a>
+                  </span>
+                </span>
+              </li>
+            ))}
+          </ul>
+          <p className="text-sm text-white/60">A place picked at random: top 50%, on average.</p>
+        </div>
+      </div>
+    </section>
   )
 }
 
