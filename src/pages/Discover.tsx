@@ -3,7 +3,7 @@ import { MoreDetails } from '../components/MoreDetails'
 import { useCallback, useMemo, useState } from 'react'
 import { useSearchParams } from 'react-router'
 import { Sparkles, MapPin, MousePointerClick, ListFilter, Map } from 'lucide-react'
-import { DiscoverMap, SHOW_FROM } from '../components/DiscoverMap'
+import { DiscoverLegend, DiscoverMap, SHOW_FROM } from '../components/DiscoverMap'
 import { ErrorState } from '../components/ErrorState'
 import { LoadingState } from '../components/LoadingState'
 import { PageHeader } from '../components/PageHeader'
@@ -231,10 +231,7 @@ function Explorer({ cells }: { cells: Cells }) {
             onSelect={select}
             className="h-[58svh] min-h-80 lg:h-[640px]"
           />
-          <p className="mt-2 px-4 text-xs text-muted lg:px-0">
-            White: {seed.site.name}. Orange: new regions. Grey: already known analogs. Yellow is the
-            closest match.
-          </p>
+          <DiscoverLegend seedName={seed.site.name} className="mt-3 px-4 lg:px-0" />
         </div>
 
         <div className="lg:col-span-2">

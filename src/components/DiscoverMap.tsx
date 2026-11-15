@@ -11,6 +11,13 @@ export const SHOW_FROM = 60
 const RELIEF_URL =
   'https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/ASTER_GDEM_Greyscale_Shaded_Relief/default/GoogleMapsCompatible_Level12/{z}/{y}/{x}.jpeg'
 
+/** Heat colour for a patch, t = 0 at SHOW_FROM to 1 at 100%: dark orange-red to bright yellow. */
+function heat(t: number): [number, number, number, number] {
+  return [255, Math.round(40 + 215 * t), Math.round(30 * t), Math.round(110 + 120 * t)]
+}
+
+const css = ([r, g, b, a]: [number, number, number, number]) => `rgba(${r},${g},${b},${a / 255})`
+
 /** The corners of one grid patch, for its outline on the map. */
 function patchBounds(cells: Cells, cell: number): [[number, number], [number, number]] {
   const half = cells.cellDeg / 2
@@ -42,11 +49,7 @@ function paint(cells: Cells, scores: Float32Array): string {
       const s = grid[row * 720 + col]
       if (s < SHOW_FROM) continue
       const t = (s - SHOW_FROM) / (100 - SHOW_FROM)
-      const o = (y * SIZE + x) * 4
-      image.data[o] = 255
-      image.data[o + 1] = Math.round(40 + 215 * t)
-      image.data[o + 2] = Math.round(30 * t)
-      image.data[o + 3] = Math.round(110 + 120 * t)
+      image.data.set(heat(t), (y * SIZE + x) * 4)
     }
   }
   ctx.putImageData(image, 0, 0)
@@ -137,4 +140,50 @@ function FlyTo({ cells, cell }: { cells: Cells; cell?: number }) {
     if (cell !== undefined) map.flyToBounds(patchBounds(cells, cell), { padding: [24, 24] })
   }, [map, cells, cell])
   return null
+}
+
+/** What the colours and markers on the Discover map mean. */
+export function DiscoverLegend({
+  seedName,
+  className = '',
+}: {
+  seedName: string
+  className?: string
+}) {
+  const dot = 'inline-block size-3.5 shrink-0 rounded-full border-2'
+  return (
+    <div
+      className={`flex flex-col gap-3 text-xs text-muted sm:flex-row sm:items-start sm:gap-8 ${className}`}
+    >
+      <div className="min-w-0 sm:w-64">
+        <p className="mb-1.5 font-medium text-fg-2">Colour: how alike each patch is</p>
+        <div
+          className="h-3 rounded-full bg-[#9a9a9a]"
+          style={{
+            backgroundImage: `linear-gradient(to right, ${css(heat(0))}, ${css(heat(0.5))}, ${css(heat(1))})`,
+          }}
+        />
+        <div className="mt-1 flex justify-between tabular-nums">
+          <span>{SHOW_FROM}%</span>
+          <span>100%</span>
+        </div>
+        <p className="mt-0.5">Below {SHOW_FROM}%: no colour.</p>
+      </div>
+      <ul className="grid grid-cols-1 gap-1.5 sm:grid-cols-2 sm:gap-x-6">
+        <li className="flex items-center gap-2">
+          <span className={`${dot} border-black bg-white`} /> Start: {seedName}
+        </li>
+        <li className="flex items-center gap-2">
+          <span className={`${dot} border-white bg-accent`} /> New region, not on our list
+        </li>
+        <li className="flex items-center gap-2">
+          <span className={`${dot} border-white bg-[#8e8e95]`} /> Already a known analog
+        </li>
+        <li className="flex items-center gap-2">
+          <span className="inline-block size-3.5 shrink-0 border-2 border-dashed border-current" />{' '}
+          The patch you opened
+        </li>
+      </ul>
+    </div>
+  )
 }
