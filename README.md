@@ -1,7 +1,81 @@
-# Mars Among Us
+<p align="center">
+  <img src="https://capsule-render.vercel.app/api?type=waving&color=0:0B0D17,55:7A1F0B,100:C1440E&height=150&section=header" width="100%" alt="">
+</p>
 
-**Find the places on Earth that resemble the Moon and Mars, and see why.**
-Live: **https://malkawi06.github.io/MarsAmoungUs/**
+<p align="center">
+  <img src="docs/award/logo.png" width="260" alt="Mars Among Us team logo: six crewmates planning over a holographic map on Mars">
+</p>
+
+<h1 align="center">Mars Among Us</h1>
+
+<p align="center">
+  <img src="https://readme-typing-svg.demolab.com?font=Montserrat&weight=600&size=22&duration=3200&pause=1200&color=C1440E&center=true&vCenter=true&width=560&lines=Mars+is+closer+than+you+think.;Earth%27s+twins+of+the+Moon+and+Mars.;First+place%2C+NASA+Space+Apps+2026." alt="Mars is closer than you think.">
+</p>
+
+<p align="center"><b>Find the places on Earth that resemble the Moon and Mars, and see why.</b></p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/%F0%9F%8F%86%20First%20Place-Ar--Ramtha%202026-D4AF37?style=for-the-badge&labelColor=1a1a1a" alt="First place, Ar-Ramtha 2026">
+  <img src="https://img.shields.io/badge/NASA-Space%20Apps%20Challenge%202026-0B3D91?style=for-the-badge&logo=nasa&logoColor=white&labelColor=1a1a1a" alt="NASA Space Apps Challenge 2026">
+  <a href="https://malkawi06.github.io/MarsAmoungUs/"><img src="https://img.shields.io/badge/Live%20site-Open%20%E2%86%92-C1440E?style=for-the-badge&labelColor=1a1a1a" alt="Open the live site"></a>
+</p>
+
+<p align="center">
+  <a href="#first-place">🏆 First place</a> &nbsp;·&nbsp;
+  <a href="#the-site">🧭 The site</a> &nbsp;·&nbsp;
+  <a href="#how-it-works">⚙️ How it works</a> &nbsp;·&nbsp;
+  <a href="#run-locally">💻 Run locally</a> &nbsp;·&nbsp;
+  <a href="#data-and-credits">📚 Data and credits</a>
+</p>
+
+> [!TIP]
+> **Try it live:** [malkawi06.github.io/MarsAmoungUs](https://malkawi06.github.io/MarsAmoungUs/) runs in your browser, nothing to install.
+
+<p align="center">
+  <img src="docs/award/divider.svg" width="100%" alt="">
+</p>
+
+## First place
+
+<p align="center"><b>🏆 NASA Space Apps Challenge 2026 &nbsp;·&nbsp; Ar-Ramtha, Jordan &nbsp;·&nbsp; 17 November 2026</b></p>
+
+<p align="center">
+  <i>We are proud of what we built together: a tool that searches all of Earth's land<br>
+  for places like the Moon and Mars, and shows the evidence behind every number.</i>
+</p>
+
+<p align="center">
+  <img src="docs/award/stage.webp" width="100%" alt="The team on stage under the 1st Place: Mars Among Us screen">
+</p>
+
+<table>
+  <tr>
+    <td align="center" width="50%">
+      <img src="docs/award/team.webp" alt="The team with the first-place cheque"><br>
+      <b>The team</b><br><sub>With the first-place cheque</sub>
+    </td>
+    <td align="center" width="50%">
+      <img src="docs/award/winners.webp" alt="All the Ar-Ramtha winners and organizers together"><br>
+      <b>The winners</b><br><sub>With the Ar-Ramtha winners and organizers</sub>
+    </td>
+  </tr>
+</table>
+
+<div align="center">
+
+| Place | Team              | Project       |
+| :---: | :---------------- | :------------ |
+|  🥇   | **Mars Among Us** | Mars Among Us |
+|  🥈   | Thinkers          | SOL 200       |
+|  🥉   | Change The Future | Tabasheer     |
+
+</div>
+
+<p align="center">
+  <img src="docs/award/divider.svg" width="100%" alt="">
+</p>
+
+## The site
 
 | Page                           | What it does                                                                                                                                                                                                                                                                                                                                                                                                  |
 | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -11,9 +85,19 @@ Live: **https://malkawi06.github.io/MarsAmoungUs/**
 | **Earth Analogs** (`/analogs`) | The analog sites on a satellite map, filtered by landform, each with the published research behind it.                                                                                                                                                                                                                                                                                                        |
 | **About** (`/about`)           | The challenge, the solution, the data used and the team: the sections of the Space Apps submission form.                                                                                                                                                                                                                                                                                                      |
 
-**Stack:** Vite · React 19 · TypeScript · Tailwind CSS v4 · React Router · Leaflet · Python (data scripts).
+<p align="center">
+  <img src="https://img.shields.io/badge/Vite-646CFF?style=flat-square&logo=vite&logoColor=white" alt="Vite">
+  <img src="https://img.shields.io/badge/React%2019-20232A?style=flat-square&logo=react&logoColor=61DAFB" alt="React 19">
+  <img src="https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white" alt="TypeScript">
+  <img src="https://img.shields.io/badge/Tailwind%20CSS%20v4-0F172A?style=flat-square&logo=tailwindcss&logoColor=38BDF8" alt="Tailwind CSS v4">
+  <img src="https://img.shields.io/badge/React%20Router-CA4245?style=flat-square&logo=reactrouter&logoColor=white" alt="React Router">
+  <img src="https://img.shields.io/badge/Leaflet-199900?style=flat-square&logo=leaflet&logoColor=white" alt="Leaflet">
+  <img src="https://img.shields.io/badge/Python-data%20scripts-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python (data scripts)">
+</p>
 
----
+<p align="center">
+  <img src="docs/award/divider.svg" width="100%" alt="">
+</p>
 
 ## How it works
 
@@ -112,7 +196,9 @@ Discover and Compare measure terrain at different scales, and each page labels i
 1 km. The same place therefore has different elevation and relief on the two pages. Slope is not in the
 Discover grid, because it means nothing at that scale.
 
----
+<p align="center">
+  <img src="docs/award/divider.svg" width="100%" alt="">
+</p>
 
 ## Run locally
 
@@ -226,3 +312,42 @@ Space Apps asks that non-NASA material be freely usable or open source, with its
 | Barlow, Barlow Condensed fonts                        | OFL-1.1                                                 |
 
 This project is not affiliated with or endorsed by NASA.
+
+<p align="center">
+  <img src="docs/award/divider.svg" width="100%" alt="">
+</p>
+
+<p align="center">
+  <img src="docs/award/logo.png" width="110" alt="Mars Among Us team logo">
+</p>
+
+<h3 align="center">Mars Among Us</h3>
+
+<p align="center"><sub>🥇 &nbsp;FIRST PLACE &nbsp;·&nbsp; NASA SPACE APPS CHALLENGE 2026 &nbsp;·&nbsp; AR-RAMTHA, JORDAN</sub></p>
+
+<table align="center">
+  <tr>
+    <td align="center" width="33%"><a href="https://www.linkedin.com/in/mohammad-h-malkawi/"><b>Mohammad Huseen Malkawi</b></a><br><sub>Creator · Data, web and submission</sub></td>
+    <td align="center" width="33%"><a href="https://www.linkedin.com/in/nour-oqaily-4310b6440/"><b>Nour Oqaily</b></a><br><sub>Website testing</sub></td>
+    <td align="center" width="33%"><a href="https://www.linkedin.com/in/mohammad-kilani-413317366/"><b>Mohammad Kilany</b></a><br><sub>Presentation</sub></td>
+  </tr>
+  <tr>
+    <td align="center" width="33%"><a href="https://www.linkedin.com/in/aisha-mohammad-202907416/"><b>Aisha</b></a><br><sub>Source review</sub></td>
+    <td align="center" width="33%"><a href="https://www.linkedin.com/in/hadeel-abughazleh-89aa0a32b/"><b>Hadeel Abughazleh</b></a><br><sub>Research and ideas</sub></td>
+    <td align="center" width="33%"><a href="https://www.linkedin.com/in/hadeel-qamar-779241311/"><b>Hadeel Qamar</b></a><br><sub>Research and ideas</sub></td>
+  </tr>
+</table>
+
+<p align="center">
+  <a href="https://malkawi06.github.io/MarsAmoungUs/">🌐 Live site</a> &nbsp;·&nbsp;
+  <a href="https://malkawi06.github.io/MarsAmoungUs/mars">🔴 Closest to Mars</a> &nbsp;·&nbsp;
+  <a href="#top">⬆️ Back to top</a>
+</p>
+
+<p align="center">
+  <img src="docs/award/star.svg" width="18" alt=""> &nbsp;<b>Made with ❤️ in Jordan 🇯🇴</b>&nbsp; <img src="docs/award/star.svg" width="18" alt="">
+</p>
+
+<p align="center">
+  <img src="https://capsule-render.vercel.app/api?type=waving&color=0:0B0D17,55:7A1F0B,100:C1440E&height=170&section=footer&text=Mars%20is%20closer%20than%20you%20think&fontSize=24&fontColor=F3E9D2&fontAlignY=72" width="100%" alt="Mars is closer than you think">
+</p>
